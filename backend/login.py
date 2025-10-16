@@ -5,7 +5,7 @@ session = {
     'dataUser' : None
 }
 
-def prosesLogin(username,password):
+def login(username,password):
     db = koneksiKeDatabase()
     if db is None:
         print('Koneksi ke database gagal')

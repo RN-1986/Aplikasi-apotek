@@ -1,5 +1,4 @@
-from koneksi import *
-
+from .koneksi import *
 
 session = {
     'is_login' : False,

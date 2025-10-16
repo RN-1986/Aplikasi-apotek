@@ -8,7 +8,8 @@ session = {
 def login(username,password):
     db = koneksiKeDatabase()
     if db is None:
-        print('Koneksi ke database gagal')
+        pesan = 'Koneksi ke database gagal'
+        return pesan
         
     cursor = db.cursor(dictionary=True)
     query = 'select * from user where username = %s and password = %s'

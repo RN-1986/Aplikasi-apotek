@@ -19,7 +19,7 @@ def login(username,password):
     if dataUserDariDatabase:
         session['is_login'] = True
         session['dataUser'] = {
-            'id' : dataUserDariDatabase['id'],
+            'id' : dataUserDariDatabase['userId'],
             'username' : dataUserDariDatabase['username'],
             'role' : dataUserDariDatabase['role']
         }
@@ -31,4 +31,3 @@ def login(username,password):
     db.close()
     
     return pesan
-    

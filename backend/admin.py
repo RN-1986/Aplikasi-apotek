@@ -90,7 +90,7 @@ def hapusObat(obatId):
     cursor = db.cursor()
     try:
         query = 'delete from obat where obatId = %s'
-        cursor.execute(query, (obatId))
+        cursor.execute(query, (obatId,))
         db.commit()
         pesan = f"Data obat dengan id {obatId} berhasil di hapus"
     except Exception as e:

@@ -25,7 +25,7 @@ CREATE TABLE `detailtransaksi` (
   `transaksiId` int DEFAULT NULL,
   `obatId` int DEFAULT NULL,
   `jumlah` int DEFAULT NULL,
-  `subtotal` decimal(12,2) DEFAULT NULL,
+  `subtotal` decimal(12,2) DEFAULT '0.00',
   PRIMARY KEY (`detailId`),
   KEY `transaksiId` (`transaksiId`),
   KEY `obatId` (`obatId`),
@@ -34,6 +34,43 @@ CREATE TABLE `detailtransaksi` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `detailtransaksi` */
+
+/*Table structure for table `keranjang` */
+
+DROP TABLE IF EXISTS `keranjang`;
+
+CREATE TABLE `keranjang` (
+  `keranjangId` int NOT NULL AUTO_INCREMENT,
+  `apotekerId` int DEFAULT NULL,
+  `namaPembeli` varchar(100) DEFAULT NULL,
+  `totalHarga` decimal(12,2) DEFAULT '0.00',
+  `status` enum('draft','dikirim','dibatalkan') DEFAULT 'draft',
+  `tanggalDibuat` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`keranjangId`),
+  KEY `apotekerId` (`apotekerId`),
+  CONSTRAINT `keranjang_ibfk_1` FOREIGN KEY (`apotekerId`) REFERENCES `user` (`userId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `keranjang` */
+
+/*Table structure for table `keranjangdetail` */
+
+DROP TABLE IF EXISTS `keranjangdetail`;
+
+CREATE TABLE `keranjangdetail` (
+  `detailKeranjangId` int NOT NULL AUTO_INCREMENT,
+  `keranjangId` int DEFAULT NULL,
+  `obatId` int DEFAULT NULL,
+  `jumlah` int DEFAULT NULL,
+  `subtotal` decimal(12,2) DEFAULT NULL,
+  PRIMARY KEY (`detailKeranjangId`),
+  KEY `keranjangId` (`keranjangId`),
+  KEY `obatId` (`obatId`),
+  CONSTRAINT `keranjangdetail_ibfk_1` FOREIGN KEY (`keranjangId`) REFERENCES `keranjang` (`keranjangId`),
+  CONSTRAINT `keranjangdetail_ibfk_2` FOREIGN KEY (`obatId`) REFERENCES `obat` (`obatId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `keranjangdetail` */
 
 /*Table structure for table `obat` */
 
@@ -48,12 +85,12 @@ CREATE TABLE `obat` (
   `kadaluarsa` date DEFAULT NULL,
   `createdAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`obatId`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `obat` */
 
 insert  into `obat`(`obatId`,`namaObat`,`jenis`,`harga`,`stok`,`kadaluarsa`,`createdAt`) values 
-(4,'abi','super',23.00,78,'2029-08-13','2025-10-17 17:20:18');
+(6,'123','super',23.00,72,'2029-08-13','2025-10-18 12:41:14');
 
 /*Table structure for table `transaksi` */
 
@@ -84,12 +121,15 @@ CREATE TABLE `user` (
   `createdAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`userId`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `user` */
 
 insert  into `user`(`userId`,`nama`,`username`,`password`,`role`,`createdAt`) values 
-(1,'aku','anjai','1221','admin','2025-10-17 18:09:37');
+(1,'aku','anjai','1221','admin','2025-10-17 18:09:37'),
+(2,'ayu','weru','123','admin','2025-10-18 12:37:40'),
+(3,'aw','a','123','admin','2025-10-18 12:42:40'),
+(4,'qwe','12','$2b$12$kmQoGw7BUSbTyOTWp31N1ejs0q6ez.Svjb1OM.C.2ibvvBGBK45pC','admin','2025-10-18 13:09:04');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

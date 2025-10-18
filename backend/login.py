@@ -1,4 +1,5 @@
 from .koneksi import *
+import bcrypt
 
 session = {
     'is_login' : False,
@@ -12,11 +13,11 @@ def login(username,password):
         return pesan
         
     cursor = db.cursor(dictionary=True)
-    query = 'select * from user where username = %s and password = %s'
-    cursor.execute(query,(username,password))
+    query = 'select * from user where username = %s'
+    cursor.execute(query,(username,))
     dataUserDariDatabase = cursor.fetchone()
     
-    if dataUserDariDatabase:
+    if dataUserDariDatabase and bcrypt.checkpw(password.encode('utf-8'), dataUserDariDatabase['password'].encode('utf-8')):
         session['is_login'] = True
         session['dataUser'] = {
             'id' : dataUserDariDatabase['userId'],

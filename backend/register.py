@@ -1,4 +1,5 @@
 from .koneksi import *
+import bcrypt
 
 def register(nama, username, password, role):
     db = koneksiKeDatabase()                          
@@ -17,8 +18,9 @@ def register(nama, username, password, role):
         db.close()
         return "Username sudah digunakan."
     
+    hashedPassword = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     queryInsert = "INSERT INTO user (nama, username, password, role) VALUES (%s, %s, %s, %s)"
-    cursor.execute(queryInsert, (nama, username, password, role))
+    cursor.execute(queryInsert, (nama, username, hashedPassword, role))
     db.commit()                             
     
     cursor.close()                           

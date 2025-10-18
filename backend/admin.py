@@ -143,7 +143,7 @@ def lihatDetailTransaksi(transaksiId):
             o.namaObat,
             d.jumlah,
             d.subtotal
-        from detailTransaksi as d
+        from detailtransaksi as d
         join obat as o on d.obatId = o.obatId
         where d.transaksiId = %s
     '''

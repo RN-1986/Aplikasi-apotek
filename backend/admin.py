@@ -100,35 +100,30 @@ def hapusObat(obatId):
     db.close()
     return pesan
 
-def cariObat(obatId=None, namaObat=None):
+def cariObat(keyword):
     db = koneksiKeDatabase()
     if db is None:
         return "Gagal koneksi ke database"
-    
+
     cursor = db.cursor(dictionary=True)
-    
+
     try:
-        if obatId is not None:
-            query = "SELECT * FROM obat WHERE obatId = %s"
-            cursor.execute(query, (obatId,))
-        
-        elif namaObat is not None:
-            query = "SELECT * FROM obat WHERE namaObat LIKE %s"
-            cursor.execute(query, (f"%{namaObat}%",))
-        else:
-            return "Masukkan minimal salah satu parameter (obatId atau namaObat)"
-        
-        hasil = cursor.fetchall()
-        if not hasil:
-            pesan = "Obat tidak ditemukan"
-        else:
-            pesan = hasil
-    except Exception as e:
-        pesan = f"Terjadi kesalahan: {e}"
+        obatId = int(keyword)
+        query = "SELECT * FROM obat WHERE obatId = %s"
+        cursor.execute(query, (obatId,))
+    except ValueError:
+        query = "SELECT * FROM obat WHERE namaObat LIKE %s"
+        cursor.execute(query, (f"%{keyword}%",))
+    
+    hasil = cursor.fetchall()
+    if hasil == []:
+        return 'Data obat tidak ditemukkan'
+    
     
     cursor.close()
     db.close()
-    return pesan
+    return hasil
+
 
 # Riwayat transaksi 
 def lihatSemuaTransaksi():

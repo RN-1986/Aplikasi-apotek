@@ -4,6 +4,7 @@ from tkinter import messagebox
 from frontend.tampilanLogin import tampil_login
 from frontend.tampilanRegister import tampil_register
 from frontend.tampilanAdmin import tampil_admin
+from frontend.tampilanApoteker import tampil_apoteker 
 from backend.login import session
 
 def menu_awal():
@@ -21,7 +22,7 @@ def menu_awal():
 
     root.mainloop()
 
-# --- Jalankan program ---
+# --- Jalankan program utama ---
 menu_awal()
 
 # Setelah jendela login/register ditutup, periksa apakah user berhasil login
@@ -30,6 +31,8 @@ if session.get('is_login'):
     
     if role.lower() == 'admin':
         tampil_admin()
+    elif role.lower() == 'apoteker':
+        tampil_apoteker()
     else:
         messagebox.showinfo("Info", f"Role '{role}' belum memiliki tampilan GUI.")
 else:

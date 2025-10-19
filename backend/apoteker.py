@@ -80,6 +80,9 @@ def lihatKeranjang(keranjangId):
     return dataKeranjang
 
 def tambahObatKeKeranjang(keranjangId, obatId, jumlah):
+    if not sessionKeranjangSaatIni['keranjangSaatIni']:
+        return 'Buat Keranjang Dulu'
+    
     if jumlah <= 0:
         return "Jumlah obat tidak boleh kurang dari 1"
     
@@ -123,6 +126,9 @@ def tambahObatKeKeranjang(keranjangId, obatId, jumlah):
     return pesan
 
 def updateJumlahObatYangDiBeli(detailKeranjangId, jumlahBaru):
+    if not sessionKeranjangSaatIni['keranjangSaatIni']:
+        return 'Buat Keranjang Dulu'
+    
     if jumlahBaru <= 0:
         return "Jumlah obat tidak boleh kurang dari 1"
     
@@ -190,6 +196,9 @@ def updateJumlahObatYangDiBeli(detailKeranjangId, jumlahBaru):
     return pesan
 
 def hapusObatDariKeranjang(detailKeranjangId):
+    if not sessionKeranjangSaatIni['keranjangSaatIni']:
+        return 'Buat Keranjang Dulu'
+    
     db = koneksiKeDatabase()
     if db is None:
         return "Gagal koneksi ke database"
@@ -231,6 +240,9 @@ def hapusObatDariKeranjang(detailKeranjangId):
     return f"Obat {dataDetailKeranjang['namaObat']} telah berhasil dihapus dari keranjang"
 
 def kirimKeranjangKeKasir(keranjangId):
+    if not sessionKeranjangSaatIni['keranjangSaatIni']:
+        return 'Buat Keranjang Dulu'
+    
     db = koneksiKeDatabase()
     if db is None:
         return "Gagal koneksi ke database"
@@ -247,6 +259,9 @@ def kirimKeranjangKeKasir(keranjangId):
     return f"Keranjang dengan id {keranjangId} berhasil dikirim ke kasir"
 
 def batalkanKeranjang(keranjangId):
+    if not sessionKeranjangSaatIni['keranjangSaatIni']:
+        return 'Buat Keranjang Dulu'
+    
     db = koneksiKeDatabase()
     if db is None:
         return "Gagal koneksi ke database"

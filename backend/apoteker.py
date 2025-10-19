@@ -30,6 +30,9 @@ def buatKeranjang(apotekerId, namaPembeli):
     return keranjangTerbaru
 
 def lihatKeranjang(keranjangId):
+    if not sessionKeranjangSaatIni['keranjangSaatIni']:
+        return 'Buat Keranjang Dulu'
+    
     db = koneksiKeDatabase()
     if db is None:
         pesan = 'Gagal terkoneksi ke database'

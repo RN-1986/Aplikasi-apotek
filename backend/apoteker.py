@@ -1,4 +1,9 @@
 from .koneksi import koneksiKeDatabase
+from .login import session
+
+sessionKeranjangSaatIni = {
+    'keranjangSaatini' : None
+}
 
 def buatKeranjang(apotekerId, namaPembeli):
     db = koneksiKeDatabase()
@@ -14,6 +19,13 @@ def buatKeranjang(apotekerId, namaPembeli):
     keranjangTerbaru = cursor.lastrowid
     cursor.close()
     db.close()
+    
+    if keranjangTerbaru :
+        sessionKeranjangSaatIni['keranjangSaatIni'] = {
+            'keranjangId' : keranjangTerbaru['keranjangId'],
+            'apotekerId' : session['dataUser']['userId'],
+            'namaPembeli' : namaPembeli
+        }
     
     return keranjangTerbaru
 
@@ -227,6 +239,8 @@ def kirimKeranjangKeKasir(keranjangId):
     db.commit()
     cursor.close()
     db.close()
+    
+    sessionKeranjangSaatIni['keranjangSaatIni'] = None
     return f"Keranjang dengan id {keranjangId} berhasil dikirim ke kasir"
 
 def batalkanKeranjang(keranjangId):
@@ -263,7 +277,9 @@ def batalkanKeranjang(keranjangId):
         db.rollback()
         pesan = f"Gagal membatalkan keranjang : {e}"
     
+    
     cursor.close()
     db.close()
+    sessionKeranjangSaatIni['keranjangSaatIni'] = None
     return pesan
     

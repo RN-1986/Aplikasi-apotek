@@ -16,6 +16,21 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/`apotek_app_python` /*!40100 DEFAULT CHA
 
 USE `apotek_app_python`;
 
+/*Table structure for table `customers` */
+
+DROP TABLE IF EXISTS `customers`;
+
+CREATE TABLE `customers` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `email` varchar(191) NOT NULL,
+  `full_name` varchar(191) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_customers_email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `customers` */
+
 /*Table structure for table `detailtransaksi` */
 
 DROP TABLE IF EXISTS `detailtransaksi`;
@@ -44,12 +59,12 @@ CREATE TABLE `keranjang` (
   `apotekerId` int DEFAULT NULL,
   `namaPembeli` varchar(100) DEFAULT NULL,
   `totalHarga` decimal(12,2) DEFAULT '0.00',
-  `status` enum('draft','dikirim','dibatalkan') DEFAULT 'draft',
+  `status` enum('draft','dikirim','dibatalkan','bayar') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'draft',
   `tanggalDibuat` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`keranjangId`),
   KEY `apotekerId` (`apotekerId`),
   CONSTRAINT `keranjang_ibfk_1` FOREIGN KEY (`apotekerId`) REFERENCES `user` (`userId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `keranjang` */
 
@@ -68,7 +83,7 @@ CREATE TABLE `keranjangdetail` (
   KEY `obatId` (`obatId`),
   CONSTRAINT `keranjangdetail_ibfk_1` FOREIGN KEY (`keranjangId`) REFERENCES `keranjang` (`keranjangId`),
   CONSTRAINT `keranjangdetail_ibfk_2` FOREIGN KEY (`obatId`) REFERENCES `obat` (`obatId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `keranjangdetail` */
 
@@ -90,7 +105,63 @@ CREATE TABLE `obat` (
 /*Data for the table `obat` */
 
 insert  into `obat`(`obatId`,`namaObat`,`jenis`,`harga`,`stok`,`kadaluarsa`,`createdAt`) values 
-(6,'123','super',23.00,72,'2029-08-13','2025-10-18 12:41:14');
+(1,'w3er','incar',3.00,534,NULL,'2025-10-19 11:42:41'),
+(6,'12elprimo','super',23.00,72,'2029-08-13','2025-10-18 12:41:14');
+
+/*Table structure for table `order_items` */
+
+DROP TABLE IF EXISTS `order_items`;
+
+CREATE TABLE `order_items` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `order_id` bigint unsigned NOT NULL,
+  `product_id` bigint unsigned NOT NULL,
+  `qty` int NOT NULL,
+  `price_cents` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_items_order` (`order_id`),
+  KEY `idx_items_product` (`product_id`),
+  CONSTRAINT `fk_items_order` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
+  CONSTRAINT `fk_items_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `order_items` */
+
+/*Table structure for table `orders` */
+
+DROP TABLE IF EXISTS `orders`;
+
+CREATE TABLE `orders` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `customer_id` bigint unsigned NOT NULL,
+  `status` enum('pending','paid','shipped','cancelled') NOT NULL,
+  `ordered_at` datetime NOT NULL,
+  `total_cents` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_orders_customer_status_date` (`customer_id`,`status`,`ordered_at`),
+  CONSTRAINT `fk_orders_customer` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `orders` */
+
+/*Table structure for table `products` */
+
+DROP TABLE IF EXISTS `products`;
+
+CREATE TABLE `products` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `sku` varchar(64) NOT NULL,
+  `name` varchar(191) NOT NULL,
+  `price_cents` int NOT NULL,
+  `category_id` int NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_products_sku` (`sku`),
+  KEY `idx_products_category_created` (`category_id`,`created_at`),
+  KEY `idx_products_price` (`price_cents`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `products` */
 
 /*Table structure for table `transaksi` */
 
@@ -101,6 +172,7 @@ CREATE TABLE `transaksi` (
   `tanggalTransaksi` datetime DEFAULT CURRENT_TIMESTAMP,
   `kasirId` int DEFAULT NULL,
   `totalHarga` decimal(12,2) DEFAULT NULL,
+  `keranjangId` int DEFAULT NULL,
   PRIMARY KEY (`transaksiId`),
   KEY `kasirId` (`kasirId`),
   CONSTRAINT `transaksi_ibfk_1` FOREIGN KEY (`kasirId`) REFERENCES `user` (`userId`)
@@ -121,7 +193,7 @@ CREATE TABLE `user` (
   `createdAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`userId`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `user` */
 
@@ -129,7 +201,8 @@ insert  into `user`(`userId`,`nama`,`username`,`password`,`role`,`createdAt`) va
 (1,'aku','anjai','1221','admin','2025-10-17 18:09:37'),
 (2,'ayu','weru','123','admin','2025-10-18 12:37:40'),
 (3,'aw','a','123','admin','2025-10-18 12:42:40'),
-(4,'qwe','12','$2b$12$kmQoGw7BUSbTyOTWp31N1ejs0q6ez.Svjb1OM.C.2ibvvBGBK45pC','admin','2025-10-18 13:09:04');
+(4,'qwe','12','$2b$12$kmQoGw7BUSbTyOTWp31N1ejs0q6ez.Svjb1OM.C.2ibvvBGBK45pC','admin','2025-10-18 13:09:04'),
+(5,'2','we','$2b$12$./ItsfLwbrZ21PZiDJ5IZun.ojqMF5GVRW2/WMQSF4l2w5D9.pEca','apoteker','2025-10-19 10:46:19');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

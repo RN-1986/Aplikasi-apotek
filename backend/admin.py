@@ -172,7 +172,7 @@ def lihatDetailTransaksi(transaksiId):
         join obat as o on d.obatId = o.obatId
         where d.transaksiId = %s
     '''
-    cursor.execute(query,(transaksiId))
+    cursor.execute(query,(transaksiId,))
     dataDetailTransaksi = cursor.fetchall()
     
     cursor.close()

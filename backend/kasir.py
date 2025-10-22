@@ -70,13 +70,12 @@ def lihatDetailKeranjangUntukKasir(keranjangId):
     return dataKeranjang
 
 
-def ubahKondisiTransaksi(keranjangId, kondisi):
+def kondisiTransaksi(keranjangId, kondisi):
     db = koneksiKeDatabase()
     if db is None:
         return "Gagal koneksi ke database"
     
-    cursor = db.cursor()
-
+    cursor = db.cursor(dictionary=True)
     if kondisi == "dibayar":
         updateKeranjang = "UPDATE keranjang SET status = 'lunas' WHERE keranjangId = %s"
         cursor.execute(updateKeranjang, (keranjangId,))
@@ -85,15 +84,16 @@ def ubahKondisiTransaksi(keranjangId, kondisi):
         queryKeranjang = "SELECT totalHarga FROM keranjang WHERE keranjangId = %s"
         cursor.execute(queryKeranjang, (keranjangId,))
         dataKeranjang = cursor.fetchone()
-        totalHarga = dataKeranjang["totalHarga"]
+        totalHarga = dataKeranjang['totalHarga']
 
         
         insertTransaksi = """
-            INSERT INTO transaksi (keranjangId, kasirId, tanggalTransaksi, totalHarga)
-            VALUES (%s, %s, NOW(), %s)
+            INSERT INTO transaksi (kasirId, tanggalTransaksi, totalHarga)
+            VALUES (%s, NOW(), %s)
         """
-        kasirId = session['dataUser']['id']
-        cursor.execute(insertTransaksi, (keranjangId, kasirId, totalHarga))
+        # kasirId = session['dataUser']['id']
+        kasirId = 1
+        cursor.execute(insertTransaksi, (kasirId, totalHarga))
         transaksiId = cursor.lastrowid
 
         detail = lihatDetailKeranjangUntukKasir(keranjangId)['detail']
@@ -107,8 +107,28 @@ def ubahKondisiTransaksi(keranjangId, kondisi):
         pesan = f"Transaksi keranjang {keranjangId} telah diterima dan dilunasi"
 
     elif kondisi == "dibatalkan": 
-        hasil = batalkanKeranjang(keranjangId)
-        pesan = f"Transaksi keranjang {keranjangId} telah dibatalkan. ({hasil})"
+        queryAmbilDetailKeranjang = '''
+            select
+                obatId,
+                jumlah
+            from keranjangdetail
+            where keranjangId = %s
+        '''
+        cursor.execute(queryAmbilDetailKeranjang,(keranjangId,))
+        daftarObat = cursor.fetchall()
+        
+        for item in daftarObat:
+            queryKembalikanStok = 'update obat set stok = stok + %s where obatId = %s'
+            cursor.execute(queryKembalikanStok,(item['jumlah'], item['obatId']))
+            
+        queryHapusDetailKeranjang = 'delete from keranjangdetail where keranjangId = %s'
+        cursor.execute(queryHapusDetailKeranjang,(keranjangId,))
+        
+        queryHapusKeranjang = 'delete from keranjang where keranjangId = %s'
+        cursor.execute(queryHapusKeranjang,(keranjangId,))
+        
+        db.commit()
+        pesan = f"Transaksi keranjang {keranjangId} telah dibatalkan."
 
     else:
         cursor.close()

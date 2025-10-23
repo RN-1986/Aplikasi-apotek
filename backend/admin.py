@@ -106,7 +106,10 @@ def cariObat(keyword):
         return "Gagal koneksi ke database"
 
     cursor = db.cursor(dictionary=True)
-
+    
+    if not keyword:
+        lihatSemuaDataObat()
+        
     try:
         obatId = int(keyword)
         query = "SELECT * FROM obat WHERE obatId = %s"

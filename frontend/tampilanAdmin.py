@@ -36,10 +36,8 @@ def tampil_admin():
     tk.Label(search_frame, text="Nama atau ID Obat:").grid(row=0, column=0, sticky="w")
     entry_search = tk.Entry(search_frame, width=40)
     entry_search.grid(row=0, column=1, padx=5)
-    entry_search.focus_set()
 
     def refresh_data_obat():
-        """Memuat ulang seluruh data obat"""
         entry_search.delete(0, tk.END)
         tabel_obat.delete(*tabel_obat.get_children())
         data = lihatSemuaDataObat()
@@ -52,16 +50,25 @@ def tampil_admin():
             ))
 
     def perform_search_admin():
-        """Menampilkan hasil pencarian"""
         keyword = entry_search.get().strip()
         tabel_obat.delete(*tabel_obat.get_children())
+
         if not keyword:
-            messagebox.showinfo("Info", "Masukkan nama atau ID obat yang ingin dicari.")
+            data = lihatSemuaDataObat()
+            if isinstance(data, str):
+                messagebox.showinfo("Info", data)
+                return
+            for d in data:
+                tabel_obat.insert("", "end", values=(
+                    d["obatId"], d["namaObat"], d["jenis"], d["harga"], d["stok"], d["kadaluarsa"]
+                ))
             return
+
         hasil = cariObat(keyword)
         if isinstance(hasil, str):
             messagebox.showinfo("Info", hasil)
             return
+
         for d in hasil:
             tabel_obat.insert("", "end", values=(
                 d["obatId"], d["namaObat"], d["jenis"], d["harga"], d["stok"], d["kadaluarsa"]
@@ -86,6 +93,12 @@ def tampil_admin():
     scrollbar.pack(side="right", fill="y")
     tabel_obat.configure(yscrollcommand=scrollbar.set)
 
+    # --- Fokus otomatis ke search bar setiap kali tab Kelola Obat dipilih ---
+    def fokus_search_bar(event=None):
+        entry_search.focus_set()
+
+    notebook.bind("<<NotebookTabChanged>>", lambda e: fokus_search_bar() if notebook.index("current") == 0 else None)
+
     # =========================
     # FORM POPUP TAMBAH / UPDATE
     # =========================
@@ -95,7 +108,11 @@ def tampil_admin():
         popup.geometry("400x350")
         popup.grab_set()
 
-        tk.Label(popup, text=("Tambah Obat Baru" if mode == "tambah" else "Update Data Obat"), font=("Arial", 12, "bold")).pack(pady=10)
+        tk.Label(
+            popup,
+            text=("Tambah Obat Baru" if mode == "tambah" else "Update Data Obat"),
+            font=("Arial", 12, "bold"),
+        ).pack(pady=10)
 
         form_frame = tk.Frame(popup)
         form_frame.pack(pady=10)
@@ -120,55 +137,86 @@ def tampil_admin():
         kadaluarsa = tk.Entry(form_frame, width=30)
         kadaluarsa.grid(row=4, column=1, padx=5, pady=3)
 
-        # isi data kalau mode update
+        # Isi data otomatis kalau mode update
         if mode == "update" and data:
             nama.insert(0, data[1])
             jenis.insert(0, data[2])
             harga.insert(0, data[3])
             stok.insert(0, data[4])
-            kadaluarsa.insert(0, data[5])
+            try:
+                if "-" in str(data[5]):
+                    tanggal = datetime.strptime(str(data[5]), "%Y-%m-%d").strftime("%d/%m/%Y")
+                else:
+                    tanggal = data[5]
+                kadaluarsa.insert(0, tanggal)
+            except Exception:
+                kadaluarsa.insert(0, data[5])
 
         def validasi_tanggal(input_str):
-            """Cek format dan range tanggal dd/mm/yyyy"""
-            pola = r"^\d{1,2}/\d{1,2}/\d{2,4}$"
+            pola = r"^\d{1,2}[-/]\d{1,2}[-/]\d{2,4}$"
             if not re.match(pola, input_str):
                 return False
             try:
-                d, m, y = input_str.split('/')
+                input_str = input_str.replace("-", "/")
+                d, m, y = input_str.split("/")
                 d, m, y = int(d), int(m), int(y)
-                if not (1 <= d <= 31 and 1 <= m <= 12):
+                if not (1 <= m <= 12):
                     return False
-                datetime.strptime(input_str, "%d/%m/%Y" if len(y) == 4 else "%d/%m/%y")
+                datetime.strptime(input_str, "%d/%m/%Y" if len(str(y)) == 4 else "%d/%m/%y")
                 return True
-            except Exception:
+            except ValueError:
                 return False
 
         def simpan():
-            n = nama.get().strip()
-            j = jenis.get().strip()
-            h = harga.get().strip()
-            s = stok.get().strip()
-            k = kadaluarsa.get().strip()
+            n, j, h, s, k = (
+                nama.get().strip(),
+                jenis.get().strip(),
+                harga.get().strip(),
+                stok.get().strip(),
+                kadaluarsa.get().strip(),
+            )
 
             if not all([n, j, h, s, k]):
                 messagebox.showwarning("Peringatan", "Harap isi semua field!", parent=popup)
                 return
 
             if not validasi_tanggal(k):
-                messagebox.showwarning("Peringatan", "Inputkan dd/mm/yy dengan benar!", parent=popup)
+                messagebox.showwarning(
+                    "Peringatan",
+                    "Inputkan tanggal kadaluarsa dengan benar (dd/mm/yyyy atau dd-mm-yyyy)!",
+                    parent=popup,
+                )
+                return
+
+            # Ubah ke format MySQL
+            k = k.replace("-", "/")
+            d, m, y = k.split("/")
+            if len(y) == 2:
+                y = "20" + y
+            try:
+                k_mysql = datetime.strptime(f"{d}/{m}/{y}", "%d/%m/%Y").strftime("%Y-%m-%d")
+            except ValueError:
+                messagebox.showwarning("Peringatan", "Tanggal kadaluarsa tidak valid!", parent=popup)
                 return
 
             if mode == "tambah":
-                pesan = tambahObat(n, j, h, s, k)
+                pesan = tambahObat(n, j, h, s, k_mysql)
             else:
                 obatId = data[0]
-                pesan = updateObat(obatId, n, j, h, s, k)
+                pesan = updateObat(obatId, n, j, h, s, k_mysql)
 
             messagebox.showinfo("Info", pesan, parent=popup)
             popup.destroy()
             refresh_data_obat()
 
-        tk.Button(popup, text=("Tambah" if mode == "tambah" else "Update"), width=12, bg="#4CAF50", fg="white", command=simpan).pack(pady=5)
+        tk.Button(
+            popup,
+            text=("Tambah" if mode == "tambah" else "Update"),
+            width=12,
+            bg="#4CAF50",
+            fg="white",
+            command=simpan,
+        ).pack(pady=5)
         tk.Button(popup, text="Batal", width=12, command=popup.destroy).pack()
 
     # =========================
@@ -177,32 +225,9 @@ def tampil_admin():
     frame_button = tk.Frame(frame_obat)
     frame_button.pack(pady=10)
 
-    def tambah_gui():
-        form_popup("tambah")
-
-    def update_gui():
-        selected = tabel_obat.selection()
-        if not selected:
-            messagebox.showwarning("Peringatan", "Pilih data obat yang ingin diupdate!")
-            return
-        data = tabel_obat.item(selected[0])["values"]
-        form_popup("update", data)
-
-    def hapus_data():
-        selected = tabel_obat.selection()
-        if not selected:
-            messagebox.showwarning("Peringatan", "Pilih data yang ingin dihapus!")
-            return
-        obatId = tabel_obat.item(selected[0])["values"][0]
-        konfirmasi = messagebox.askyesno("Konfirmasi", f"Yakin ingin menghapus obat ID {obatId}?")
-        if konfirmasi:
-            pesan = hapusObat(obatId)
-            messagebox.showinfo("Info", pesan)
-            refresh_data_obat()
-
-    tk.Button(frame_button, text="Tambah", command=tambah_gui, bg="#4CAF50", fg="white", width=12).grid(row=0, column=0, padx=5)
-    tk.Button(frame_button, text="Update", command=update_gui, bg="#2196F3", fg="white", width=12).grid(row=0, column=1, padx=5)
-    tk.Button(frame_button, text="Hapus", command=hapus_data, bg="#f44336", fg="white", width=12).grid(row=0, column=2, padx=5)
+    tk.Button(frame_button, text="Tambah", command=lambda: form_popup("tambah"), bg="#4CAF50", fg="white", width=12).grid(row=0, column=0, padx=5)
+    tk.Button(frame_button, text="Update", command=lambda: [form_popup("update", tabel_obat.item(tabel_obat.selection()[0])["values"]) if tabel_obat.selection() else messagebox.showwarning("Peringatan", "Pilih data obat yang ingin diupdate!")], bg="#2196F3", fg="white", width=12).grid(row=0, column=1, padx=5)
+    tk.Button(frame_button, text="Hapus", command=lambda: [hapusObat(tabel_obat.item(tabel_obat.selection()[0])["values"][0]) if tabel_obat.selection() else messagebox.showwarning("Peringatan", "Pilih data yang ingin dihapus!")], bg="#f44336", fg="white", width=12).grid(row=0, column=2, padx=5)
     tk.Button(frame_button, text="Refresh", command=refresh_data_obat, width=12).grid(row=0, column=3, padx=5)
 
     # =========================
@@ -267,9 +292,6 @@ def tampil_admin():
     tk.Button(frame_btn_trans, text="Refresh Data", command=refresh_transaksi, width=15).grid(row=0, column=0, padx=5)
     tk.Button(frame_btn_trans, text="Lihat Detail", command=lihat_detail_transaksi, width=15).grid(row=0, column=1, padx=5)
 
-    # =========================
-    # KELUAR KE MENU UTAMA
-    # =========================
     def kembali_ke_menu():
         root.destroy()
         from main import menu_awal
@@ -277,12 +299,18 @@ def tampil_admin():
 
     tk.Button(root, text="Keluar", command=kembali_ke_menu, width=15).pack(pady=10)
 
-    # Load data awal
+      # Load data awal
     refresh_data_obat()
     refresh_transaksi()
 
-    root.mainloop()
+    # --- Fokus otomatis ke search bar ---
+    def fokus_awal(*args):
+        entry_search.focus_force()
 
+    # Panggil saat frame kelihatan di layar
+    frame_obat.bind("<Visibility>", fokus_awal)
+
+    root.mainloop()
 
 if __name__ == "__main__":
     tampil_admin()

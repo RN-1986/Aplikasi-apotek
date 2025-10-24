@@ -5,6 +5,7 @@ from frontend.tampilanLogin import tampil_login
 from frontend.tampilanRegister import tampil_register
 from frontend.tampilanAdmin import tampil_admin
 from frontend.tampilanApoteker import tampil_apoteker
+from frontend.tampilanKasir import tampil_kasir
 from backend.login import session
 
 
@@ -70,6 +71,8 @@ def main():
             tampil_admin()
         elif role == 'apoteker':
             tampil_apoteker()
+        elif role == 'kasir':
+            tampil_kasir()
         else:
             messagebox.showinfo("Info", f"Role '{role}' belum memiliki tampilan GUI.")
     else:

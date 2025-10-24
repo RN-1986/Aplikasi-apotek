@@ -292,11 +292,9 @@ def tampil_admin():
     tk.Button(frame_btn_trans, text="Refresh Data", command=refresh_transaksi, width=15).grid(row=0, column=0, padx=5)
     tk.Button(frame_btn_trans, text="Lihat Detail", command=lihat_detail_transaksi, width=15).grid(row=0, column=1, padx=5)
 
-
     # ==============================
     # TOMBOL KELUAR → kembali ke menu awal
     # ==============================
-    
     def keluar_dari_aplikasi():
         from backend.logout import logout
         pesan = logout()

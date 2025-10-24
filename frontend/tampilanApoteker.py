@@ -321,17 +321,15 @@ def tampil_apoteker():
     # ==============================
     # TOMBOL KELUAR → kembali ke menu awal
     # ==============================
-    frame_keluar = tk.Frame(root)
-    frame_keluar.pack(pady=10)
-
-    def kembali_ke_menu_awal():
+    def keluar_dari_aplikasi():
+        from backend.logout import logout
+        pesan = logout()
+        messagebox.showinfo("Logout", pesan)
         root.destroy()
-        # Import di sini agar tidak circular import
-        from main import menu_awal
-        menu_awal()
+        from main import main
+        main()
 
-
-    tk.Button(frame_keluar, text="Keluar", width=14, bg="#ff4d4d", fg="white", command=kembali_ke_menu_awal).pack()
+    tk.Button(root, text="Keluar", command=keluar_dari_aplikasi, width=15, bg="#ff4d4d", fg="white").pack(pady=10)
 
     root.mainloop()
 

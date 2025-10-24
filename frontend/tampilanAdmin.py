@@ -292,12 +292,20 @@ def tampil_admin():
     tk.Button(frame_btn_trans, text="Refresh Data", command=refresh_transaksi, width=15).grid(row=0, column=0, padx=5)
     tk.Button(frame_btn_trans, text="Lihat Detail", command=lihat_detail_transaksi, width=15).grid(row=0, column=1, padx=5)
 
-    def kembali_ke_menu():
-        root.destroy()
-        from main import menu_awal
-        menu_awal()
 
-    tk.Button(root, text="Keluar", command=kembali_ke_menu, width=15).pack(pady=10)
+    # ==============================
+    # TOMBOL KELUAR → kembali ke menu awal
+    # ==============================
+    
+    def keluar_dari_aplikasi():
+        from backend.logout import logout
+        pesan = logout()
+        messagebox.showinfo("Logout", pesan)
+        root.destroy()
+        from main import main
+        main()
+
+    tk.Button(root, text="Keluar", command=keluar_dari_aplikasi, width=15, bg="#ff4d4d", fg="white").pack(pady=10)
 
       # Load data awal
     refresh_data_obat()

@@ -133,7 +133,7 @@ def tampil_admin():
         stok = tk.Entry(form_frame, width=30)
         stok.grid(row=3, column=1, padx=5, pady=3)
 
-        tk.Label(form_frame, text="Kadaluarsa (dd/mm/yyyy)").grid(row=4, column=0, sticky="w", padx=5, pady=3)
+        tk.Label(form_frame, text="Kadaluarsa (dd-mm-yyyy)").grid(row=4, column=0, sticky="w", padx=5, pady=3)
         kadaluarsa = tk.Entry(form_frame, width=30)
         kadaluarsa.grid(row=4, column=1, padx=5, pady=3)
 
@@ -183,7 +183,7 @@ def tampil_admin():
             if not validasi_tanggal(k):
                 messagebox.showwarning(
                     "Peringatan",
-                    "Inputkan tanggal kadaluarsa dengan benar (dd/mm/yyyy atau dd-mm-yyyy)!",
+                    "Inputkan tanggal kadaluarsa dengan benar (dd-mm-yyyy)!",
                     parent=popup,
                 )
                 return

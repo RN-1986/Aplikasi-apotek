@@ -77,7 +77,7 @@ def kondisiTransaksi(keranjangId, kondisi):
     
     cursor = db.cursor(dictionary=True)
     if kondisi == "dibayar":
-        updateKeranjang = "UPDATE keranjang SET status = 'lunas' WHERE keranjangId = %s"
+        updateKeranjang = "UPDATE keranjang SET status = 'bayar' WHERE keranjangId = %s"
         cursor.execute(updateKeranjang, (keranjangId,))
 
        
@@ -91,8 +91,7 @@ def kondisiTransaksi(keranjangId, kondisi):
             INSERT INTO transaksi (kasirId, tanggalTransaksi, totalHarga)
             VALUES (%s, NOW(), %s)
         """
-        # kasirId = session['dataUser']['id']
-        kasirId = 1
+        kasirId = session['dataUser']['id']
         cursor.execute(insertTransaksi, (kasirId, totalHarga))
         transaksiId = cursor.lastrowid
 

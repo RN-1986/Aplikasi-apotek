@@ -18,6 +18,13 @@ def tampil_apoteker():
     root = tk.Tk()
     root.title("🧴 Aplikasi Apotek - Menu Apoteker")
     root.geometry("980x650")
+    try:
+        root.state('zoomed')  # khusus Windows
+    except:
+        # fallback untuk OS lain (misal Linux)
+        screen_width = root.winfo_screenwidth()
+        screen_height = root.winfo_screenheight()
+        root.geometry(f"{screen_width}x{screen_height}")
     root.resizable(True, True)
 
     # ==============================

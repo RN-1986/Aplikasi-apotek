@@ -67,6 +67,16 @@ def tampil_admin():
         hasil = cariObat(keyword)
         if isinstance(hasil, str):
             messagebox.showinfo("Info", hasil)
+                    # 🔁 Reset otomatis setelah pop-up OK ditekan
+            entry_search.delete(0, tk.END)
+            refresh_data_obat()
+            return
+        
+        if not hasil:
+            messagebox.showinfo("Info", "Data tidak ditemukan.")
+            # 🔁 Reset otomatis setelah pop-up OK ditekan
+            entry_search.delete(0, tk.END)
+            refresh_data_obat()
             return
 
         for d in hasil:
@@ -230,7 +240,7 @@ def tampil_admin():
     tk.Button(frame_button, text="Hapus", command=lambda: [hapusObat(tabel_obat.item(tabel_obat.selection()[0])["values"][0]) if tabel_obat.selection() else messagebox.showwarning("Peringatan", "Pilih data yang ingin dihapus!")], bg="#f44336", fg="white", width=12).grid(row=0, column=2, padx=5)
     tk.Button(frame_button, text="Refresh", command=refresh_data_obat, width=12).grid(row=0, column=3, padx=5)
 
-    # =========================
+        # =========================
     # TAB 2: RIWAYAT TRANSAKSI
     # =========================
     frame_transaksi = tk.Frame(notebook)
@@ -239,28 +249,51 @@ def tampil_admin():
     tk.Label(frame_transaksi, text="Riwayat Transaksi", font=("Arial", 16, "bold")).pack(pady=10)
 
     frame_data_trans = tk.Frame(frame_transaksi)
-    frame_data_trans.pack(pady=10)
+    frame_data_trans.pack(pady=10, padx=10, fill="both", expand=True)
 
     columns_trans = ("transaksiId", "tanggalTransaksi", "Kasir", "totalHarga")
-    tabel_transaksi = ttk.Treeview(frame_data_trans, columns=columns_trans, show="headings", height=10)
+    tabel_transaksi = ttk.Treeview(frame_data_trans, columns=columns_trans, show="headings", height=12)
 
-    for col in columns_trans:
-        tabel_transaksi.heading(col, text=col)
-        tabel_transaksi.column(col, width=150)
+    # 🔧 Perlebar kolom agar tampilan lebih proporsional
+    tabel_transaksi.heading("transaksiId", text="ID Transaksi")
+    tabel_transaksi.heading("tanggalTransaksi", text="Tanggal Transaksi")
+    tabel_transaksi.heading("Kasir", text="Kasir")
+    tabel_transaksi.heading("totalHarga", text="Total Harga (Rp)")
 
-    tabel_transaksi.pack(side="left")
+    tabel_transaksi.column("transaksiId", width=180, anchor="center")
+    tabel_transaksi.column("tanggalTransaksi", width=200, anchor="center")
+    tabel_transaksi.column("Kasir", width=200, anchor="w")
+    tabel_transaksi.column("totalHarga", width=180, anchor="e")
+
+    tabel_transaksi.pack(side="left", fill="both", expand=True)
     scrollbar2 = ttk.Scrollbar(frame_data_trans, orient="vertical", command=tabel_transaksi.yview)
     scrollbar2.pack(side="right", fill="y")
     tabel_transaksi.configure(yscrollcommand=scrollbar2.set)
 
+    # === Label Total Omset ===
+    total_omset_label = tk.Label(frame_transaksi, text="Total Omset: Rp 0", font=("Arial", 12, "bold"), anchor="e")
+    total_omset_label.pack(fill="x", padx=15, pady=(5, 10))
+
+    # === Fungsi untuk refresh data dan hitung total omset ===
     def refresh_transaksi():
         tabel_transaksi.delete(*tabel_transaksi.get_children())
         data = lihatSemuaTransaksi()
         if isinstance(data, str):
             messagebox.showinfo("Info", data)
+            total_omset_label.config(text="Total Omset: Rp 0")
             return
+
+        total_omset = 0
         for d in data:
             tabel_transaksi.insert("", "end", values=(d["transaksiId"], d["tanggalTransaksi"], d["Kasir"], d["totalHarga"]))
+            try:
+                total_omset += float(d["totalHarga"])
+            except (ValueError, TypeError):
+                pass
+
+        # 🧮 Update label total omset
+        total_omset_label.config(text=f"Total Omset: Rp {total_omset:,.0f}")
+
 
     def lihat_detail_transaksi():
         selected = tabel_transaksi.selection()

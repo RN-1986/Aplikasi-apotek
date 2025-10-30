@@ -69,7 +69,6 @@ def tampil_kasir():
         pesan = kondisiTransaksi(keranjangId, "dibayar")
         messagebox.showinfo("Info", pesan)
         refresh_keranjang()
-        refresh_transaksi()
 
     def batal_keranjang():
         selected = tabel_keranjang.selection()
@@ -89,60 +88,6 @@ def tampil_kasir():
     tk.Button(frame_btn_keranjang, text="Batalkan", command=batal_keranjang, bg="red", fg="white", width=15).grid(row=0, column=3, padx=5)
 
     # =========================
-    # TAB 2: RIWAYAT TRANSAKSI
-    # =========================
-    frame_transaksi = tk.Frame(notebook)
-    notebook.add(frame_transaksi, text="Riwayat Transaksi")
-
-    tk.Label(frame_transaksi, text="Riwayat Transaksi", font=("Arial", 16, "bold")).pack(pady=10)
-
-    columns_trans = ("transaksiId", "tanggalTransaksi", "Kasir", "totalHarga")
-    tabel_transaksi = ttk.Treeview(frame_transaksi, columns=columns_trans, show="headings", height=10)
-    for col in columns_trans:
-        tabel_transaksi.heading(col, text=col)
-        tabel_transaksi.column(col, width=150)
-    tabel_transaksi.pack(fill="both", expand=True, padx=10)
-
-    def refresh_transaksi():
-        tabel_transaksi.delete(*tabel_transaksi.get_children())
-        data = lihatSemuaTransaksi()
-        if isinstance(data, str):
-            messagebox.showinfo("Info", data)
-            return
-        for d in data:
-            tabel_transaksi.insert("", "end", values=(d["transaksiId"], d["tanggalTransaksi"], d["Kasir"], d["totalHarga"]))
-
-    def lihat_detail_transaksi():
-        selected = tabel_transaksi.selection()
-        if not selected:
-            messagebox.showwarning("Peringatan", "Pilih transaksi untuk melihat detail!")
-            return
-        transaksiId = tabel_transaksi.item(selected[0])["values"][0]
-        dataDetail = lihatDetailTransaksi(transaksiId)
-        if isinstance(dataDetail, str):
-            messagebox.showinfo("Info", dataDetail)
-            return
-
-        detail_window = tk.Toplevel(root)
-        detail_window.title(f"Detail Transaksi {transaksiId}")
-        detail_window.geometry("500x300")
-
-        columns_detail = ("detailId", "namaObat", "jumlah", "subtotal")
-        tabel_detail = ttk.Treeview(detail_window, columns=columns_detail, show="headings")
-        for col in columns_detail:
-            tabel_detail.heading(col, text=col)
-            tabel_detail.column(col, width=100)
-        tabel_detail.pack(fill="both", expand=True, padx=10, pady=10)
-
-        for d in dataDetail:
-            tabel_detail.insert("", "end", values=(d["detailId"], d["namaObat"], d["jumlah"], d["subtotal"]))
-
-    frame_btn_trans = tk.Frame(frame_transaksi)
-    frame_btn_trans.pack(pady=10)
-    tk.Button(frame_btn_trans, text="Refresh Data", command=refresh_transaksi, width=15).grid(row=0, column=0, padx=5)
-    tk.Button(frame_btn_trans, text="Lihat Detail", command=lihat_detail_transaksi, width=15).grid(row=0, column=1, padx=5)
-
-    # =========================
     # KELUAR KE MENU UTAMA
     # =========================
     def keluar_dari_aplikasi():
@@ -157,7 +102,6 @@ def tampil_kasir():
 
     # Load data awal
     refresh_keranjang()
-    refresh_transaksi()
 
     root.mainloop()
 

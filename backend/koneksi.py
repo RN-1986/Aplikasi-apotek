@@ -7,7 +7,7 @@ def koneksiKeDatabase():
            user = 'root',
            password = '',
            database = 'apotek_app_python',
-           cursorclass= pymysql.cursors.DictCursor()  
+           cursorclass= pymysql.cursors.DictCursor  
         )
         return koneksi
     except pymysql.Error as error:

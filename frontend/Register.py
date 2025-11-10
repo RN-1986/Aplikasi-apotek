@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (QApplication, QComboBox, QLabel, QLineEdit,
     QStatusBar, QWidget, QVBoxLayout, QFormLayout,QHBoxLayout)
 from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox
 from backend.register import register
-from frontend import tampilanLogin
+from frontend.tampilanLogin import tampil_login
 
 
 class FormRegister(QMainWindow):
@@ -164,8 +164,7 @@ class FormRegister(QMainWindow):
 
         if "berhasil" in hasil.lower():
             self.close()
-            if self.menu_awal_window:
-                self.menu_awal_window.show()
+            tampil_login() 
 
     def kembali_ke_menu(self):
         """Kembali ke menu awal"""

@@ -12,7 +12,7 @@ def login(username,password):
         pesan = 'Koneksi ke database gagal'
         return pesan
         
-    cursor = db.cursor(dictionary=True)
+    cursor = db.cursor()
     query = 'select * from user where username = %s'
     cursor.execute(query,(username,))
     dataUserDariDatabase = cursor.fetchone()

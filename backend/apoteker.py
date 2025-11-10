@@ -38,7 +38,7 @@ def lihatKeranjang(keranjangId):
         pesan = 'Gagal terkoneksi ke database'
         return pesan
     
-    cursor = db.cursor(dictionary=True)
+    cursor = db.cursor()
     queryKeranjang = '''
         select
             k.keranjangId, 
@@ -90,8 +90,8 @@ def tambahObatKeKeranjang(keranjangId, obatId, jumlah):
     if db is None:
         pesan = 'Gagal terkoneksi ke database'
         return pesan
-    
-    cursor = db.cursor(dictionary=True)
+
+    cursor = db.cursor()
     
     query = 'select * from obat where obatId = %s'
     cursor.execute(query,(obatId,))
@@ -137,7 +137,7 @@ def updateJumlahObatYangDiBeli(detailKeranjangId, jumlahBaru):
         pesan = 'Gagal terkoneksi ke database'
         return pesan
     
-    cursor = db.cursor(dictionary=True)
+    cursor = db.cursor()
     
     try:
         query = 'select * from keranjangdetail where detailKeranjangId = %s'
@@ -203,7 +203,7 @@ def hapusObatDariKeranjang(detailKeranjangId):
     if db is None:
         return "Gagal koneksi ke database"
 
-    cursor = db.cursor(dictionary=True)
+    cursor = db.cursor()
     
     queryAmbilObatYangAkanDihapus = """
         select
@@ -266,7 +266,7 @@ def batalkanKeranjang(keranjangId):
     if db is None:
         return "Gagal koneksi ke database"
 
-    cursor = db.cursor(dictionary=True)
+    cursor = db.cursor()
     
     try:
         queryAmbilDetailKeranjang = '''

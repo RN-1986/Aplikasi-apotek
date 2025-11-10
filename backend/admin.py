@@ -28,7 +28,7 @@ def lihatSemuaDataObat():
         pesan = "Gagal koneksi ke database"
         return pesan
     
-    cursor = db.cursor(dictionary=True)
+    cursor = db.cursor()
     query = 'select * from obat'
     cursor.execute(query)
     dataObat = cursor.fetchall()
@@ -48,7 +48,7 @@ def ambilDataObatYangAkanDiUpdate(obatId):
         pesan = "Gagal koneksi ke database"
         return pesan
     
-    cursor = db.cursor(dictionary=True)
+    cursor = db.cursor()
     query = 'select * from obat where obatId = %s'
     cursor.execute(query, (obatId,))
     dataObat = cursor.fetchone()
@@ -105,7 +105,7 @@ def cariObat(keyword):
     if db is None:
         return "Gagal koneksi ke database"
 
-    cursor = db.cursor(dictionary=True)
+    cursor = db.cursor()
     
     if not keyword:
         lihatSemuaDataObat()
@@ -135,7 +135,7 @@ def lihatSemuaTransaksi():
         pesan = "Gagal koneksi ke database"
         return pesan
     
-    cursor = db.cursor(dictionary=True)
+    cursor = db.cursor()
     query = '''
         select
             t.transaksiId,
@@ -164,7 +164,7 @@ def lihatDetailTransaksi(transaksiId):
         pesan = "Gagal koneksi ke database"
         return pesan
     
-    cursor = db.cursor(dictionary=True)
+    cursor = db.cursor()
     query = '''
         select  
             d.detailId,

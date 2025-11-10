@@ -1,14 +1,15 @@
-import mysql.connector
+import pymysql
 
 def koneksiKeDatabase():
     try:
-        koneksi = mysql.connector.connect(
+        koneksi = pymysql.connect(
            host = 'localhost',
            user = 'root',
            password = '',
-           database = 'apotek_app_python'  
+           database = 'apotek_app_python',
+           cursorclass= pymysql.cursors.DictCursor()  
         )
         return koneksi
-    except mysql.connector.Error as error:
+    except pymysql.Error as error:
         print(f"Gagal koneksi ke database: {error}")
         return None

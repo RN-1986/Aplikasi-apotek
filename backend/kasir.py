@@ -31,7 +31,7 @@ def lihatDetailKeranjangUntukKasir(keranjangId):
     if db is None:
         return "Gagal koneksi ke database"
     
-    cursor = db.cursor(dictionary=True)
+    cursor = db.cursor()
     queryKeranjang = """
         SELECT 
             k.keranjangId, 
@@ -75,7 +75,7 @@ def kondisiTransaksi(keranjangId, kondisi):
     if db is None:
         return "Gagal koneksi ke database"
     
-    cursor = db.cursor(dictionary=True)
+    cursor = db.cursor()
     if kondisi == "dibayar":
         updateKeranjang = "UPDATE keranjang SET status = 'bayar' WHERE keranjangId = %s"
         cursor.execute(updateKeranjang, (keranjangId,))

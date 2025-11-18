@@ -21,11 +21,11 @@ class FormRegister(QMainWindow):
         self.resize(500, 430)
         self.center_window()
 
-        # 🌿 Background gradasi hijau lembut
+        # Background gradasi # biru muda-putih
         palette = QPalette()
         gradient = QLinearGradient(0, 0, 0, 400)
-        gradient.setColorAt(0.0, QColor("#d4f8e8"))
-        gradient.setColorAt(1.0, QColor("#ffffff"))
+        gradient.setColorAt(0.0, QColor("#BBFFFD"))  
+        gradient.setColorAt(1.0, QColor("#FFFFFF")) 
         palette.setBrush(QPalette.Window, QBrush(gradient))
         self.setPalette(palette)
 

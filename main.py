@@ -20,7 +20,7 @@ from PySide6.QtWidgets import (QApplication, QLabel, QMainWindow, QMenuBar,
 from PySide6.QtWidgets import QApplication, QMessageBox
 import sys
 from frontend.tampilanLogin import tampil_login
-from frontend.Register import tampil_register
+from frontend.tampilanRegister import tampil_register
 from frontend.tampilanAdmin import tampil_admin
 from frontend.tampilanApoteker import tampil_apoteker
 from frontend.tampilanKasir import tampil_kasir
@@ -151,7 +151,7 @@ form_register_window = None  # tambahkan global di luar fungsi
 
 def buka_register(main_window):
     """Buka form register dan sembunyikan menu utama"""
-    from frontend.Register import FormRegister
+    from frontend.tampilanRegister import FormRegister
     global form_register_window
     main_window.hide()
     form_register_window = FormRegister(menu_awal_window=main_window)

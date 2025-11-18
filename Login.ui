@@ -7,21 +7,21 @@
     <x>0</x>
     <y>0</y>
     <width>594</width>
-    <height>600</height>
+    <height>515</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(185, 225, 179);</string>
+   <string notr="true">background-color: rgb(187, 255, 253);</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
       <x>90</x>
-      <y>40</y>
+      <y>20</y>
       <width>411</width>
       <height>101</height>
      </rect>
@@ -29,21 +29,22 @@
     <property name="font">
      <font>
       <family>Times New Roman</family>
-      <pointsize>16</pointsize>
+      <pointsize>14</pointsize>
       <bold>true</bold>
      </font>
     </property>
     <property name="styleSheet">
      <string notr="true">border-radius: 30px;
-background-color: rgb(114, 170, 118);
+background-color: rgb(255, 255, 255);
 color: rgb(0, 0, 0);
 width: 200px;
 height: 50px;
 text-align: center;      
-line-height: 50px;  </string>
+line-height: 50px;  
+border: 3px solid white;   </string>
     </property>
     <property name="text">
-     <string>💊Selamat Datang di Aplikasi Apotek💊</string>
+     <string>  💊Selamat Datang di Aplikasi Apotek💊</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -59,9 +60,9 @@ line-height: 50px;  </string>
     <property name="geometry">
      <rect>
       <x>90</x>
-      <y>160</y>
+      <y>140</y>
       <width>411</width>
-      <height>271</height>
+      <height>221</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -76,16 +77,25 @@ border-radius: 20px;   </string>
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>260</x>
-      <y>490</y>
-      <width>75</width>
+      <x>224</x>
+      <y>390</y>
+      <width>141</width>
       <height>41</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(114, 170, 118);
-color: rgb(255, 255, 255);
-border-radius: 20px;</string>
+     <string notr="true">background-color: rgb(125, 202, 211);
+border-radius: 20px;
+border-width: 2px;            
+border-style: solid;       
+border-color: rgb(0, 0, 0);
+</string>
     </property>
     <property name="text">
      <string>Login</string>
@@ -95,14 +105,23 @@ border-radius: 20px;</string>
     <property name="geometry">
      <rect>
       <x>390</x>
-      <y>490</y>
+      <y>390</y>
       <width>75</width>
       <height>41</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 20px;</string>
+border-radius: 20px;
+border-width: 2px;            
+border-style: solid;       
+border-color: rgb(0, 0, 0);</string>
     </property>
     <property name="text">
      <string>Register</string>
@@ -112,15 +131,24 @@ border-radius: 20px;</string>
     <property name="geometry">
      <rect>
       <x>120</x>
-      <y>490</y>
+      <y>390</y>
       <width>75</width>
       <height>41</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(255, 0, 0);
 color: rgb(255, 255, 255);
-border-radius: 20px;</string>
+border-radius: 20px;
+border-width: 2px;            
+border-style: solid;       
+border-color: rgb(0, 0, 0);</string>
     </property>
     <property name="text">
      <string>Logout</string>
@@ -130,7 +158,7 @@ border-radius: 20px;</string>
     <property name="geometry">
      <rect>
       <x>190</x>
-      <y>210</y>
+      <y>190</y>
       <width>211</width>
       <height>51</height>
      </rect>
@@ -143,7 +171,8 @@ border-radius: 20px;</string>
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-radius: 20px;</string>
+     <string notr="true">border-radius: 20px;
+background-color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
      <string/>
@@ -153,7 +182,7 @@ border-radius: 20px;</string>
     <property name="geometry">
      <rect>
       <x>190</x>
-      <y>330</y>
+      <y>280</y>
       <width>211</width>
       <height>51</height>
      </rect>
@@ -166,7 +195,8 @@ border-radius: 20px;</string>
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-radius: 20px;</string>
+     <string notr="true">border-radius: 20px;
+background-color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
      <string/>
@@ -176,7 +206,7 @@ border-radius: 20px;</string>
     <property name="geometry">
      <rect>
       <x>260</x>
-      <y>180</y>
+      <y>160</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -200,7 +230,7 @@ border-radius: 20px;</string>
     <property name="geometry">
      <rect>
       <x>260</x>
-      <y>300</y>
+      <y>250</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -242,8 +272,6 @@ border-radius: 20px;</string>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources>
-  <include location="../../Downloads/userr.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

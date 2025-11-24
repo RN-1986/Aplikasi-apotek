@@ -129,3 +129,29 @@ class Ui_MainWindow(object):
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"Nama Obat       :", None))
     # retranslateUi
 
+class HapusObatWindow(QMainWindow):
+    def __init__(self, obatId, parent=None):
+        super().__init__(parent)
+        self._obatId = obatId
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
+        try:
+            if hasattr(self.ui, "pushButton"):
+                self.ui.pushButton.clicked.connect(self.confirm_hapus)
+            if hasattr(self.ui, "pushButton_2"):
+                self.ui.pushButton_2.clicked.connect(self.close)
+        except Exception:
+            pass
+
+    def confirm_hapus(self):
+        from backend.admin import hapusObat
+        from PySide6.QtWidgets import QMessageBox
+        pesan = hapusObat(self._obatId)
+        QMessageBox.information(self, "Info", pesan)
+        self.close()
+        try:
+            if hasattr(self.parent(), "refresh_data_obat"):
+                self.parent().refresh_data_obat()
+        except Exception:
+            pass
+

@@ -17,7 +17,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QLabel, QLineEdit, QMainWindow,
     QMenuBar, QPushButton, QSizePolicy, QStatusBar,
-    QWidget)
+    QWidget, QMessageBox)
+from backend.admin import ambilDataObatYangAkanDiUpdate, updateObat
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -127,4 +128,65 @@ class Ui_MainWindow(object):
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"Nama Obat       :", None))
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"Tgl Kadaluarsa     :", None))
     # retranslateUi
+
+class EditObatWindow(QMainWindow):
+    def __init__(self, obatId, parent=None):
+        super().__init__(parent)
+        self._obatId = obatId
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
+        try:
+            if hasattr(self.ui, "pushButton"):
+                self.ui.pushButton.clicked.connect(self.save)
+            if hasattr(self.ui, "pushButton_2"):
+                self.ui.pushButton_2.clicked.connect(self.close)
+        except Exception:
+            pass
+
+        # load data dari backend
+        try:
+            from backend.admin import ambilDataObatYangAkanDiUpdate
+            data = ambilDataObatYangAkanDiUpdate(obatId)
+            if isinstance(data, dict):
+                try: self.ui.lineEdit.setText(str(data.get("namaObat","")))
+                except Exception: pass
+                try: self.ui.lineEdit_2.setText(str(data.get("jenis","")))
+                except Exception: pass
+                try: self.ui.lineEdit_3.setText(str(data.get("harga","")))
+                except Exception: pass
+                try: self.ui.lineEdit_4.setText(str(data.get("stok","")))
+                except Exception: pass
+                try: self.ui.lineEdit_5.setText(str(data.get("kadaluarsa","")))
+                except Exception: pass
+            else:
+                # tuple/list fallback
+                try:
+                    if len(data) > 1: self.ui.lineEdit.setText(str(data[1]))
+                    if len(data) > 2: self.ui.lineEdit_2.setText(str(data[2]))
+                    if len(data) > 3: self.ui.lineEdit_3.setText(str(data[3]))
+                    if len(data) > 4: self.ui.lineEdit_4.setText(str(data[4]))
+                    if len(data) > 5: self.ui.lineEdit_5.setText(str(data[5]))
+                except Exception:
+                    pass
+        except Exception:
+            pass
+
+    def save(self):
+        from backend.admin import updateObat
+        from PySide6.QtWidgets import QMessageBox
+        def get(name):
+            return getattr(self.ui, name).text().strip() if hasattr(self.ui, name) else ""
+        nama = get("lineEdit")
+        jenis = get("lineEdit_2")
+        harga = get("lineEdit_3")
+        stok = get("lineEdit_4")
+        kadaluarsa = get("lineEdit_5") or get("lineEdit_6")
+        pesan = updateObat(self._obatId, nama, jenis, harga, stok, kadaluarsa)
+        QMessageBox.information(self, "Info", pesan)
+        self.close()
+        try:
+            if hasattr(self.parent(), "refresh_data_obat"):
+                self.parent().refresh_data_obat()
+        except Exception:
+            pass
 

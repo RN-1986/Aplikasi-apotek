@@ -19,7 +19,6 @@ from PySide6.QtWidgets import (QApplication, QFrame, QHeaderView, QLabel,
     QMainWindow, QMenuBar, QPushButton, QScrollBar,
     QSizePolicy, QStatusBar, QTableWidget, QTableWidgetItem,
     QTextBrowser, QWidget)
-import logo-apotek_rc
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):

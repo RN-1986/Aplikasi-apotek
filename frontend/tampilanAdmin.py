@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-from backend.admin import (
+from backend  .admin import (
     lihatSemuaDataObat,
     tambahObat,
     updateObat,

@@ -17,7 +17,12 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QLabel, QLineEdit, QMainWindow,
     QMenuBar, QPushButton, QSizePolicy, QStatusBar,
-    QWidget)
+    QWidget, QMessageBox)
+from backend.login import login, session
+from backend.logout import logout as backend_logout
+from dashboardAdmin import DashboardAdmin
+from PySide6.QtWidgets import QMainWindow, QPushButton
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -134,13 +139,37 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-
         QMetaObject.connectSlotsByName(MainWindow)
+
+        # simpan referensi window supaya bisa ditutup oleh proses_login
+        self.login_window = MainWindow
+
+        # koneksikan tombol Login / Register / Logout tanpa try/except
+        if hasattr(self, "pushButton"):
+            self.pushButton.setEnabled(True)
+            self.pushButton.clicked.connect(lambda: self.proses_login(MainWindow))
+
+        if hasattr(self, "lineEdit"):
+            self.lineEdit.returnPressed.connect(lambda: self.proses_login(MainWindow))
+
+        if hasattr(self, "lineEdit_2"):
+            self.lineEdit_2.returnPressed.connect(lambda: self.proses_login(MainWindow))
+
+        if hasattr(self, "pushButton_2"):
+            # tombol Register
+            self.pushButton_2.clicked.connect(lambda: self.action_register(MainWindow))
+
+        if hasattr(self, "pushButton_3"):
+            # tombol Logout
+            self.pushButton_3.clicked.connect(lambda: self.action_logout(MainWindow))
+
+        # set state awal tombol berdasarkan session
+        self.update_button_states()
     # setupUi
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.label.setText(QCoreApplication.translate("MainWindow", u"  \ud83d\udc8aSelamat Datang di Aplikasi Apotek\ud83d\udc8a", None))
+        self.label.setText(QCoreApplication.translate("MainWindow", u"Selamat Datang di Aplikasi Apotek", None))
         self.label_2.setText("")
         self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Login", None))
         self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"Register", None))
@@ -150,4 +179,72 @@ class Ui_MainWindow(object):
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"Username:", None))
         self.label_4.setText(QCoreApplication.translate("MainWindow", u"Password:", None))
     # retranslateUi
+    # ======================================================
+    #  FUNGSI LOGIN - harus jadi method class
+    # ======================================================
+    def proses_login(self, MainWindow):
+        username = self.lineEdit.text()
+        password = self.lineEdit_2.text()
 
+        if not username or not password:
+            QMessageBox.warning(MainWindow, "Peringatan", "Username dan password harus diisi!")
+            return
+
+        pesan = login(username, password)
+
+        if session.get('is_login'):
+            QMessageBox.information(MainWindow, "Login Berhasil", pesan)
+            role = session.get('role')
+
+            if role == "admin":
+                # buka dashboard admin (kelas DashboardAdmin)
+                self.window = DashboardAdmin()
+                self.window.show()
+                # tutup window login
+                if hasattr(self, "login_window") and self.login_window:
+                    self.login_window.close()
+            else:
+                QMessageBox.warning(MainWindow, "Role belum tersedia", f"Role '{role}' belum didukung.")
+        else:
+            QMessageBox.critical(MainWindow, "Login Gagal", pesan)
+
+    def update_button_states(self):
+        """
+        Atur enabled/disabled untuk tiga tombol:
+        - sebelum login: Login & Register aktif, Logout non-aktif
+        - sesudah login : Login & Register non-aktif, Logout aktif
+        """
+        logged = bool(session.get('is_login'))
+        if hasattr(self, "pushButton"):
+            self.pushButton.setEnabled(not logged)
+        if hasattr(self, "pushButton_2"):
+            self.pushButton_2.setEnabled(not logged)
+        if hasattr(self, "pushButton_3"):
+            self.pushButton_3.setEnabled(not logged)
+
+    def action_register(self, MainWindow):
+        """
+        Aksi register sederhana — ganti dengan membuka form register bila ada.
+        """
+        QMessageBox.information(MainWindow, "Register", "Fitur registrasi belum tersedia.")
+
+    def action_logout(self, MainWindow):
+        # panggil backend untuk membersihkan session
+        pesan = backend_logout()
+        QMessageBox.information(MainWindow, "Logout", pesan)
+
+        # tutup window yang dipassing (mis. window login atau dashboard)
+        MainWindow.close()
+
+        # pastikan aplikasi berhenti jika tidak ada window tersisa
+        QApplication.quit()
+
+
+if __name__ == "__main__":
+    import sys
+    app = QApplication(sys.argv)
+    MainWindow = QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec())

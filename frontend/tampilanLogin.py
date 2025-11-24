@@ -6,7 +6,7 @@ from backend.login import login, session
 def tampil_login():
     root = tk.Tk()
     root.title("Login Aplikasi Apotek")
-    root.geometry("300x200")
+    root.geometry("400x400")
     root.resizable(False, False)
 
     tk.Label(root, text="Username").pack(pady=(20, 5))

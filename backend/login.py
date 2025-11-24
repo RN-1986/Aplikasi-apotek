@@ -3,7 +3,9 @@ import bcrypt
 
 session = {
     'is_login' : False,
-    'dataUser' : None
+    'dataUser' : None,
+    'role': None,
+    'userId': None
 }
 
 def login(username,password):
@@ -24,6 +26,9 @@ def login(username,password):
             'username' : dataUserDariDatabase['username'],
             'role' : dataUserDariDatabase['role']
         }
+        # set top-level keys supaya frontend bisa langsung baca session.get('role') / session.get('userId')
+        session['role'] = dataUserDariDatabase.get('role')
+        session['userId'] = dataUserDariDatabase.get('userId')
         pesan = f"Selamat datang {dataUserDariDatabase['username']}!"
     else:
         pesan = "Username atau password salah"

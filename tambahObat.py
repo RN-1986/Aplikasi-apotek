@@ -17,8 +17,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QLabel, QLineEdit, QMainWindow,
     QMenuBar, QPushButton, QSizePolicy, QStatusBar,
-    QWidget)
-import logoApotek_rc
+    QWidget, QMessageBox)
+from backend.admin import tambahObat as backend_tambahObat
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -128,4 +128,45 @@ class Ui_MainWindow(object):
         self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"Batal", None))
         self.label_7.setText(QCoreApplication.translate("MainWindow", u"Tgl Kadaluarsa     :", None))
     # retranslateUi
+
+class TambahObatWindow(QMainWindow):
+    """
+    Window wrapper untuk UI Tambah Obat.
+    Gunakan: win = TambahObatWindow(on_saved=self.refresh_data_obat); win.show()
+    """
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
+        try:
+            # tombol simpan / batal: sesuaikan nama tombol di UI jika berbeda
+            if hasattr(self.ui, "pushButton"):
+                self.ui.pushButton.clicked.connect(self.save)
+            if hasattr(self.ui, "pushButton_2"):
+                self.ui.pushButton_2.clicked.connect(self.close)
+        except Exception:
+            pass
+
+    def save(self):
+        from backend.admin import tambahObat
+        from PySide6.QtWidgets import QMessageBox
+        # ambil field dengan fallback jika nama berbeda
+        def get(name):
+            return getattr(self.ui, name).text().strip() if hasattr(self.ui, name) else ""
+        nama = get("lineEdit") or get("lineEdit_1")
+        jenis = get("lineEdit_2")
+        harga = get("lineEdit_3")
+        stok = get("lineEdit_4")
+        kadaluarsa = get("lineEdit_6") or get("lineEdit_5")
+        if not nama:
+            QMessageBox.warning(self, "Peringatan", "Nama obat harus diisi")
+            return
+        pesan = tambahObat(nama, jenis, harga, stok, kadaluarsa)
+        QMessageBox.information(self, "Info", pesan)
+        self.close()
+        try:
+            if hasattr(self.parent(), "refresh_data_obat"):
+                self.parent().refresh_data_obat()
+        except Exception:
+            pass
 

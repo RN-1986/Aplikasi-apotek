@@ -10,9 +10,9 @@ from PySide6.QtWidgets import (QApplication, QLabel, QLineEdit, QMainWindow,
     QWidget, QMessageBox)
 from backend.login import login, session
 from backend.logout import logout as backend_logout
-from frontend.dashboardAdmin import DashboardAdmin
+from tes.dashboardAdmin_lama import DashboardAdmin
 from PySide6.QtWidgets import QMainWindow, QPushButton
-from frontend.tampilanRegister_lama import tampil_register
+from tes.tampilanRegister_lama import tampil_register
 
 
 class Ui_MainWindow(object):

@@ -1,0 +1,648 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>854</width>
+    <height>657</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(255, 255, 255);</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QTextBrowser" name="textBrowser">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>60</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(187, 255, 253);
+border-radius: 10px;</string>
+      </property>
+      <property name="html">
+       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;DASHBOARD&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;APOTEKER&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QTabBar::tab{
+ background-color: rgb(255, 255, 255); 
+padding: 8px 20px; 
+border-radius: 6px; 
+margin-right: 5px; }
+
+ QTabBar::tab:selected { 
+background-color: rgb(48, 93, 124); 
+color: rgb(255, 255, 255); 
+}
+ QTabWidget::pane { 
+border: none; /* samakan dengan QWidget */ 
+background-color: rgb(125, 202, 211); 
+}</string>
+      </property>
+      <property name="currentIndex">
+       <number>1</number>
+      </property>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>Lihat Keranjang</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QTableWidget" name="tableWidget">
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(187, 255, 253);</string>
+          </property>
+          <attribute name="horizontalHeaderDefaultSectionSize">
+           <number>163</number>
+          </attribute>
+          <column>
+           <property name="text">
+            <string>Keranjang ID</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Nama Pembeli</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Total Harga</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Status</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Apoteker</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+        <item>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="1" column="3">
+           <widget class="QPushButton" name="pushButton_refresh_2">
+            <property name="styleSheet">
+             <string notr="true">QPushButton { 
+background-color: rgb(125, 202, 211);
+border-radius:5px;
+	border-radius: 5px;
+padding: 6px 8px; 
+}
+
+/* Saat kursor hover */
+QPushButton:hover {
+     /* warna saat hover */
+	color: rgb(255, 255, 255);
+	background-color: rgb(36, 79, 124);
+}
+
+/* Saat tombol ditekan */
+QPushButton:pressed {
+     /* warna saat ditekan */
+	color: rgb(255, 255, 255);
+	background-color: rgb(36, 79, 124);
+}
+</string>
+            </property>
+            <property name="text">
+             <string>Refresh</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="5">
+           <widget class="QPushButton" name="pushButton_buatKeranjang">
+            <property name="styleSheet">
+             <string notr="true">QPushButton { 
+		background-color: rgb(85, 255, 0);
+	border-radius: 5px;
+padding: 6px 8px; 
+}
+
+/* Saat kursor hover */
+QPushButton:hover {
+     /* warna saat hover */
+	background-color: rgb(85, 255, 127);
+    color: black;
+}
+
+/* Saat tombol ditekan */
+QPushButton:pressed {
+     /* warna saat ditekan */
+		background-color: rgb(85, 255, 127);
+    color: black;
+}
+
+</string>
+            </property>
+            <property name="text">
+             <string>Buat Keranjang</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="6">
+           <widget class="QPushButton" name="pushButton_kirimKasir">
+            <property name="styleSheet">
+             <string notr="true">QPushButton { 
+background-color: rgb(255, 255, 0);	
+	border-radius: 5px;
+padding: 6px 8px; 
+}
+
+/* Saat kursor hover */
+QPushButton:hover {
+     /* warna saat hover */
+	background-color: rgb(255, 255, 127);
+    color: black;
+}
+
+/* Saat tombol ditekan */
+QPushButton:pressed {
+     /* warna saat ditekan */
+	background-color: rgb(255, 255, 127);
+    color: black;
+}</string>
+            </property>
+            <property name="text">
+             <string>Kirim Kasir</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="4">
+           <widget class="QPushButton" name="pushButton_lihatDetail">
+            <property name="styleSheet">
+             <string notr="true">QPushButton { 
+background-color: rgb(125, 202, 211);
+border-radius:5px;
+	border-radius: 5px;
+padding: 6px 8px; 
+}
+
+/* Saat kursor hover */
+QPushButton:hover {
+     /* warna saat hover */
+	color: rgb(255, 255, 255);
+	background-color: rgb(36, 79, 124);
+}
+
+/* Saat tombol ditekan */
+QPushButton:pressed {
+     /* warna saat ditekan */
+	color: rgb(255, 255, 255);
+	background-color: rgb(36, 79, 124);
+}
+</string>
+            </property>
+            <property name="text">
+             <string>Lihat Detail</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QPushButton" name="pushButton_editKeranjang">
+            <property name="styleSheet">
+             <string notr="true">QPushButton { 
+background-color: rgb(125, 202, 211);
+border-radius:5px;
+	border-radius: 5px;
+padding: 6px 8px; 
+}
+
+/* Saat kursor hover */
+QPushButton:hover {
+     /* warna saat hover */
+	color: rgb(255, 255, 255);
+	background-color: rgb(36, 79, 124);
+}
+
+/* Saat tombol ditekan */
+QPushButton:pressed {
+     /* warna saat ditekan */
+	color: rgb(255, 255, 255);
+	background-color: rgb(36, 79, 124);
+}
+</string>
+            </property>
+            <property name="text">
+             <string>Edit Keranjang</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QPushButton" name="pushButton_hapusKeranjang">
+            <property name="styleSheet">
+             <string notr="true">QPushButton { 
+border-radius: 5px;
+padding: 6px 8px; 
+	background-color: rgb(255, 0, 0);
+    color: white;
+}
+
+/* Saat kursor hover */
+QPushButton:hover {
+     /* warna saat hover */
+background-color:rgb(213, 0, 0);
+	color: white;
+}
+
+/* Saat tombol ditekan */
+QPushButton:pressed {
+     /* warna saat ditekan */
+background-color: rgb(213, 0, 0);
+	color: white;
+}</string>
+            </property>
+            <property name="text">
+             <string>Hapus Keranjang</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item alignment="Qt::AlignHCenter">
+         <widget class="QPushButton" name="pushButton_batalKeranjang">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton { 
+	background-color: rgb(255, 0, 0);
+color: rgb(255, 255, 255);
+border-radius: 5px;
+padding: 10px 20px;
+}
+
+/* Saat kursor hover */
+QPushButton:hover {
+     /* warna saat hover */
+	
+	background-color: rgb(190, 0, 0);
+    color: white;
+}
+
+/* Saat tombol ditekan */
+QPushButton:pressed {
+     /* warna saat ditekan */
+	
+	background-color: rgb(190, 0, 0);
+    color: white;
+}</string>
+          </property>
+          <property name="text">
+           <string>Batalkan Keranjang</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>Tambah Data Keranjang</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="8" column="4">
+         <widget class="QPushButton" name="pushButton_simpan">
+          <property name="maximumSize">
+           <size>
+            <width>700</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton { 
+background-color: rgb(49, 245, 46);
+	border-radius: 5px;
+padding: 6px 40px; 
+}
+
+/* Saat kursor hover */
+QPushButton:hover {
+     /* warna saat hover */
+	background-color: rgb(85, 255, 127);
+    color: black;
+}
+
+/* Saat tombol ditekan */
+QPushButton:pressed {
+     /* warna saat ditekan */
+		background-color: rgb(85, 255, 127);
+    color: black;
+}
+
+</string>
+          </property>
+          <property name="text">
+           <string>Simpan</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="5">
+         <widget class="QPushButton" name="pushButton_refresh">
+          <property name="styleSheet">
+           <string notr="true">QPushButton { 
+background-color: rgb(125, 202, 211);
+border-radius:5px;
+	border-radius: 5px;
+padding: 6px 8px; 
+}
+
+/* Saat kursor hover */
+QPushButton:hover {
+     /* warna saat hover */
+	color: rgb(255, 255, 255);
+	background-color: rgb(36, 79, 124);
+}
+
+/* Saat tombol ditekan */
+QPushButton:pressed {
+     /* warna saat ditekan */
+	color: rgb(255, 255, 255);
+	background-color: rgb(36, 79, 124);
+}
+</string>
+          </property>
+          <property name="text">
+           <string>Refresh</string>
+          </property>
+         </widget>
+        </item>
+        <item row="8" column="2">
+         <widget class="QLineEdit" name="lineEdit_jumlahObat">
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(255, 255, 255);
+border-radius: 8px;
+padding: 6px 8px; 
+border: 1px solid black;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="0" colspan="7">
+         <widget class="QTableWidget" name="tableWidget_2">
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(187, 255, 253);</string>
+          </property>
+          <attribute name="horizontalHeaderDefaultSectionSize">
+           <number>163</number>
+          </attribute>
+          <column>
+           <property name="text">
+            <string>Nama Obat</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Jenis</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Harga</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Stok</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Kadaluarsa</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+            </font>
+           </property>
+          </column>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label">
+          <property name="maximumSize">
+           <size>
+            <width>450</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(255, 255, 255);</string>
+          </property>
+          <property name="text">
+           <string>Nama Pembeli  :</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" colspan="3">
+         <widget class="QLabel" name="label_2">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>780</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(187, 255, 253);
+border-radius: 5px;
+padding: 6px 8px;</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="8" column="0">
+         <widget class="QLabel" name="label_8">
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(255, 255, 255);</string>
+          </property>
+          <property name="text">
+           <string>Masukkan jumlah obat   :</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0" colspan="7">
+         <widget class="QLabel" name="label_3">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>120</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(187, 255, 253);
+border-radius: 2px;
+</string>
+          </property>
+          <property name="text">
+           <string> Pilih obat yang ingin ditambahkan!</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+    <item alignment="Qt::AlignRight">
+     <widget class="QPushButton" name="pushButton_keluar">
+      <property name="maximumSize">
+       <size>
+        <width>240</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>12</pointsize>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton { 
+border-radius: 5px;
+padding: 6px 20px;
+    min-width: 100px;
+    max-width: 200px;
+	background-color: rgb(255, 0, 0);
+    color: white;
+}
+
+/* Saat kursor hover */
+QPushButton:hover {
+     /* warna saat hover */
+background-color:rgb(213, 0, 0);
+	color: white;
+}
+
+/* Saat tombol ditekan */
+QPushButton:pressed {
+     /* warna saat ditekan */
+background-color: rgb(213, 0, 0);
+	color: white;
+}</string>
+      </property>
+      <property name="text">
+       <string>Keluar</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>854</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources>
+  <include location="frontend/logo-apotek.qrc"/>
+ </resources>
+ <connections/>
+</ui>

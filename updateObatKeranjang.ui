@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>458</width>
-    <height>367</height>
+    <width>463</width>
+    <height>327</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,144 +23,70 @@
       <property name="maximumSize">
        <size>
         <width>16777215</width>
-        <height>60</height>
+        <height>30</height>
        </size>
       </property>
       <property name="font">
        <font>
-        <family>Times New Roman</family>
-        <pointsize>18</pointsize>
+        <pointsize>13</pointsize>
         <bold>true</bold>
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">
-border-radius: 20px;</string>
+       <string notr="true"/>
       </property>
       <property name="text">
-       <string>Edit Obat </string>
+       <string>  Update Data Keranjang</string>
       </property>
      </widget>
     </item>
     <item>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Nama Obat       :</string>
+      <item row="1" column="2">
+       <widget class="QLineEdit" name="lineEdit_2">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(255, 255, 255);
+border-radius: 10px;
+padding: 8px 8px;</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QLineEdit" name="lineEdit">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 10px;
-padding: 6px 8px;</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_3">
+       <widget class="QLabel" name="label_2">
         <property name="font">
          <font>
-          <pointsize>12</pointsize>
+          <pointsize>8</pointsize>
          </font>
         </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
         <property name="text">
-         <string>Jenis Obat         :</string>
+         <string>Nama Obat  :</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QLineEdit" name="lineEdit_2">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 10px;
-padding: 6px 8px;</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
        <widget class="QLabel" name="label_4">
         <property name="font">
          <font>
-          <pointsize>12</pointsize>
+          <pointsize>8</pointsize>
          </font>
         </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
         <property name="text">
-         <string>Harga                :</string>
+         <string>Jumlah          :</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
-       <widget class="QLineEdit" name="lineEdit_3">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
+      <item row="0" column="2">
+       <widget class="QLineEdit" name="lineEdit">
         <property name="styleSheet">
          <string notr="true">background-color: rgb(255, 255, 255);
 border-radius: 10px;
-padding: 6px 8px;</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label_5">
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Stok                   :</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QLineEdit" name="lineEdit_4">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 10px;
-padding: 6px 8px;</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="label_6">
-        <property name="font">
-         <font>
-          <pointsize>11</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Tgl Kadaluarsa     :</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="1">
-       <widget class="QLineEdit" name="lineEdit_5">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 10px;
-padding: 6px 8px;</string>
+padding: 8px 8px;</string>
         </property>
        </widget>
       </item>
@@ -174,7 +100,7 @@ padding: 6px 8px;</string>
          <string notr="true">QPushButton { 
 background-color: rgb(49, 245, 46);
 	border-radius: 5px;
-padding: 6px 8px; 
+padding: 8px 8px;
 }
 
 /* Saat kursor hover */
@@ -194,7 +120,7 @@ QPushButton:pressed {
 </string>
         </property>
         <property name="text">
-         <string>Simpan</string>
+         <string>SIMPAN</string>
         </property>
        </widget>
       </item>
@@ -203,7 +129,7 @@ QPushButton:pressed {
         <property name="styleSheet">
          <string notr="true">QPushButton { 
 border-radius: 5px;
-padding: 6px 8px; 
+padding: 8px 8px;
 	background-color: rgb(255, 0, 0);
     color: white;
 }
@@ -223,7 +149,7 @@ background-color: rgb(213, 0, 0);
 }</string>
         </property>
         <property name="text">
-         <string>Batal</string>
+         <string>BATAL</string>
         </property>
        </widget>
       </item>
@@ -237,8 +163,8 @@ background-color: rgb(213, 0, 0);
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>88</width>
-          <height>25</height>
+          <width>40</width>
+          <height>20</height>
          </size>
         </property>
        </spacer>
@@ -252,7 +178,7 @@ background-color: rgb(213, 0, 0);
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>458</width>
+     <width>463</width>
      <height>22</height>
     </rect>
    </property>

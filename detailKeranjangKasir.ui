@@ -6,15 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>607</width>
-    <height>405</height>
+    <width>573</width>
+    <height>526</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
-  </property>
-  <property name="styleSheet">
-   <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -27,21 +24,52 @@
        </font>
       </property>
       <property name="text">
-       <string>                                    DETAIL RIWAYAT TRANSAKSI</string>
+       <string>Detail Riwayat Keranjang</string>
       </property>
      </widget>
     </item>
     <item>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="font">
+         <font>
+          <pointsize>13</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Nama Pembeli  :</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_namaPembeli">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(255, 255, 255);
+border-radius: 5px;
+padding: 6px 8px; 
+alternate-background-color: rgb(187, 255, 253);</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
      <widget class="QTableWidget" name="tableWidget">
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 255, 255);</string>
-      </property>
       <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>134</number>
+       <number>110</number>
       </attribute>
       <column>
        <property name="text">
-        <string>Detail ID</string>
+        <string>Keranjang ID</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>ID Obat</string>
        </property>
       </column>
       <column>
@@ -61,19 +89,16 @@
       </column>
      </widget>
     </item>
-    <item>
+    <item alignment="Qt::AlignRight">
      <widget class="QPushButton" name="pushButton">
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
       <property name="styleSheet">
        <string notr="true">QPushButton { 
-border-radius: 5px;
-padding: 6px 8px; 
+border-radius: 5px; 
 	background-color: rgb(255, 0, 0);
     color: white;
+padding: 6px 20px;
+    min-width: 100px;
+    max-width: 200px;
 }
 
 /* Saat kursor hover */
@@ -91,7 +116,7 @@ background-color: rgb(213, 0, 0);
 }</string>
       </property>
       <property name="text">
-       <string>Keluar</string>
+       <string>PushButton</string>
       </property>
      </widget>
     </item>
@@ -102,7 +127,7 @@ background-color: rgb(213, 0, 0);
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>607</width>
+     <width>573</width>
      <height>22</height>
     </rect>
    </property>

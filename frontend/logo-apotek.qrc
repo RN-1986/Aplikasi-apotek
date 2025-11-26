@@ -1,0 +1,15 @@
+<RCC>
+  <qresource prefix="logo-apoteker">
+    <file>asset/logo_apoteker.jpeg</file>
+    <file>asset/admin-alt.png</file>
+    <file>asset/circle-user.png</file>
+    <file>asset/medication.png</file>
+    <file>asset/money-check-edit.png</file>
+    <file>asset/money-gears.png</file>
+    <file>asset/search.png</file>
+    <file>asset/trading.png</file>
+  </qresource>
+  <qresource prefix="logo-apotek">
+    <file>asset/apotek.jpeg</file>
+  </qresource>
+</RCC>

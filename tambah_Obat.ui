@@ -6,53 +6,65 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>458</width>
-    <height>367</height>
+    <width>453</width>
+    <height>408</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true"/>
-  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QLabel" name="label">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
       <property name="maximumSize">
        <size>
-        <width>16777215</width>
+        <width>9000</width>
         <height>60</height>
        </size>
       </property>
       <property name="font">
        <font>
         <family>Times New Roman</family>
-        <pointsize>18</pointsize>
+        <pointsize>20</pointsize>
         <bold>true</bold>
        </font>
       </property>
       <property name="styleSheet">
        <string notr="true">
-border-radius: 20px;</string>
+border-radius: 5px;</string>
       </property>
       <property name="text">
-       <string>Edit Obat </string>
+       <string>Tambah Obat + </string>
       </property>
      </widget>
     </item>
     <item>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="lineEdit_2">
+        <property name="enabled">
+         <bool>true</bool>
         </property>
-        <property name="text">
-         <string>Nama Obat       :</string>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(255, 255, 255);
+border-radius: 10px;
+padding: 6px 8px;</string>
         </property>
        </widget>
       </item>
@@ -68,20 +80,8 @@ padding: 6px 8px;</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Jenis Obat         :</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="lineEdit_2">
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="lineEdit_4">
         <property name="enabled">
          <bool>true</bool>
         </property>
@@ -89,6 +89,30 @@ padding: 6px 8px;</string>
          <string notr="true">background-color: rgb(255, 255, 255);
 border-radius: 10px;
 padding: 6px 8px;</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QLineEdit" name="lineEdit_6">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(255, 255, 255);
+border-radius: 10px;
+padding: 6px 8px;</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Nama Obat       :</string>
         </property>
        </widget>
       </item>
@@ -104,18 +128,6 @@ padding: 6px 8px;</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
-       <widget class="QLineEdit" name="lineEdit_3">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 10px;
-padding: 6px 8px;</string>
-        </property>
-       </widget>
-      </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_5">
         <property name="font">
@@ -128,8 +140,8 @@ padding: 6px 8px;</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
-       <widget class="QLineEdit" name="lineEdit_4">
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="lineEdit_3">
         <property name="enabled">
          <bool>true</bool>
         </property>
@@ -141,7 +153,7 @@ padding: 6px 8px;</string>
        </widget>
       </item>
       <item row="4" column="0">
-       <widget class="QLabel" name="label_6">
+       <widget class="QLabel" name="label_7">
         <property name="font">
          <font>
           <pointsize>11</pointsize>
@@ -152,22 +164,54 @@ padding: 6px 8px;</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
-       <widget class="QLineEdit" name="lineEdit_5">
-        <property name="enabled">
-         <bool>true</bool>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
         </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 10px;
-padding: 6px 8px;</string>
+        <property name="text">
+         <string>Jenis Obat         :</string>
         </property>
        </widget>
       </item>
      </layout>
     </item>
     <item>
-     <layout class="QGridLayout" name="gridLayout_2">
+     <layout class="QGridLayout" name="gridLayout">
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QPushButton" name="pushButton_batal">
+        <property name="styleSheet">
+         <string notr="true">QPushButton { 
+border-radius: 5px;
+padding: 6px 8px; 
+	background-color: rgb(255, 0, 0);
+    color: white;
+}
+
+/* Saat kursor hover */
+QPushButton:hover {
+     /* warna saat hover */
+background-color:rgb(213, 0, 0);
+	color: white;
+}
+
+/* Saat tombol ditekan */
+QPushButton:pressed {
+     /* warna saat ditekan */
+background-color: rgb(213, 0, 0);
+	color: white;
+}</string>
+        </property>
+        <property name="text">
+         <string>Batal</string>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="2">
        <widget class="QPushButton" name="pushButton_simpan">
         <property name="styleSheet">
@@ -198,35 +242,6 @@ QPushButton:pressed {
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QPushButton" name="pushButton_batal">
-        <property name="styleSheet">
-         <string notr="true">QPushButton { 
-border-radius: 5px;
-padding: 6px 8px; 
-	background-color: rgb(255, 0, 0);
-    color: white;
-}
-
-/* Saat kursor hover */
-QPushButton:hover {
-     /* warna saat hover */
-background-color:rgb(213, 0, 0);
-	color: white;
-}
-
-/* Saat tombol ditekan */
-QPushButton:pressed {
-     /* warna saat ditekan */
-background-color: rgb(213, 0, 0);
-	color: white;
-}</string>
-        </property>
-        <property name="text">
-         <string>Batal</string>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="1">
        <spacer name="horizontalSpacer">
         <property name="orientation">
@@ -237,8 +252,8 @@ background-color: rgb(213, 0, 0);
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>88</width>
-          <height>25</height>
+          <width>40</width>
+          <height>20</height>
          </size>
         </property>
        </spacer>
@@ -252,7 +267,7 @@ background-color: rgb(213, 0, 0);
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>458</width>
+     <width>453</width>
      <height>22</height>
     </rect>
    </property>

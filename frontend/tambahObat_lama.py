@@ -115,6 +115,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
 
         QMetaObject.connectSlotsByName(MainWindow)
+        MainWindow.setFixedSize(MainWindow.size())
     # setupUi
 
     def retranslateUi(self, MainWindow):

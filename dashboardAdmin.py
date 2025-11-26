@@ -15,87 +15,94 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFrame, QHeaderView, QLabel,
+from PySide6.QtWidgets import (QApplication, QGridLayout, QHeaderView, QLabel,
     QLineEdit, QMainWindow, QMenuBar, QPushButton,
-    QScrollBar, QSizePolicy, QStatusBar, QTableWidget,
-    QTableWidgetItem, QTextBrowser, QWidget, QMessageBox)
-from backend.admin import (
-    lihatSemuaDataObat, tambahObat, updateObat, hapusObat,
-    lihatSemuaTransaksi, lihatDetailTransaksi, cariObat,
-    ambilDataObatYangAkanDiUpdate
-)
-# tambahkan import UI windows lain + wrapper window classes
-from tambahObat import Ui_MainWindow as Ui_TambahObat, TambahObatWindow
-from editObat import Ui_MainWindow as Ui_EditObat, EditObatWindow
-from hapusObat import Ui_MainWindow as Ui_HapusObat, HapusObatWindow
-from adminRiwayatTransaksi import Ui_MainWindow as Ui_Riwayat
-from detailRiwayatTransaksi import Ui_MainWindow as Ui_Detail
-from datetime import datetime
+    QSizePolicy, QStatusBar, QTabWidget, QTableWidget,
+    QTableWidgetItem, QTextBrowser, QVBoxLayout, QWidget)
+import logo-apotek_rc
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(947, 608)
+        MainWindow.resize(881, 632)
+        MainWindow.setMaximumSize(QSize(16777215, 16777215))
         MainWindow.setStyleSheet(u"background-color: rgb(255, 255, 255);")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.label_4 = QLabel(self.centralwidget)
-        self.label_4.setObjectName(u"label_4")
-        self.label_4.setGeometry(QRect(160, 40, 41, 31))
-        self.label_4.setStyleSheet(u"image: url(:/Icons/medication.png);\n"
-"border-radius: 15px;")
-        self.label_6 = QLabel(self.centralwidget)
-        self.label_6.setObjectName(u"label_6")
-        self.label_6.setGeometry(QRect(20, 530, 31, 31))
-        self.label_6.setStyleSheet(u"image: url(:/logoKasir/circle-user.png);\n"
-"border-radius: 15px;")
-        self.label = QLabel(self.centralwidget)
-        self.label.setObjectName(u"label")
-        self.label.setGeometry(QRect(20, 230, 41, 41))
-        self.label.setStyleSheet(u"image: url(:/logo-admin/money-check-edit.png);\n"
-"\n"
-"background-color: rgb(125, 202, 211);\n"
-"border-radius: 5px;")
-        self.frame = QFrame(self.centralwidget)
-        self.frame.setObjectName(u"frame")
-        self.frame.setGeometry(QRect(260, 10, 661, 501))
-        self.frame.setStyleSheet(u"border-radius: 20px;\n"
-"background-color: rgb(187, 255, 253);")
-        self.frame.setFrameShape(QFrame.StyledPanel)
-        self.frame.setFrameShadow(QFrame.Raised)
-        self.label_2 = QLabel(self.frame)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setGeometry(QRect(40, 20, 561, 81))
-        self.label_2.setStyleSheet(u"background-color: rgb(255, 255, 255);\n"
-"border radius: 30px;")
-        self.label_3 = QLabel(self.frame)
-        self.label_3.setObjectName(u"label_3")
-        self.label_3.setGeometry(QRect(60, 10, 71, 20))
+        self.gridLayout_4 = QGridLayout(self.centralwidget)
+        self.gridLayout_4.setObjectName(u"gridLayout_4")
+        self.pushButton_keluar = QPushButton(self.centralwidget)
+        self.pushButton_keluar.setObjectName(u"pushButton_keluar")
+        self.pushButton_keluar.setMinimumSize(QSize(140, 0))
+        self.pushButton_keluar.setMaximumSize(QSize(240, 16777215))
         font = QFont()
-        font.setPointSize(10)
-        self.label_3.setFont(font)
-        self.label_3.setStyleSheet(u"border-radius: 5px;\n"
-"background-color: rgb(125, 202, 211);")
-        self.lineEdit = QLineEdit(self.frame)
-        self.lineEdit.setObjectName(u"lineEdit")
-        self.lineEdit.setGeometry(QRect(160, 40, 261, 41))
-        self.lineEdit.setStyleSheet(u"border-radius: 15px;\n"
-"background-color: rgb(125, 202, 211);")
-        self.pushButton_search = QPushButton(self.frame)
-        self.pushButton_search.setObjectName(u"pushButton_search")
-        self.pushButton_search.setGeometry(QRect(420, 50, 41, 21))
-        self.pushButton_search.setStyleSheet(u"border-radius: 50px;\n"
-"background-color: rgba(255, 255, 255, 80);\n"
-"image: url(:/logo-admin/search.png);")
-        self.pushButton_4 = QPushButton(self.frame)
-        self.pushButton_4.setObjectName(u"pushButton_4")
-        self.pushButton_4.setGeometry(QRect(480, 40, 71, 41))
-        self.pushButton_4.setStyleSheet(u"border-radius: 5px;\n"
-"background-color: rgb(125, 202, 211);")
-        self.tableWidget = QTableWidget(self.frame)
-        if (self.tableWidget.columnCount() < 5):
-            self.tableWidget.setColumnCount(5)
+        font.setFamilies([u"Segoe UI"])
+        font.setPointSize(12)
+        font.setBold(False)
+        font.setItalic(False)
+        self.pushButton_keluar.setFont(font)
+        self.pushButton_keluar.setStyleSheet(u"QPushButton { \n"
+"border-radius: 5px;\n"
+"	background-color: rgb(255, 0, 0);\n"
+"    color: white;\n"
+"padding: 6px 20px;\n"
+"    min-width: 100px;\n"
+"    max-width: 200px;\n"
+"}\n"
+"\n"
+"/* Saat kursor hover */\n"
+"QPushButton:hover {\n"
+"     /* warna saat hover */\n"
+"background-color:rgb(213, 0, 0);\n"
+"	color: white;\n"
+"}\n"
+"\n"
+"/* Saat tombol ditekan */\n"
+"QPushButton:pressed {\n"
+"     /* warna saat ditekan */\n"
+"background-color: rgb(213, 0, 0);\n"
+"	color: white;\n"
+"}")
+
+        self.gridLayout_4.addWidget(self.pushButton_keluar, 3, 0, 1, 1, Qt.AlignRight|Qt.AlignVCenter)
+
+        self.tabWidget = QTabWidget(self.centralwidget)
+        self.tabWidget.setObjectName(u"tabWidget")
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.tabWidget.sizePolicy().hasHeightForWidth())
+        self.tabWidget.setSizePolicy(sizePolicy)
+        self.tabWidget.setMinimumSize(QSize(0, 450))
+        self.tabWidget.setMaximumSize(QSize(16777215, 450))
+        self.tabWidget.setStyleSheet(u"QTabBar::tab {       \n"
+"	\n"
+"	background-color: rgb(255, 255, 255);\n"
+"         padding: 8px 20px;\n"
+"         border-radius: 6px;\n"
+"         margin-right: 5px;\n"
+"       }\n"
+"       QTabBar::tab:selected {\n"
+"	background-color: rgb(48, 93, 124);\n"
+"	color: rgb(255, 255, 255);\n"
+"       }\n"
+"\n"
+"QTabWidget::pane {\n"
+"    border: none;\n"
+"    /* samakan dengan QWidget */\n"
+"	\n"
+"	background-color: rgb(125, 202, 211);\n"
+"}\n"
+"\n"
+"")
+        self.tab = QWidget()
+        self.tab.setObjectName(u"tab")
+        self.gridLayout_3 = QGridLayout(self.tab)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.tableWidget = QTableWidget(self.tab)
+        if (self.tableWidget.columnCount() < 6):
+            self.tableWidget.setColumnCount(6)
         font1 = QFont()
         font1.setPointSize(12)
         __qtablewidgetitem = QTableWidgetItem()
@@ -113,109 +120,250 @@ class Ui_MainWindow(object):
         __qtablewidgetitem4 = QTableWidgetItem()
         __qtablewidgetitem4.setFont(font1);
         self.tableWidget.setHorizontalHeaderItem(4, __qtablewidgetitem4)
+        __qtablewidgetitem5 = QTableWidgetItem()
+        __qtablewidgetitem5.setFont(font1);
+        self.tableWidget.setHorizontalHeaderItem(5, __qtablewidgetitem5)
         self.tableWidget.setObjectName(u"tableWidget")
-        self.tableWidget.setGeometry(QRect(40, 150, 561, 331))
-        self.tableWidget.setStyleSheet(u"background-color: rgb(255, 255, 255);")
-        self.tableWidget.horizontalHeader().setDefaultSectionSize(112)
-        self.pushButton_tambah = QPushButton(self.frame)
-        self.pushButton_tambah.setObjectName(u"pushButton_tambah")
-        self.pushButton_tambah.setGeometry(QRect(40, 110, 91, 31))
-        self.pushButton_tambah.setStyleSheet(u"border-radius: 10px;\n"
-"background-color: rgb(49, 245, 46);")
-        self.pushButton_edit = QPushButton(self.frame)
-        self.pushButton_edit.setObjectName(u"pushButton_edit")
-        self.pushButton_edit.setGeometry(QRect(140, 110, 91, 31))
-        self.pushButton_edit.setStyleSheet(u"border-radius: 10px;\n"
-"background-color: rgb(255, 216, 23);")
-        self.pushButton_delete = QPushButton(self.frame)
+        self.tableWidget.setStyleSheet(u"background-color: rgb(187, 255, 253);")
+        self.tableWidget.horizontalHeader().setMinimumSectionSize(32)
+        self.tableWidget.horizontalHeader().setDefaultSectionSize(140)
+
+        self.gridLayout_3.addWidget(self.tableWidget, 2, 0, 1, 1)
+
+        self.gridLayout_2 = QGridLayout()
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.gridLayout_2.setHorizontalSpacing(6)
+        self.gridLayout_2.setVerticalSpacing(0)
+        self.gridLayout_2.setContentsMargins(-1, -1, -1, 0)
+        self.label_2 = QLabel(self.tab)
+        self.label_2.setObjectName(u"label_2")
+        self.label_2.setStyleSheet(u"background-color: rgb(187, 255, 253);\n"
+"border radius: 5px;")
+
+        self.gridLayout_2.addWidget(self.label_2, 1, 0, 1, 1)
+
+        self.pushButton_search = QPushButton(self.tab)
+        self.pushButton_search.setObjectName(u"pushButton_search")
+        self.pushButton_search.setStyleSheet(u"\n"
+"QPushButton { \n"
+"background-color: rgb(125, 202, 211);\n"
+"border-radius:5px;\n"
+"	border-radius: 5px;\n"
+"padding: 6px 8px; \n"
+"}\n"
+"\n"
+"/* Saat kursor hover */\n"
+"QPushButton:hover {\n"
+"     /* warna saat hover */\n"
+"	color: rgb(255, 255, 255);\n"
+"	background-color: rgb(36, 79, 124);\n"
+"}\n"
+"\n"
+"/* Saat tombol ditekan */\n"
+"QPushButton:pressed {\n"
+"     /* warna saat ditekan */\n"
+"	color: rgb(255, 255, 255);\n"
+"	background-color: rgb(36, 79, 124);\n"
+"}\n"
+"\n"
+"")
+
+        self.gridLayout_2.addWidget(self.pushButton_search, 1, 2, 1, 1)
+
+        self.lineEdit = QLineEdit(self.tab)
+        self.lineEdit.setObjectName(u"lineEdit")
+        self.lineEdit.setStyleSheet(u"border-radius: 5px;\n"
+"padding: 6px 8px; \n"
+"background-color: rgb(226, 226, 226);")
+
+        self.gridLayout_2.addWidget(self.lineEdit, 1, 1, 1, 1)
+
+        self.pushButton_refresh = QPushButton(self.tab)
+        self.pushButton_refresh.setObjectName(u"pushButton_refresh")
+        self.pushButton_refresh.setStyleSheet(u"QPushButton { \n"
+"background-color: rgb(125, 202, 211);\n"
+"border-radius:5px;\n"
+"	border-radius: 5px;\n"
+"padding: 6px 8px; \n"
+"}\n"
+"\n"
+"/* Saat kursor hover */\n"
+"QPushButton:hover {\n"
+"     /* warna saat hover */\n"
+"	color: rgb(255, 255, 255);\n"
+"	background-color: rgb(36, 79, 124);\n"
+"}\n"
+"\n"
+"/* Saat tombol ditekan */\n"
+"QPushButton:pressed {\n"
+"     /* warna saat ditekan */\n"
+"	color: rgb(255, 255, 255);\n"
+"	background-color: rgb(36, 79, 124);\n"
+"}\n"
+"")
+
+        self.gridLayout_2.addWidget(self.pushButton_refresh, 1, 3, 1, 1)
+
+
+        self.gridLayout_3.addLayout(self.gridLayout_2, 1, 0, 1, 1)
+
+        self.gridLayout = QGridLayout()
+        self.gridLayout.setObjectName(u"gridLayout")
+        self.pushButton_delete = QPushButton(self.tab)
         self.pushButton_delete.setObjectName(u"pushButton_delete")
-        self.pushButton_delete.setGeometry(QRect(240, 110, 91, 31))
-        self.pushButton_delete.setStyleSheet(u"border-radius: 10px;\n"
-"background-color: rgb(255, 0, 0);\n"
-"color: rgb(255, 255, 255);")
-        self.pushButton_kelolaObat = QPushButton(self.centralwidget)
-        self.pushButton_kelolaObat.setObjectName(u"pushButton_kelolaObat")
-        self.pushButton_kelolaObat.setGeometry(QRect(70, 170, 161, 41))
-        self.pushButton_kelolaObat.setFont(font)
-        self.pushButton_kelolaObat.setStyleSheet(u"""
-            QPushButton {
-                background-color: rgb(187, 255, 253);
-                border-radius: 10px;
-                padding: 6px;
-            }
-            QPushButton:hover {
-                background-color: rgb(160, 230, 228);
-            }
-            QPushButton:pressed {
-                background-color: rgb(120, 200, 198);
-            }
-        """)
-        self.pushButton_riwayatTransaksi = QPushButton(self.centralwidget)
-        self.pushButton_riwayatTransaksi.setObjectName(u"pushButton_riwayatTransaksi")
-        self.pushButton_riwayatTransaksi.setGeometry(QRect(70, 230, 161, 41))
-        self.pushButton_riwayatTransaksi.setFont(font)
-        self.pushButton_riwayatTransaksi.setStyleSheet(u"""
-            QPushButton {
-                background-color: rgb(187, 255, 253);
-                border-radius: 10px;
-                padding: 6px;
-            }
-            QPushButton:hover {
-                background-color: rgb(160, 230, 228);
-            }
-            QPushButton:pressed {
-                background-color: rgb(120, 200, 198);
-            }
-        """)
-        self.pushButton = QPushButton(self.centralwidget)
-        self.pushButton.setObjectName(u"pushButton")
-        self.pushButton.setGeometry(QRect(30, 520, 131, 41))
+        self.pushButton_delete.setStyleSheet(u"QPushButton { \n"
+"border-radius: 5px;\n"
+"padding: 8px 8px; \n"
+"	background-color: rgb(255, 0, 0);\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"/* Saat kursor hover */\n"
+"QPushButton:hover {\n"
+"     /* warna saat hover */\n"
+"background-color:rgb(213, 0, 0);\n"
+"	color: white;\n"
+"}\n"
+"\n"
+"/* Saat tombol ditekan */\n"
+"QPushButton:pressed {\n"
+"     /* warna saat ditekan */\n"
+"background-color: rgb(213, 0, 0);\n"
+"	color: white;\n"
+"}")
+
+        self.gridLayout.addWidget(self.pushButton_delete, 0, 2, 1, 1)
+
+        self.pushButton_tambah = QPushButton(self.tab)
+        self.pushButton_tambah.setObjectName(u"pushButton_tambah")
+        self.pushButton_tambah.setStyleSheet(u"QPushButton { \n"
+"background-color: rgb(49, 245, 46);\n"
+"	border-radius: 5px;\n"
+"padding: 8px 8px; \n"
+"}\n"
+"\n"
+"/* Saat kursor hover */\n"
+"QPushButton:hover {\n"
+"     /* warna saat hover */\n"
+"	background-color: rgb(85, 255, 127);\n"
+"    color: black;\n"
+"}\n"
+"\n"
+"/* Saat tombol ditekan */\n"
+"QPushButton:pressed {\n"
+"     /* warna saat ditekan */\n"
+"		background-color: rgb(85, 255, 127);\n"
+"    color: black;\n"
+"}\n"
+"\n"
+"")
+
+        self.gridLayout.addWidget(self.pushButton_tambah, 0, 0, 1, 1)
+
+        self.pushButton_edit = QPushButton(self.tab)
+        self.pushButton_edit.setObjectName(u"pushButton_edit")
+        self.pushButton_edit.setStyleSheet(u"QPushButton { \n"
+"background-color: rgb(255, 255, 0);	\n"
+"	border-radius: 5px;\n"
+"padding: 8px 8px; \n"
+"}\n"
+"\n"
+"/* Saat kursor hover */\n"
+"QPushButton:hover {\n"
+"     /* warna saat hover */\n"
+"	background-color: rgb(255, 255, 127);\n"
+"    color: black;\n"
+"}\n"
+"\n"
+"/* Saat tombol ditekan */\n"
+"QPushButton:pressed {\n"
+"     /* warna saat ditekan */\n"
+"	background-color: rgb(255, 255, 127);\n"
+"    color: black;\n"
+"}")
+
+        self.gridLayout.addWidget(self.pushButton_edit, 0, 1, 1, 1)
+
+
+        self.gridLayout_3.addLayout(self.gridLayout, 3, 0, 1, 1)
+
+        self.label_3 = QLabel(self.tab)
+        self.label_3.setObjectName(u"label_3")
         font2 = QFont()
-        font2.setFamilies([u"Times New Roman"])
-        font2.setPointSize(12)
-        font2.setBold(False)
-        font2.setItalic(False)
-        self.pushButton.setFont(font2)
-        self.pushButton.setStyleSheet(u"background-color: rgb(125, 202, 211);\n"
-"border-color: 1px rgb(0, 0, 0);\n"
-"border-radius:10px;")
-        self.label_5 = QLabel(self.centralwidget)
-        self.label_5.setObjectName(u"label_5")
-        self.label_5.setGeometry(QRect(20, 170, 41, 41))
-        font3 = QFont()
-        font3.setPointSize(6)
-        self.label_5.setFont(font3)
-        self.label_5.setStyleSheet(u"background-color: rgb(125, 202, 211);\n"
-"image: url(:/logo-admin/admin-alt.png);\n"
-"border-radius: 5px;")
+        font2.setPointSize(10)
+        self.label_3.setFont(font2)
+        self.label_3.setStyleSheet(u"border-radius: 5px;\n"
+"padding: 6px 8px; \n"
+"padding-bottom:1px;\n"
+"")
+
+        self.gridLayout_3.addWidget(self.label_3, 0, 0, 1, 1)
+
+        self.tabWidget.addTab(self.tab, "")
+        self.tab_2 = QWidget()
+        self.tab_2.setObjectName(u"tab_2")
+        self.verticalLayout = QVBoxLayout(self.tab_2)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.tableWidget_2 = QTableWidget(self.tab_2)
+        if (self.tableWidget_2.columnCount() < 4):
+            self.tableWidget_2.setColumnCount(4)
+        __qtablewidgetitem6 = QTableWidgetItem()
+        self.tableWidget_2.setHorizontalHeaderItem(0, __qtablewidgetitem6)
+        __qtablewidgetitem7 = QTableWidgetItem()
+        self.tableWidget_2.setHorizontalHeaderItem(1, __qtablewidgetitem7)
+        __qtablewidgetitem8 = QTableWidgetItem()
+        self.tableWidget_2.setHorizontalHeaderItem(2, __qtablewidgetitem8)
+        __qtablewidgetitem9 = QTableWidgetItem()
+        self.tableWidget_2.setHorizontalHeaderItem(3, __qtablewidgetitem9)
+        self.tableWidget_2.setObjectName(u"tableWidget_2")
+        self.tableWidget_2.setStyleSheet(u"background-color: rgb(187, 255, 253);")
+        self.tableWidget_2.horizontalHeader().setDefaultSectionSize(210)
+
+        self.verticalLayout.addWidget(self.tableWidget_2)
+
+        self.pushButton_LihatDetail = QPushButton(self.tab_2)
+        self.pushButton_LihatDetail.setObjectName(u"pushButton_LihatDetail")
+        self.pushButton_LihatDetail.setStyleSheet(u"\n"
+"QPushButton { \n"
+"background-color: rgb(125, 202, 211);\n"
+"border-radius:5px;\n"
+"	border-radius: 5px;\n"
+"padding: 6px 8px; \n"
+"}\n"
+"\n"
+"/* Saat kursor hover */\n"
+"QPushButton:hover {\n"
+"     /* warna saat hover */\n"
+"	color: rgb(255, 255, 255);\n"
+"	background-color: rgb(36, 79, 124);\n"
+"}\n"
+"\n"
+"/* Saat tombol ditekan */\n"
+"QPushButton:pressed {\n"
+"     /* warna saat ditekan */\n"
+"	color: rgb(255, 255, 255);\n"
+"	background-color: rgb(36, 79, 124);\n"
+"}\n"
+"")
+
+        self.verticalLayout.addWidget(self.pushButton_LihatDetail)
+
+        self.tabWidget.addTab(self.tab_2, "")
+
+        self.gridLayout_4.addWidget(self.tabWidget, 2, 0, 1, 1)
+
         self.textBrowser = QTextBrowser(self.centralwidget)
         self.textBrowser.setObjectName(u"textBrowser")
-        self.textBrowser.setGeometry(QRect(30, 20, 191, 61))
+        self.textBrowser.setMaximumSize(QSize(16777215, 70))
         self.textBrowser.setStyleSheet(u"background-color: rgb(187, 255, 253);\n"
-"border-radius: 30px;")
-        self.pushButton_keluar = QPushButton(self.centralwidget)
-        self.pushButton_keluar.setObjectName(u"pushButton_keluar")
-        self.pushButton_keluar.setGeometry(QRect(770, 530, 151, 31))
-        self.pushButton_keluar.setFont(font2)
-        self.pushButton_keluar.setStyleSheet(u"background-color: rgb(255, 0, 0);\n"
-"border-color: 1px rgb(0, 0, 0);\n"
-"border-radius:10px;\n"
-"color: rgb(255, 255, 255);")
-        self.label_7 = QLabel(self.centralwidget)
-        self.label_7.setObjectName(u"label_7")
-        self.label_7.setGeometry(QRect(20, 520, 41, 41))
-        self.label_7.setStyleSheet(u"image: url(:/logo-admin/circle-user.png);\n"
-"border-radius: 15px;")
-        self.label_8 = QLabel(self.centralwidget)
-        self.label_8.setObjectName(u"label_8")
-        self.label_8.setGeometry(QRect(160, 40, 41, 31))
-        self.label_8.setStyleSheet(u"\n"
-"image: url(:/logo-admin/medication.png);\n"
-"border-radius: 10px;")
+"BORDER-RADIUS:5PX;")
+
+        self.gridLayout_4.addWidget(self.textBrowser, 0, 0, 1, 1)
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 947, 22))
+        self.menubar.setGeometry(QRect(0, 0, 881, 22))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -223,563 +371,54 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
+        self.tabWidget.setCurrentIndex(0)
+
+
         QMetaObject.connectSlotsByName(MainWindow)
     # setupUi
+
     def retranslateUi(self, MainWindow):
-        # buat stub sederhana supaya setupUi tidak error bila file UI terpotong.
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"Dashboard Admin", None))
-        try:
-            self.label_2.setText(QCoreApplication.translate("MainWindow", u"Daftar Obat", None))
-        except Exception:
-            pass
-        try:
-            self.label.setText(QCoreApplication.translate("MainWindow", u"", None))
-        except Exception:
-            pass
-        try:
-            self.label_3.setText(QCoreApplication.translate("MainWindow", u"", None))
-        except Exception:
-            pass
-        try:
-            self.lineEdit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Search...", None))
-        except Exception:
-            pass
-        try:
-            self.pushButton_search.setText(QCoreApplication.translate("MainWindow", u"", None))
-        except Exception:
-            pass
-        try:
-            self.pushButton_4.setText(QCoreApplication.translate("MainWindow", u"Refresh", None))
-        except Exception:
-            pass
-        try:
-            self.pushButton_tambah.setText(QCoreApplication.translate("MainWindow", u"Tambah", None))
-        except Exception:
-            pass
-        try:
-            self.pushButton_edit.setText(QCoreApplication.translate("MainWindow", u"Edit", None))
-        except Exception:
-            pass
-        try:
-            self.pushButton_delete.setText(QCoreApplication.translate("MainWindow", u"Hapus", None))
-        except Exception:
-            pass
-        try:
-            self.pushButton_kelolaObat.setText(QCoreApplication.translate("MainWindow", u"Kelola Obat", None))
-        except Exception:
-            pass
-        try:
-            self.pushButton_riwayatTransaksi.setText(QCoreApplication.translate("MainWindow", u"Riwayat Transaksi", None))
-        except Exception:
-            pass
-        try:
-            self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Admin", None))
-        except Exception:
-            pass
-        try:
-            self.pushButton_keluar.setText(QCoreApplication.translate("MainWindow", u"Logout", None))
-        except Exception:
-            pass
-        try:
-            self.label_5.setText(QCoreApplication.translate("MainWindow", u"Admin", None))
-        except Exception:
-            pass
-        try:
-            self.textBrowser.setHtml(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\"><span style=\" font-size:14pt; font-weight:600; color:#0078d4;\">Dashboard Admin</span></p></body></html>", None))
-        except Exception:
-            pass
-        try:
-            self.label_7.setText(QCoreApplication.translate("MainWindow", u"", None))
-        except Exception:
-            pass
-        try:
-            self.label_8.setText(QCoreApplication.translate("MainWindow", u"", None))
-        except Exception:
-            pass
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
+        self.pushButton_keluar.setText(QCoreApplication.translate("MainWindow", u"Keluar", None))
+        ___qtablewidgetitem = self.tableWidget.horizontalHeaderItem(0)
+        ___qtablewidgetitem.setText(QCoreApplication.translate("MainWindow", u"ID Obat", None));
+        ___qtablewidgetitem1 = self.tableWidget.horizontalHeaderItem(1)
+        ___qtablewidgetitem1.setText(QCoreApplication.translate("MainWindow", u"Nama Obat", None));
+        ___qtablewidgetitem2 = self.tableWidget.horizontalHeaderItem(2)
+        ___qtablewidgetitem2.setText(QCoreApplication.translate("MainWindow", u"Jenis", None));
+        ___qtablewidgetitem3 = self.tableWidget.horizontalHeaderItem(3)
+        ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"Harga", None));
+        ___qtablewidgetitem4 = self.tableWidget.horizontalHeaderItem(4)
+        ___qtablewidgetitem4.setText(QCoreApplication.translate("MainWindow", u"Stok", None));
+        ___qtablewidgetitem5 = self.tableWidget.horizontalHeaderItem(5)
+        ___qtablewidgetitem5.setText(QCoreApplication.translate("MainWindow", u"Kadaluarsa", None));
+        self.label_2.setText(QCoreApplication.translate("MainWindow", u" Nama atau ID obat", None))
+        self.pushButton_search.setText(QCoreApplication.translate("MainWindow", u"Cari", None))
+        self.pushButton_refresh.setText(QCoreApplication.translate("MainWindow", u"Refresh", None))
+        self.pushButton_delete.setText(QCoreApplication.translate("MainWindow", u"Delete Data -", None))
+        self.pushButton_tambah.setText(QCoreApplication.translate("MainWindow", u"Tambah Data +", None))
+        self.pushButton_edit.setText(QCoreApplication.translate("MainWindow", u"Edit Data", None))
+        self.label_3.setText(QCoreApplication.translate("MainWindow", u"   Cari Obat", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Kelola Data Obat", None))
+        ___qtablewidgetitem6 = self.tableWidget_2.horizontalHeaderItem(0)
+        ___qtablewidgetitem6.setText(QCoreApplication.translate("MainWindow", u"ID Transaksi", None));
+        ___qtablewidgetitem7 = self.tableWidget_2.horizontalHeaderItem(1)
+        ___qtablewidgetitem7.setText(QCoreApplication.translate("MainWindow", u"Tanggal Transaksi", None));
+        ___qtablewidgetitem8 = self.tableWidget_2.horizontalHeaderItem(2)
+        ___qtablewidgetitem8.setText(QCoreApplication.translate("MainWindow", u"Kasir", None));
+        ___qtablewidgetitem9 = self.tableWidget_2.horizontalHeaderItem(3)
+        ___qtablewidgetitem9.setText(QCoreApplication.translate("MainWindow", u"Total Harga(Rp)", None));
+        self.pushButton_LihatDetail.setText(QCoreApplication.translate("MainWindow", u"Lihat Detail", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("MainWindow", u"Riwayat Transaksi", None))
+        self.textBrowser.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
+"</style></head><body style=\" font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">DASHBOARD</p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">ADMIN</p></body></html>", None))
     # retranslateUi
 
-class DashboardAdmin(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.ui = Ui_MainWindow()
-        self.ui.setupUi(self)
-
-        # ===== fix: tombol warna sesuai fungsi + search emoji posision =====
-        try:
-            # mapping warna per tombol (sesuaikan nama widget jika berbeda)
-            button_map = {
-                "pushButton_tambah":  {"bg":"#36D14A","hover":"#2FBF3F","pressed":"#219224","color":"#000"},
-                "pushButton_edit":    {"bg":"#FFD54D","hover":"#FFCC33","pressed":"#E6B800","color":"#000"},
-                "pushButton_delete":  {"bg":"#FF4D4D","hover":"#E04343","pressed":"#C73A3A","color":"#fff"},
-                "pushButton_4":       {"bg":"#7FE6E6","hover":"#66DADA","pressed":"#4BCBCB","color":"#000"}, # refresh
-                "pushButton_search":  {"bg":"#E6FFFF","hover":"#D6FFFF","pressed":"#C6FFFF","color":"#000"},
-                "pushButton_keluar":  {"bg":"#FF2B2B","hover":"#E02424","pressed":"#C71D1D","color":"#fff"}
-            }
-
-            for name, colors in button_map.items():
-                if hasattr(self.ui, name):
-                    btn = getattr(self.ui, name)
-                    # set teks/emoji khusus untuk search (emoji di kanan)
-                    if name == "pushButton_search":
-                        # letakkan emoji di kanan sedikit: "Cari 🔍"
-                        try:
-                            btn.setText("Cari 🔍")
-                        except Exception:
-                            pass
-                    # apply per-button stylesheet (preserve color)
-                    style = f"""
-                        QPushButton {{
-                            background-color: {colors['bg']};
-                            color: {colors['color']};
-                            border: none;
-                            border-radius: 8px;
-                            padding: 6px 10px;
-                        }}
-                        QPushButton:hover {{
-                            background-color: {colors['hover']};
-                        }}
-                        QPushButton:pressed {{
-                            background-color: {colors['pressed']};
-                        }}
-                    """
-                    btn.setStyleSheet(style)
-        except Exception:
-            pass
-
-        # ===== fix: hapus background putih pada label-welcome jika ada =====
-        try:
-            # cari semua QLabel di ui dan bersihkan background bila ada putih
-            from PySide6.QtWidgets import QLabel
-            for attr in vars(self.ui).values():
-                if isinstance(attr, QLabel):
-                    ss = attr.styleSheet() or ""
-                    # jika di stylesheet ada background-color putih atau fill putih, set jadi transparent
-                    if "background-color: rgb(255, 255, 255)" in ss or "background-color: #ffffff" in ss.lower():
-                        attr.setStyleSheet("background: transparent; color: #000;")
-                    # jika label menampilkan teks "Selamat" dan masih ada kotak, buat transparan juga
-                    try:
-                        if "selamat" in (attr.text() or "").lower():
-                            attr.setStyleSheet("background: transparent; color: #000;")
-                    except Exception:
-                        pass
-        except Exception:
-            pass
-
-        # pastikan tableWidget ada dan konfigurasi header terlihat
-        try:
-            # pastikan jumlah kolom sesuai (sesuaikan jumlah kolom UI)
-            self.ui.tableWidget.setColumnCount(5)
-            # set label header (sesuaikan teks sesuai UI)
-            self.ui.tableWidget.setHorizontalHeaderLabels(["ID Obat", "Jenis", "Harga", "Nama Obat", "Kadaluarsa"])
-
-            # pastikan header terlihat dan memiliki tinggi minimum
-            header = self.ui.tableWidget.horizontalHeader()
-            header.setVisible(True)
-            header.setMinimumHeight(28)              # atur tinggi header jika terlalu kecil
-            header.setStretchLastSection(False)
-            header.setSectionResizeMode(0, header.Stretch)   # contoh: kolom 0 stretch
-            header.setSectionResizeMode(1, header.ResizeToContents)
-            header.setSectionResizeMode(2, header.ResizeToContents)
-            header.setSectionResizeMode(3, header.ResizeToContents)
-            header.setSectionResizeMode(4, header.ResizeToContents)
-
-            # override stylesheet header kalau ada style yang menyembunyikan teks/bg
-            self.ui.tableWidget.setStyleSheet("""
-                QHeaderView::section {
-                    background-color: #E6FFFF;
-                    color: #000000;
-                    padding: 4px;
-                    border: 1px solid #d9d9d9;
-                }
-            """)
-        except Exception:
-            pass
-
-        # contoh koneksi tombol jika ada (gunakan nama widget yang valid)
-        try:
-            if hasattr(self.ui, "pushButton_keluar"):
-                self.ui.pushButton_keluar.clicked.connect(self.logout_to_login)
-        except Exception:
-            pass
-
-        # Tombol Tambah / Edit / Delete / Refresh / Search / Riwayat
-        self.ui.pushButton_tambah.clicked.connect(self.open_tambah)
-        self.ui.pushButton_edit.clicked.connect(self.open_edit)
-        self.ui.pushButton_delete.clicked.connect(self.open_hapus)
-        self.ui.pushButton_4.clicked.connect(self.refresh_data_obat)
-        # search
-        try:
-            self.ui.pushButton_search.clicked.connect(self.action_search)
-        except Exception:
-            pass
-        # riwayat page
-        try:
-            self.ui.pushButton_riwayatTransaksi.clicked.connect(self.open_riwayat)
-        except Exception:
-            pass
-
-        # double click item => edit
-        try:
-            self.ui.tableWidget.itemDoubleClicked.connect(self.open_edit_from_item)
-        except Exception:
-            pass
-
-        # tambahkan emoji 🔍 di samping tombol search (jika ada)
-        try:
-            if hasattr(self.ui, "pushButton_search"):
-                # pilih salah satu: hanya emoji, atau emoji + teks
-                self.ui.pushButton_search.setText("🔍")
-                # atau: self.ui.pushButton_search.setText("🔍 Cari")
-        except Exception:
-            pass
-
-        # Load awal
-        self.refresh_data_obat()
-
-    def keluar(self):
-        self.close()
-
-    def refresh_data_obat(self):
-        self.ui.tableWidget.setRowCount(0)
-        data = lihatSemuaDataObat()
-        if isinstance(data, str):
-            QMessageBox.information(self, "Info", data)
-            return
-
-        for row_data in data:
-            row = self.ui.tableWidget.rowCount()
-            self.ui.tableWidget.insertRow(row)
-
-            # dukung hasil dict atau tuple/list
-            if isinstance(row_data, dict):
-                obatId = row_data.get("obatId") or row_data.get("id") or ""
-                jenis = row_data.get("jenis") or ""
-                harga = row_data.get("harga") or ""
-                hargaObat = row_data.get("hargaObat") or row_data.get("namaObat") or ""
-                kadaluarsa = row_data.get("kadaluarsa") or ""
-            else:
-                # asumsi tuple: (obatId, namaObat, jenis, harga, stok, kadaluarsa)
-                obatId = row_data[0] if len(row_data) > 0 else ""
-                hargaObat = row_data[1] if len(row_data) > 1 else ""
-                jenis = row_data[2] if len(row_data) > 2 else ""
-                harga = row_data[3] if len(row_data) > 3 else ""
-                kadaluarsa = row_data[5] if len(row_data) > 5 else ""
-
-            self.ui.tableWidget.setItem(row, 0, QTableWidgetItem(str(obatId)))
-            self.ui.tableWidget.setItem(row, 1, QTableWidgetItem(str(jenis)))
-            self.ui.tableWidget.setItem(row, 2, QTableWidgetItem(str(harga)))
-            self.ui.tableWidget.setItem(row, 3, QTableWidgetItem(str(hargaObat)))
-            self.ui.tableWidget.setItem(row, 4, QTableWidgetItem(str(kadaluarsa)))
-
-    def tambah_data(self):
-        QMessageBox.information(self, "Info", "Tambah data diklik")
-
-    def edit_data(self):
-        selected = self.ui.tableWidget.selectedItems()
-        if not selected:
-            QMessageBox.warning(self, "Peringatan", "Pilih data dulu!")
-            return
-        QMessageBox.information(self, "Info", f"Edit data {selected[0].text()}")
-
-    def hapus_data(self):
-        selected = self.ui.tableWidget.selectedItems()
-        if not selected:
-            QMessageBox.warning(self, "Peringatan", "Pilih data dulu!")
-            return
-        obatId = selected[0].text()
-        pesan = hapusObat(obatId)
-        QMessageBox.information(self, "Info", pesan)
-        self.refresh_data_obat()
-
-    # --------------------
-    # Window: Tambah Obat
-    # --------------------
-    def open_tambah(self):
-        self._tambah_win = TambahObatWindow(parent=self)
-        self._tambah_win.show()
-
-    def save_tambah(self):
-        ui = self._tambah_ui
-        nama = ui.lineEdit.text().strip()
-        jenis = ui.lineEdit_2.text().strip()
-        harga = ui.lineEdit_3.text().strip()
-        stok = ui.lineEdit_4.text().strip()
-        kadaluarsa = ui.lineEdit_6.text().strip()
-        if not nama:
-            QMessageBox.warning(self, "Peringatan", "Nama obat harus diisi")
-            return
-        pesan = tambahObat(nama, jenis, harga, stok, kadaluarsa)
-        QMessageBox.information(self, "Info", pesan)
-        self._tambah_win.close()
-        self.refresh_data_obat()
-
-    # --------------------
-    # Window: Edit Obat
-    # --------------------
-    def open_edit(self):
-        selected = self.ui.tableWidget.selectedItems()
-        if not selected:
-            QMessageBox.warning(self, "Peringatan", "Pilih baris terlebih dulu")
-            return
-        obatId = selected[0].text()
-        self._edit_win = EditObatWindow(obatId, parent=self)
-        self._edit_win.show()
-
-    def open_edit_from_item(self, item):
-        # double-click handler opens EditObatWindow
-        row = item.row()
-        id_item = self.ui.tableWidget.item(row, 0).text()
-        self._edit_win = EditObatWindow(id_item, parent=self)
-        self._edit_win.show()
-
-    def save_edit(self, obatId):
-        # tetap ada untuk kompatibilitas jika ada code lain yg memanggilnya
-        pass
-
-    # --------------------
-    # Window: Hapus Obat
-    # --------------------
-    def open_hapus(self):
-        selected = self.ui.tableWidget.selectedItems()
-        if not selected:
-            QMessageBox.warning(self, "Peringatan", "Pilih baris terlebih dulu")
-            return
-        obatId = selected[0].text()
-        self._hapus_win = HapusObatWindow(obatId, parent=self)
-        # jika UI hapus memiliki field nama, coba isi
-        try:
-            if hasattr(self._hapus_win.ui, "lineEdit"):
-                try:
-                    self._hapus_win.ui.lineEdit.setText(selected[1].text())
-                except Exception:
-                    pass
-        except Exception:
-            pass
-        self._hapus_win.show()
-
-    def confirm_hapus(self, obatId):
-        pesan = hapusObat(obatId)
-        QMessageBox.information(self, "Info", pesan)
-        self._hapus_win.close()
-        self.refresh_data_obat()
-
-    # --------------------
-    # Search / Refresh
-    # --------------------
-    def action_search(self):
-        keyword = self.ui.lineEdit.text().strip()
-        if not keyword:
-            self.refresh_data_obat()
-            return
-        hasil = cariObat(keyword)
-        if isinstance(hasil, str):
-            QMessageBox.information(self, "Info", hasil)
-            return
-        # tampilkan hasil
-        self.ui.tableWidget.setRowCount(0)
-        for row_data in hasil:
-            row = self.ui.tableWidget.rowCount()
-            self.ui.tableWidget.insertRow(row)
-            if isinstance(row_data, dict):
-                obatId = row_data.get("obatId", "")
-                nama = row_data.get("namaObat", "")
-                jenis = row_data.get("jenis", "")
-                harga = row_data.get("harga", "")
-                kadaluarsa = row_data.get("kadaluarsa", "")
-            else:
-                obatId = row_data[0]
-                nama = row_data[1]
-                jenis = row_data[2]
-                harga = row_data[3]
-                kadaluarsa = row_data[5] if len(row_data) > 5 else ""
-            self.ui.tableWidget.setItem(row, 0, QTableWidgetItem(str(obatId)))
-            self.ui.tableWidget.setItem(row, 1, QTableWidgetItem(str(jenis)))
-            self.ui.tableWidget.setItem(row, 2, QTableWidgetItem(str(harga)))
-            self.ui.tableWidget.setItem(row, 3, QTableWidgetItem(str(nama)))
-            self.ui.tableWidget.setItem(row, 4, QTableWidgetItem(str(kadaluarsa)))
-
-    # --------------------
-    # Riwayat Transaksi
-    # --------------------
-    def open_riwayat(self):
-        # sembunyikan dashboard, buka window riwayat sebagai window terpisah
-        try:
-            self.hide()
-        except Exception:
-            pass
-
-        self._riwayat_win = QMainWindow()
-        self._riwayat_ui = Ui_Riwayat()
-        self._riwayat_ui.setupUi(self._riwayat_win)
-
-        # koneksikan tombol riwayat -> panggil fungsi yang sesuai
-        try:
-            if hasattr(self._riwayat_ui, "pushButton_semuTransaksi"):
-                self._riwayat_ui.pushButton_semuTransaksi.clicked.connect(lambda: self.load_semua_transaksi(self._riwayat_ui))
-            if hasattr(self._riwayat_ui, "pushButton_detailriwayatTransaksi"):
-                self._riwayat_ui.pushButton_detailriwayatTransaksi.clicked.connect(lambda: self.open_detail_riwayat_from_selection(self._riwayat_ui))
-            if hasattr(self._riwayat_ui, "tableWidget_2"):
-                self._riwayat_ui.tableWidget_2.itemDoubleClicked.connect(lambda item: self.open_detail_riwayat_from_item(self._riwayat_ui, item))
-
-            # tombol "Kelola Data" di riwayat -> kembali ke dashboard (tutup riwayat, show dashboard)
-            if hasattr(self._riwayat_ui, "pushButton_kelolaData"):
-                def back_to_dashboard():
-                    try:
-                        self._riwayat_win.close()
-                    except Exception:
-                        pass
-                    try:
-                        self.show()
-                    except Exception:
-                        pass
-                self._riwayat_ui.pushButton_kelolaData.clicked.connect(back_to_dashboard)
-
-            # tombol "Keluar" di riwayat -> logout dan kembali ke Login
-            if hasattr(self._riwayat_ui, "pushButton_keluar"):
-                def logout_from_riwayat():
-                    try:
-                        from backend.logout import logout as backend_logout
-                        try:
-                            backend_logout()
-                        except Exception:
-                            pass
-                    except Exception:
-                        pass
-                    try:
-                        self._riwayat_win.close()
-                    except Exception:
-                        pass
-                    try:
-                        self.close()
-                    except Exception:
-                        pass
-                    try:
-                        from Login import Ui_MainWindow as Ui_Login
-                        from PySide6.QtWidgets import QMainWindow
-                        self._login_win = QMainWindow()
-                        self._login_ui = Ui_Login()
-                        self._login_ui.setupUi(self._login_win)
-                        self._login_win.show()
-                    except Exception:
-                        pass
-                self._riwayat_ui.pushButton_keluar.clicked.connect(logout_from_riwayat)
-        except Exception:
-            pass
-
-        # pastikan saat window riwayat ditutup, dashboard muncul kembali
-        try:
-            self._riwayat_win.destroyed.connect(lambda _: self.show())
-        except Exception:
-            pass
-
-        # tampilkan dan load data awal
-        self._riwayat_win.show()
-        try:
-            self.load_semua_transaksi(self._riwayat_ui)
-        except Exception:
-            pass
-
-    def load_semua_transaksi(self, ui):
-        data = lihatSemuaTransaksi()
-        if isinstance(data, str):
-            QMessageBox.information(self, "Info", data)
-            return
-        ui.tableWidget_2.setRowCount(0)
-        for row_data in data:
-            row = ui.tableWidget_2.rowCount()
-            ui.tableWidget_2.insertRow(row)
-            # dukung dict atau tuple/list
-            if isinstance(row_data, dict):
-                tid = row_data.get('transaksiId') or row_data.get('transaksi_id') or ''
-                tanggal = row_data.get('tanggalTransaksi') or row_data.get('tanggal_transaksi') or row_data.get('tanggal') or ''
-                kasir = row_data.get('Kasir') or row_data.get('kasir') or row_data.get('username') or ''
-                total = row_data.get('totalHarga') or row_data.get('total_harga') or row_data.get('total') or ''
-            else:
-                # asumsi tuple: (transaksiId, tanggalTransaksi, Kasir, totalHarga)
-                try:
-                    tid = row_data[0]
-                    tanggal = row_data[1]
-                    kasir = row_data[2]
-                    total = row_data[3]
-                except Exception:
-                    tid = tanggal = kasir = total = ''
-            ui.tableWidget_2.setItem(row, 0, QTableWidgetItem(str(tid)))
-            ui.tableWidget_2.setItem(row, 1, QTableWidgetItem(str(tanggal)))
-            ui.tableWidget_2.setItem(row, 2, QTableWidgetItem(str(kasir)))
-            ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(str(total)))
-
-    def open_detail_riwayat_from_selection(self, ui):
-        sel = ui.tableWidget_2.selectedItems()
-        if not sel:
-            QMessageBox.warning(self, "Peringatan", "Pilih transaksi dulu")
-            return
-        transaksiId = sel[0].text()
-        self.open_detail_riwayat(transaksiId)
-
-    def open_detail_riwayat_from_item(self, ui, item):
-        row = item.row()
-        transaksiId = ui.tableWidget_2.item(row, 0).text()
-        self.open_detail_riwayat(transaksiId)
-
-    def open_detail_riwayat(self, transaksiId):
-        from PySide6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QHBoxLayout
-
-        data = lihatDetailTransaksi(transaksiId)
-        if isinstance(data, str):
-            QMessageBox.information(self, "Info", data)
-            return
-
-        # modal dialog mirip Toplevel di tkinter
-        dlg = QDialog(self)
-        dlg.setWindowTitle(f"Detail Transaksi {transaksiId}")
-        dlg.resize(520, 360)
-        layout = QVBoxLayout(dlg)
-
-        # table detail
-        tbl = QTableWidget(dlg)
-        tbl.setColumnCount(4)
-        tbl.setHorizontalHeaderLabels(["detailId", "Nama Obat", "Jumlah", "Subtotal"])
-        tbl.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
-        tbl.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
-        tbl.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeToContents)
-        tbl.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeToContents)
-
-        # isi baris
-        tbl.setRowCount(0)
-        for d in data:
-            r = tbl.rowCount()
-            tbl.insertRow(r)
-            if isinstance(d, dict):
-                tbl.setItem(r, 0, QTableWidgetItem(str(d.get("detailId") or d.get("detail_id") or "")))
-                tbl.setItem(r, 1, QTableWidgetItem(str(d.get("namaObat") or d.get("nama") or "")))
-                tbl.setItem(r, 2, QTableWidgetItem(str(d.get("jumlah") or d.get("qty") or "")))
-                tbl.setItem(r, 3, QTableWidgetItem(str(d.get("subtotal") or "")))
-            else:
-                try:
-                    tbl.setItem(r, 0, QTableWidgetItem(str(d[0])))
-                    tbl.setItem(r, 1, QTableWidgetItem(str(d[1])))
-                    tbl.setItem(r, 2, QTableWidgetItem(str(d[2])))
-                    tbl.setItem(r, 3, QTableWidgetItem(str(d[3])))
-                except Exception:
-                    tbl.setItem(r, 0, QTableWidgetItem(str(d)))
-
-        layout.addWidget(tbl)
-
-        # tombol tutup
-        btn_layout = QHBoxLayout()
-        btn_layout.addStretch(1)
-        close_btn = QPushButton("Tutup", dlg)
-        close_btn.clicked.connect(dlg.accept)
-        btn_layout.addWidget(close_btn)
-        layout.addLayout(btn_layout)
-
-        # jika ingin menyembunyikan dashboard saat dialog terbuka:
-        try:
-            self.hide()
-            dlg.exec()
-        finally:
-            # pastikan dashboard muncul kembali
-            try:
-                self.show()
-            except Exception:
-                pass

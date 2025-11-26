@@ -1,13 +1,3 @@
-# -*- coding: utf-8 -*-
-
-################################################################################
-## Form generated from reading UI file 'adminRiwayatTransaksi.ui'
-##
-## Created by: Qt User Interface Compiler version 6.10.0
-##
-## WARNING! All changes made in this file will be lost when recompiling UI file!
-################################################################################
-
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
     QMetaObject, QObject, QPoint, QRect,
     QSize, QTime, QUrl, Qt)
@@ -110,13 +100,13 @@ class Ui_MainWindow(object):
         self.label.setStyleSheet(u"image: url(:/logo-admin/money-check-edit.png);\n"
 "background-color: rgb(125, 202, 211);\n"
 "border-radius: 5px;")
-        self.pushButton_kelolaObat = QPushButton(self.centralwidget)
-        self.pushButton_kelolaObat.setObjectName(u"pushButton_kelolaObat")
-        self.pushButton_kelolaObat.setGeometry(QRect(70, 160, 161, 41))
+        self.pushButton_kelolaObat_Riwayat = QPushButton(self.centralwidget)
+        self.pushButton_kelolaObat_Riwayat.setObjectName(u"pushButton_kelolaObat_Riwayat")
+        self.pushButton_kelolaObat_Riwayat.setGeometry(QRect(70, 160, 161, 41))
         font3 = QFont()
         font3.setPointSize(10)
-        self.pushButton_kelolaObat.setFont(font3)
-        self.pushButton_kelolaObat.setStyleSheet(u"background-color: rgb(187, 255, 253);\n"
+        self.pushButton_kelolaObat_Riwayat.setFont(font3)
+        self.pushButton_kelolaObat_Riwayat.setStyleSheet(u"background-color: rgb(187, 255, 253);\n"
 "border-radius: 10px;\n"
 "hover-color: rgb(160, 230, 228); \n"
 "pressed-color: rgb(120, 200, 198); ")
@@ -168,14 +158,25 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
 
         QMetaObject.connectSlotsByName(MainWindow)
+        MainWindow.setFixedSize(MainWindow.size())
+        self.MainWindow = MainWindow
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.label_5.setText("")
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"Dashboard Admin Transaksi", None))
+        self.label_5.setText("💊")
+        font_emoji4 = QFont()
+        font_emoji4.setPointSize(25)  # perbesar emoji
+        self.label_5.setFont(font_emoji4)
         self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Admin", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"                      RIWAYAT TRANSAKSI", None))
-        self.label_3.setText("")
+        self.label_3.setText("📊")
+        font_emoji5 = QFont()
+        font_emoji5.setPointSize(35)  # perbesar emoji
+        self.label_3.setFont(font_emoji5)
+        font_emoji = QFont()
+        font_emoji.setPointSize(25)  # perbesar emoji
+        self.label.setFont(font_emoji)
         ___qtablewidgetitem = self.tableWidget_2.horizontalHeaderItem(0)
         ___qtablewidgetitem.setText(QCoreApplication.translate("MainWindow", u"ID Transaksi", None));
         ___qtablewidgetitem1 = self.tableWidget_2.horizontalHeaderItem(1)
@@ -186,9 +187,15 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"Total Harga(Rp)", None));
         self.pushButton_semuTransaksi.setText(QCoreApplication.translate("MainWindow", u"Semua Transaksi", None))
         self.pushButton_detailriwayatTransaksi.setText(QCoreApplication.translate("MainWindow", u"Detail Riwayat Transaksi", None))
-        self.label.setText("")
-        self.pushButton_kelolaObat.setText(QCoreApplication.translate("MainWindow", u"Kelola Data Obat", None))
-        self.label_6.setText("")
+        self.label.setText("📊")
+        font_emoji3 = QFont()
+        font_emoji3.setPointSize(25)  # perbesar emoji
+        self.label.setFont(font_emoji3)
+        self.pushButton_kelolaObat_Riwayat.setText(QCoreApplication.translate("MainWindow", u"Kelola Data Obat", None))
+        self.label_6.setText("👤")
+        font_emoji2 = QFont()
+        font_emoji2.setPointSize(25)  # perbesar emoji
+        self.label_6.setFont(font_emoji2)
         self.pushButton_riwayatTransaksi.setText(QCoreApplication.translate("MainWindow", u"Riwayat Transaksi", None))
         self.label_4.setText("")
         self.textBrowser.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
@@ -201,6 +208,24 @@ class Ui_MainWindow(object):
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">DASHBOARD</span></p>\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">ADMIN</span></p></body></html>", None))
         self.pushButton_keluar.setText(QCoreApplication.translate("MainWindow", u"Keluar", None))
-        self.label_7.setText("")
+        self.label_7.setText("👤")
+        font_emoji1 = QFont()
+        font_emoji1.setPointSize(25)  # perbesar emoji
+        self.label_7.setFont(font_emoji1)
     # retranslateUi
+
+class RiwayatWindow(QMainWindow):
+    def __init__(self, parent=None):
+        super().__init__()
+        self.parent = parent
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
+
+        # tombol kembali
+        self.ui.pushButton_kelolaObat_Riwayat.clicked.connect(self.kembali_ke_dashboard)
+
+    def kembali_ke_dashboard(self):
+        if self.parent:
+                self.parent.show()
+        self.close()
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'detailRiwayatTransaksi.ui'
+## Form generated from reading UI file 'detailKeranjangApoteker.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.10.0
 ##
@@ -15,15 +15,16 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QHeaderView, QLabel, QMainWindow,
-    QMenuBar, QPushButton, QSizePolicy, QStatusBar,
-    QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QGridLayout, QHeaderView, QLabel,
+    QMainWindow, QMenuBar, QPushButton, QSizePolicy,
+    QStatusBar, QTableWidget, QTableWidgetItem, QVBoxLayout,
+    QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(607, 405)
+        MainWindow.resize(573, 509)
         MainWindow.setStyleSheet(u"")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
@@ -35,8 +36,31 @@ class Ui_MainWindow(object):
         font.setPointSize(13)
         font.setBold(True)
         self.label.setFont(font)
+        self.label.setStyleSheet(u"")
 
         self.verticalLayout.addWidget(self.label)
+
+        self.gridLayout = QGridLayout()
+        self.gridLayout.setObjectName(u"gridLayout")
+        self.label_2 = QLabel(self.centralwidget)
+        self.label_2.setObjectName(u"label_2")
+        font1 = QFont()
+        font1.setPointSize(13)
+        self.label_2.setFont(font1)
+
+        self.gridLayout.addWidget(self.label_2, 0, 0, 1, 1)
+
+        self.label_namaPembeli = QLabel(self.centralwidget)
+        self.label_namaPembeli.setObjectName(u"label_namaPembeli")
+        self.label_namaPembeli.setStyleSheet(u"background-color: rgb(255, 255, 255);\n"
+"border-radius: 5px;\n"
+"padding: 6px 8px; \n"
+"alternate-background-color: rgb(187, 255, 253);")
+
+        self.gridLayout.addWidget(self.label_namaPembeli, 0, 1, 1, 1)
+
+
+        self.verticalLayout.addLayout(self.gridLayout)
 
         self.tableWidget = QTableWidget(self.centralwidget)
         if (self.tableWidget.columnCount() < 4):
@@ -50,21 +74,21 @@ class Ui_MainWindow(object):
         __qtablewidgetitem3 = QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(3, __qtablewidgetitem3)
         self.tableWidget.setObjectName(u"tableWidget")
-        self.tableWidget.setStyleSheet(u"background-color: rgb(255, 255, 255);")
-        self.tableWidget.horizontalHeader().setDefaultSectionSize(134)
+        self.tableWidget.setStyleSheet(u"background-color: rgb(255, 255, 255);\n"
+"border-radius: 5px;")
+        self.tableWidget.horizontalHeader().setDefaultSectionSize(138)
 
         self.verticalLayout.addWidget(self.tableWidget)
 
-        self.pushButton = QPushButton(self.centralwidget)
-        self.pushButton.setObjectName(u"pushButton")
-        font1 = QFont()
-        font1.setPointSize(12)
-        self.pushButton.setFont(font1)
-        self.pushButton.setStyleSheet(u"QPushButton { \n"
-"border-radius: 5px;\n"
-"padding: 6px 8px; \n"
+        self.pushButton_kembali = QPushButton(self.centralwidget)
+        self.pushButton_kembali.setObjectName(u"pushButton_kembali")
+        self.pushButton_kembali.setStyleSheet(u"QPushButton { \n"
+"border-radius: 5px; \n"
 "	background-color: rgb(255, 0, 0);\n"
 "    color: white;\n"
+"padding: 6px 20px;\n"
+"    min-width: 100px;\n"
+"    max-width: 200px;\n"
 "}\n"
 "\n"
 "/* Saat kursor hover */\n"
@@ -81,12 +105,12 @@ class Ui_MainWindow(object):
 "	color: white;\n"
 "}")
 
-        self.verticalLayout.addWidget(self.pushButton)
+        self.verticalLayout.addWidget(self.pushButton_kembali, 0, Qt.AlignRight)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 607, 22))
+        self.menubar.setGeometry(QRect(0, 0, 573, 22))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -99,15 +123,17 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.label.setText(QCoreApplication.translate("MainWindow", u"                                    DETAIL RIWAYAT TRANSAKSI", None))
+        self.label.setText(QCoreApplication.translate("MainWindow", u"Detail Data Keranjang", None))
+        self.label_2.setText(QCoreApplication.translate("MainWindow", u"Nama Pembeli  :", None))
+        self.label_namaPembeli.setText("")
         ___qtablewidgetitem = self.tableWidget.horizontalHeaderItem(0)
-        ___qtablewidgetitem.setText(QCoreApplication.translate("MainWindow", u"Detail ID", None));
+        ___qtablewidgetitem.setText(QCoreApplication.translate("MainWindow", u"Keranjang ID", None));
         ___qtablewidgetitem1 = self.tableWidget.horizontalHeaderItem(1)
         ___qtablewidgetitem1.setText(QCoreApplication.translate("MainWindow", u"Nama Obat", None));
         ___qtablewidgetitem2 = self.tableWidget.horizontalHeaderItem(2)
         ___qtablewidgetitem2.setText(QCoreApplication.translate("MainWindow", u"Jumlah", None));
         ___qtablewidgetitem3 = self.tableWidget.horizontalHeaderItem(3)
-        ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"Sub Total", None));
-        self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Keluar", None))
+        ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"Subtotal", None));
+        self.pushButton_kembali.setText(QCoreApplication.translate("MainWindow", u"Kembali", None))
     # retranslateUi
 

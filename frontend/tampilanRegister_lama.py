@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (QApplication, QComboBox, QLabel, QLineEdit,
     QStatusBar, QWidget, QVBoxLayout, QFormLayout,QHBoxLayout)
 from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox
 from backend.register import register
-from frontend.tampilanLogin import tampil_login
+from frontend.tampilanLogin_lama import tampil_login
 
 
 class FormRegister(QMainWindow):
@@ -20,6 +20,7 @@ class FormRegister(QMainWindow):
         self.setWindowTitle("Form Register - Aplikasi Apotek")
         self.resize(500, 430)
         self.center_window()
+        self.setFixedSize(self.size())
 
         # Background gradasi # biru muda-putih
         palette = QPalette()

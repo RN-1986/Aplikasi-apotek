@@ -1,9 +1,52 @@
 from .koneksi import koneksiKeDatabase
 from .login import session
+from datetime import date
 
 sessionKeranjangSaatIni = {
     'keranjangSaatini' : None
 }
+
+def cariObatLayakJual(keyword=""):
+    db = koneksiKeDatabase()
+    if db is None:
+        return "Gagal koneksi ke database"
+
+    cursor = db.cursor()
+    
+    # Kalau keyword kosong, tampilin semua yang AMAN
+    if not keyword:
+        query = """
+            SELECT * FROM obat 
+            WHERE kadaluarsa >= CURDATE() 
+            AND stok > 0
+        """
+        cursor.execute(query)
+    else:
+        # Kalau ada keyword, cari nama/ID tapi tetep filter tanggalnya
+        try:
+            obatId = int(keyword)
+            query = """
+                SELECT * FROM obat 
+                WHERE obatId = %s 
+                AND kadaluarsa >= CURDATE()
+            """
+            cursor.execute(query, (obatId,))
+        except ValueError:
+            query = """
+                SELECT * FROM obat 
+                WHERE namaObat LIKE %s 
+                AND kadaluarsa >= CURDATE()
+            """
+            cursor.execute(query, (f"%{keyword}%",))
+    
+    hasil = cursor.fetchall()
+    cursor.close()
+    db.close()
+    
+    if not hasil:
+        return 'Data obat tidak ditemukan atau stok kosong/kadaluarsa'
+    
+    return hasil
 
 def buatKeranjang(apotekerId, namaPembeli):
     db = koneksiKeDatabase()
@@ -63,12 +106,15 @@ def lihatKeranjang(keranjangId):
         select 
             dk.detailKeranjangId,
             o.namaObat,
+            kat.namaKategori,  
             dk.jumlah,
             dk.subtotal
-            from keranjangdetail as dk
-            join obat as o on o.obatId = dk.obatId
-            where dk.keranjangId = %s
+        from keranjangdetail as dk
+        join obat as o on o.obatId = dk.obatId
+        left join kategoriObat as kat on kat.kategoriId = o.kategoriId
+        where dk.keranjangId = %s
     '''
+
     cursor.execute(queryDetailKeranjang, (dataKeranjang['keranjangId'],))
     detailObatDiKeranjang = cursor.fetchall()
     
@@ -98,13 +144,18 @@ def tambahObatKeKeranjang(keranjangId, obatId, jumlah):
     dataObat = cursor.fetchone()
     
     if not dataObat:
-        cursor.close()
-        db.close()
+        cursor.close(); db.close()
         return "Data obat tidak ditemukan"
-        
+    
+    # --- VALIDASI TAMBAHAN: KADALUARSA ---
+    # Cek apakah tanggal hari ini lebih besar dari tanggal kadaluarsa obat
+    if dataObat['kadaluarsa'] and dataObat['kadaluarsa'] < date.today():
+        cursor.close(); db.close()
+        return f"GAGAL! Obat {dataObat['namaObat']} sudah kadaluarsa ({dataObat['kadaluarsa']}). Tidak boleh dijual!"
+    # -------------------------------------
+
     if dataObat['stok'] < jumlah:
-        cursor.close()
-        db.close()
+        cursor.close(); db.close()
         pesan = 'Stok obat tidak mencukupi'
         return pesan
     
@@ -140,34 +191,47 @@ def updateJumlahObatYangDiBeli(detailKeranjangId, jumlahBaru):
     cursor = db.cursor()
     
     try:
+        # 1. Ambil data keranjang detail yang lama
         query = 'select * from keranjangdetail where detailKeranjangId = %s'
         cursor.execute(query,(detailKeranjangId,))
         dataLama = cursor.fetchone()
         
         if not dataLama:
-            cursor.close()
-            db.close()
+            cursor.close(); db.close()
             return "Item keranjang tidak ditemukan"
         
+        # 2. Ambil data stok obat terkini di gudang
         queryAmbilDataObat = 'select * from obat where obatId = %s'
         cursor.execute(queryAmbilDataObat,(dataLama['obatId'], ))
         dataObat = cursor.fetchone()
         
         if not dataObat:
-            cursor.close()
-            db.close()
+            cursor.close(); db.close()
             return "Data obat tidak ditemukan"
         
+        # 3. Hitung selisih (Jumlah Baru - Jumlah Lama)
         selisihJumlah = jumlahBaru - dataLama['jumlah']
+        
+        # --- LOGIC VALIDASI STOK (BARU) ---
         if selisihJumlah > 0 :
+            # Kalau nambah jumlah, cek dulu stok gudang cukup gak?
+            if dataObat['stok'] < selisihJumlah:
+                cursor.close(); db.close()
+                return f"Gagal! Stok tidak cukup. Sisa stok cuma {dataObat['stok']}, tapi kamu minta tambah {selisihJumlah} lagi."
+            
+            # Kalau cukup, baru update
             queryKurangiStok = 'update obat set stok = stok - %s where obatId = %s'
             cursor.execute(queryKurangiStok,(selisihJumlah, dataObat['obatId']))
+            
         elif selisihJumlah < 0:
+            # Kalau mengurangi jumlah (misal dari 5 jadi 3), balikin stok ke gudang
             queryKembalikanStok = 'update obat set stok = stok + %s where obatId = %s'
             cursor.execute(queryKembalikanStok,(abs(selisihJumlah), dataObat['obatId']))
+        # ----------------------------------
         
+        # Update Subtotal dan Jumlah di Keranjang
         subTotalLama = dataLama['subtotal']
-        subTotalBaru = dataObat['harga'] * jumlahBaru
+        subTotalBaru = float(dataObat['harga']) * jumlahBaru # Pastikan harga dikali float/int
         selisihSubTotal = subTotalBaru - subTotalLama
         
         queryUpdateDataDetailKeranjang = '''
@@ -179,14 +243,17 @@ def updateJumlahObatYangDiBeli(detailKeranjangId, jumlahBaru):
         '''   
         cursor.execute(queryUpdateDataDetailKeranjang, (jumlahBaru, subTotalBaru, detailKeranjangId))
         
+        # Update Total Harga Keranjang Utama
         if selisihSubTotal > 0:
             queryTambahTotal = 'update keranjang set totalHarga = totalHarga + %s where keranjangId = %s'
             cursor.execute(queryTambahTotal,(selisihSubTotal, dataLama['keranjangId']))
         elif selisihSubTotal < 0:
             queryKurangTotal = 'update keranjang set totalHarga = totalHarga - %s where keranjangId = %s'
             cursor.execute(queryKurangTotal,(abs(selisihSubTotal), dataLama['keranjangId']))
+            
         db.commit()
         pesan = f"Item {dataObat['namaObat']} pada keranjang berhasil di update"
+        
     except Exception as e:
         db.rollback()
         pesan = f"Terjadi kesalahan: {e}"

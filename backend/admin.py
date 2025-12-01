@@ -1,7 +1,7 @@
 from .koneksi import *
 
 # Kelola Obat 
-def tambahObat(namaObat, jenis, harga, stok, kadaluarsa):
+def tambahObat(namaObat, jenis, harga, stok, tgl_produksi, kadaluarsa, kategoriId):
     db = koneksiKeDatabase()
     cursor = db.cursor()
     
@@ -10,8 +10,11 @@ def tambahObat(namaObat, jenis, harga, stok, kadaluarsa):
         return pesan
     
     try:
-        query = 'insert into obat(namaObat, jenis, harga, stok, kadaluarsa) values(%s,%s,%s,%s, %s)'
-        cursor.execute(query,(namaObat,jenis,harga,stok,kadaluarsa))
+        query = '''
+            insert into obat(namaObat, jenis, harga, stok, tgl_produksi, kadaluarsa, kategoriId) 
+            values(%s, %s, %s, %s, %s, %s, %s)
+        '''
+        cursor.execute(query,(namaObat, jenis, harga, stok, tgl_produksi, kadaluarsa, kategoriId))
         db.commit()
         pesan = 'Data obat baru telah ditambahkan'
     except Exception as e:
@@ -29,7 +32,13 @@ def lihatSemuaDataObat():
         return pesan
     
     cursor = db.cursor()
-    query = 'select * from obat'
+    query = '''
+        SELECT 
+            o.*, 
+            k.namaKategori 
+        FROM obat o
+        LEFT JOIN kategoriObat k ON o.kategoriId = k.kategoriId
+    '''
     cursor.execute(query)
     dataObat = cursor.fetchall()
     
@@ -61,16 +70,26 @@ def ambilDataObatYangAkanDiUpdate(obatId):
     db.close()
     return dataObat
 
-def updateObat(obatId, namaObat, jenis, harga, stok, kadaluarsa):
+def updateObat(obatId, namaObat, jenis, harga, stok, tgl_produksi, kadaluarsa, kategoriId):
     db = koneksiKeDatabase()
     if db is None:
-        pesan = "Gagal koneksi ke database"
-        return pesan
+        return "Gagal koneksi ke database"
     
     cursor = db.cursor()
     try:
-        query = 'update obat set namaObat = %s, jenis = %s, harga = %s, stok = %s, kadaluarsa = %s where obatId = %s'
-        cursor.execute(query, (namaObat, jenis, harga, stok, kadaluarsa, obatId))
+        query = '''
+            update obat 
+            set 
+                namaObat = %s, 
+                jenis = %s, 
+                harga = %s, 
+                stok = %s, 
+                tgl_produksi = %s, 
+                kadaluarsa = %s,
+                kategoriId = %s
+            where obatId = %s
+        '''
+        cursor.execute(query, (namaObat, jenis, harga, stok, tgl_produksi, kadaluarsa, kategoriId, obatId))
         db.commit()
         pesan = f'Data obat dengan id {obatId} berhasil di update'
     except Exception as e:
@@ -181,3 +200,62 @@ def lihatDetailTransaksi(transaksiId):
     cursor.close()
     db.close()
     return dataDetailTransaksi
+
+def tambahKategori(namaKategori):
+    db = koneksiKeDatabase()
+    if db is None:
+        return "Gagal koneksi ke database"
+    
+    cursor = db.cursor()
+    try:
+        query = 'insert into kategoriObat(namaKategori) values(%s)'
+        cursor.execute(query, (namaKategori,))
+        db.commit()
+        pesan = 'Kategori baru berhasil ditambahkan'
+    except Exception as e:
+        pesan = f"Terjadi kesalahan: {e}"
+        
+    cursor.close()
+    db.close()
+    return pesan
+
+def lihatSemuaKategori():
+    db = koneksiKeDatabase()
+    if db is None:
+        return []
+    
+    cursor = db.cursor()
+    query = 'select * from kategoriObat'
+    cursor.execute(query)
+    data = cursor.fetchall()
+    
+    cursor.close()
+    db.close()
+    return data
+
+def lihatObatKadaluarsa():
+    db = koneksiKeDatabase()
+    if db is None:
+        return "Gagal koneksi ke database"
+    
+    cursor = db.cursor()
+    # Query: Ambil obat yang tanggalnya LEBIH KECIL dari hari ini
+    query = """
+        SELECT 
+            o.*, 
+            k.namaKategori 
+        FROM obat o
+        LEFT JOIN kategoriObat k ON o.kategoriId = k.kategoriId
+        WHERE o.kadaluarsa < CURDATE()
+        ORDER BY o.kadaluarsa ASC
+    """
+    cursor.execute(query)
+    dataObat = cursor.fetchall()
+    
+    cursor.close()
+    db.close()
+    
+    if not dataObat:
+        return 'Tidak ada obat yang kadaluarsa'
+    
+    return dataObat

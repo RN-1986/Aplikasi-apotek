@@ -18,7 +18,10 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QGridLayout, QLabel, QLineEdit,
     QMainWindow, QMenuBar, QPushButton, QSizePolicy,
     QStatusBar, QVBoxLayout, QWidget)
-import logo-apotek_rc
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), "frontend"))
+import logo_apotek_rc
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -87,14 +90,14 @@ class Ui_MainWindow(object):
         self.label_6.setFont(font3)
         self.label_6.setStyleSheet(u"background-color: rgba(0, 0, 0, 0);\n"
 "color: black;")
-        self.widget = QWidget(self.centralwidget)
-        self.widget.setObjectName(u"widget")
-        self.widget.setGeometry(QRect(30, 190, 241, 121))
-        self.verticalLayout = QVBoxLayout(self.widget)
+        self.layoutWidget = QWidget(self.centralwidget)
+        self.layoutWidget.setObjectName(u"layoutWidget")
+        self.layoutWidget.setGeometry(QRect(30, 190, 241, 121))
+        self.verticalLayout = QVBoxLayout(self.layoutWidget)
         self.verticalLayout.setSpacing(0)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.label_5 = QLabel(self.widget)
+        self.label_5 = QLabel(self.layoutWidget)
         self.label_5.setObjectName(u"label_5")
         font4 = QFont()
         font4.setFamilies([u"Times New Roman"])
@@ -106,7 +109,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addWidget(self.label_5, 0, Qt.AlignHCenter)
 
-        self.lineEdit = QLineEdit(self.widget)
+        self.lineEdit = QLineEdit(self.layoutWidget)
         self.lineEdit.setObjectName(u"lineEdit")
         self.lineEdit.setFont(font4)
         self.lineEdit.setStyleSheet(u"border-radius: 5px;\n"
@@ -115,7 +118,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addWidget(self.lineEdit)
 
-        self.label_4 = QLabel(self.widget)
+        self.label_4 = QLabel(self.layoutWidget)
         self.label_4.setObjectName(u"label_4")
         self.label_4.setFont(font4)
         self.label_4.setStyleSheet(u"background-color: rgba(255, 255, 255, 60);\n"
@@ -123,7 +126,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addWidget(self.label_4, 0, Qt.AlignHCenter)
 
-        self.lineEdit_2 = QLineEdit(self.widget)
+        self.lineEdit_2 = QLineEdit(self.layoutWidget)
         self.lineEdit_2.setObjectName(u"lineEdit_2")
         self.lineEdit_2.setFont(font4)
         self.lineEdit_2.setStyleSheet(u"border-radius: 5px;\n"
@@ -132,13 +135,13 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addWidget(self.lineEdit_2)
 
-        self.widget1 = QWidget(self.centralwidget)
-        self.widget1.setObjectName(u"widget1")
-        self.widget1.setGeometry(QRect(20, 410, 241, 51))
-        self.gridLayout = QGridLayout(self.widget1)
+        self.layoutWidget1 = QWidget(self.centralwidget)
+        self.layoutWidget1.setObjectName(u"layoutWidget1")
+        self.layoutWidget1.setGeometry(QRect(20, 410, 241, 51))
+        self.gridLayout = QGridLayout(self.layoutWidget1)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
-        self.pushButton_logout = QPushButton(self.widget1)
+        self.pushButton_logout = QPushButton(self.layoutWidget1)
         self.pushButton_logout.setObjectName(u"pushButton_logout")
         self.pushButton_logout.setFont(font2)
         self.pushButton_logout.setStyleSheet(u"QPushButton { \n"
@@ -164,7 +167,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.pushButton_logout, 0, 0, 1, 1)
 
-        self.pushButton_login = QPushButton(self.widget1)
+        self.pushButton_login = QPushButton(self.layoutWidget1)
         self.pushButton_login.setObjectName(u"pushButton_login")
         font5 = QFont()
         font5.setPointSize(11)
@@ -223,3 +226,10 @@ class Ui_MainWindow(object):
         self.pushButton_login.setText(QCoreApplication.translate("MainWindow", u"Login", None))
     # retranslateUi
 
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(window)
+    window.show()
+    sys.exit(app.exec())

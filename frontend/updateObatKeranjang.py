@@ -153,10 +153,10 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.label.setText(QCoreApplication.translate("MainWindow", u"  Update Data Keranjang", None))
+        self.label.setText(QCoreApplication.translate("MainWindow", u"Update Data Keranjang", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"Nama Obat  :", None))
-        self.label_4.setText(QCoreApplication.translate("MainWindow", u"Jumlah          :", None))
-        self.pushButton_simpan.setText(QCoreApplication.translate("MainWindow", u"SIMPAN", None))
-        self.pushButton_batal.setText(QCoreApplication.translate("MainWindow", u"BATAL", None))
+        self.label_4.setText(QCoreApplication.translate("MainWindow", u"Jumlah Baru :", None))
+        self.pushButton_simpan.setText(QCoreApplication.translate("MainWindow", u"Update", None))
+        self.pushButton_batal.setText(QCoreApplication.translate("MainWindow", u"Batal", None))
     # retranslateUi
 

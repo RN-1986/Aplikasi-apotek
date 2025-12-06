@@ -36,7 +36,7 @@
        <string notr="true"/>
       </property>
       <property name="text">
-       <string>  Update Data Keranjang</string>
+       <string>Update Data Keranjang</string>
       </property>
      </widget>
     </item>
@@ -77,7 +77,7 @@ padding: 8px 8px;</string>
          <string notr="true"/>
         </property>
         <property name="text">
-         <string>Jumlah          :</string>
+         <string>Jumlah Baru :</string>
         </property>
        </widget>
       </item>
@@ -120,7 +120,7 @@ QPushButton:pressed {
 </string>
         </property>
         <property name="text">
-         <string>SIMPAN</string>
+         <string>Update</string>
         </property>
        </widget>
       </item>
@@ -149,7 +149,7 @@ background-color: rgb(213, 0, 0);
 }</string>
         </property>
         <property name="text">
-         <string>BATAL</string>
+         <string>Batal</string>
         </property>
        </widget>
       </item>

@@ -34,7 +34,7 @@ class Ui_MainWindow(object):
         self.textBrowser = QTextBrowser(self.centralwidget)
         self.textBrowser.setObjectName(u"textBrowser")
         self.textBrowser.setMaximumSize(QSize(16777215, 65))
-        self.textBrowser.setStyleSheet(u"background-color: rgb(187, 255, 253);\n"
+        self.textBrowser.setStyleSheet(u"background-color: rgb(125, 202, 211);\n"
 "border-radius: 5px;")
 
         self.verticalLayout.addWidget(self.textBrowser)
@@ -42,7 +42,7 @@ class Ui_MainWindow(object):
         self.frame = QFrame(self.centralwidget)
         self.frame.setObjectName(u"frame")
         self.frame.setMaximumSize(QSize(16777215, 450))
-        self.frame.setStyleSheet(u"background-color: rgb(187, 255, 253);\n"
+        self.frame.setStyleSheet(u"background-color: rgb(125, 202, 211);\n"
 "border-radius: 5px;\n"
 "")
         self.frame.setFrameShape(QFrame.StyledPanel)
@@ -240,8 +240,8 @@ class Ui_MainWindow(object):
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">DASHBOARD</span></p>\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">KASIR</span></p></body></html>", None))
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:11pt; font-weight:700;\">DASHBOARD</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:11pt; font-weight:700;\">KASIR</span></p></body></html>", None))
         self.pushButton_Bayar.setText(QCoreApplication.translate("MainWindow", u"Bayar", None))
         self.pushButton_lihatDetail.setText(QCoreApplication.translate("MainWindow", u"Lihat Detail", None))
         ___qtablewidgetitem = self.tableWidget.horizontalHeaderItem(0)

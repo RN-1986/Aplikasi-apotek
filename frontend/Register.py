@@ -18,7 +18,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QComboBox, QLabel, QLineEdit,
     QMainWindow, QMenuBar, QPushButton, QSizePolicy,
     QStatusBar, QVBoxLayout, QWidget)
-import logo-apotek_rc
+import sys, os
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", "qrc"))
+import logo_apotek_rc
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -56,18 +58,18 @@ class Ui_MainWindow(object):
         self.label_9.setFont(font2)
         self.label_9.setStyleSheet(u"\n"
 "background-color: rgb(0, 0, 0, 0);")
-        self.widget = QWidget(self.centralwidget)
-        self.widget.setObjectName(u"widget")
-        self.widget.setGeometry(QRect(80, 80, 231, 286))
-        self.verticalLayout = QVBoxLayout(self.widget)
+        self.layoutWidget = QWidget(self.centralwidget)
+        self.layoutWidget.setObjectName(u"layoutWidget")
+        self.layoutWidget.setGeometry(QRect(80, 80, 231, 286))
+        self.verticalLayout = QVBoxLayout(self.layoutWidget)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.label_2 = QLabel(self.widget)
+        self.label_2 = QLabel(self.layoutWidget)
         self.label_2.setObjectName(u"label_2")
 
         self.verticalLayout.addWidget(self.label_2, 0, Qt.AlignHCenter)
 
-        self.lineEdit_nama = QLineEdit(self.widget)
+        self.lineEdit_nama = QLineEdit(self.layoutWidget)
         self.lineEdit_nama.setObjectName(u"lineEdit_nama")
         self.lineEdit_nama.setStyleSheet(u"border-radius: 5px;\n"
 "background-color: rgb(226, 226, 226);\n"
@@ -75,12 +77,12 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addWidget(self.lineEdit_nama)
 
-        self.label_3 = QLabel(self.widget)
+        self.label_3 = QLabel(self.layoutWidget)
         self.label_3.setObjectName(u"label_3")
 
         self.verticalLayout.addWidget(self.label_3, 0, Qt.AlignHCenter)
 
-        self.lineEdit_username = QLineEdit(self.widget)
+        self.lineEdit_username = QLineEdit(self.layoutWidget)
         self.lineEdit_username.setObjectName(u"lineEdit_username")
         self.lineEdit_username.setStyleSheet(u"border-radius: 5px;\n"
 "background-color: rgb(226, 226, 226);\n"
@@ -88,12 +90,12 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addWidget(self.lineEdit_username)
 
-        self.label_4 = QLabel(self.widget)
+        self.label_4 = QLabel(self.layoutWidget)
         self.label_4.setObjectName(u"label_4")
 
         self.verticalLayout.addWidget(self.label_4, 0, Qt.AlignHCenter)
 
-        self.lineEdit_password = QLineEdit(self.widget)
+        self.lineEdit_password = QLineEdit(self.layoutWidget)
         self.lineEdit_password.setObjectName(u"lineEdit_password")
         self.lineEdit_password.setStyleSheet(u"border-radius: 5px;\n"
 "background-color: rgb(226, 226, 226);\n"
@@ -101,12 +103,12 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addWidget(self.lineEdit_password)
 
-        self.label_5 = QLabel(self.widget)
+        self.label_5 = QLabel(self.layoutWidget)
         self.label_5.setObjectName(u"label_5")
 
         self.verticalLayout.addWidget(self.label_5, 0, Qt.AlignHCenter)
 
-        self.lineEdit_konfirmasipass = QLineEdit(self.widget)
+        self.lineEdit_konfirmasipass = QLineEdit(self.layoutWidget)
         self.lineEdit_konfirmasipass.setObjectName(u"lineEdit_konfirmasipass")
         self.lineEdit_konfirmasipass.setStyleSheet(u"border-radius: 5px;\n"
 "background-color: rgb(226, 226, 226);\n"
@@ -114,12 +116,15 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addWidget(self.lineEdit_konfirmasipass)
 
-        self.label_6 = QLabel(self.widget)
+        self.label_6 = QLabel(self.layoutWidget)
         self.label_6.setObjectName(u"label_6")
 
         self.verticalLayout.addWidget(self.label_6, 0, Qt.AlignHCenter)
 
-        self.comboBox_pilihRole = QComboBox(self.widget)
+        self.comboBox_pilihRole = QComboBox(self.layoutWidget)
+        self.comboBox_pilihRole.addItem("")
+        self.comboBox_pilihRole.addItem("")
+        self.comboBox_pilihRole.addItem("")
         self.comboBox_pilihRole.setObjectName(u"comboBox_pilihRole")
         self.comboBox_pilihRole.setStyleSheet(u"border-radius: 5px;\n"
 "background-color: rgb(226, 226, 226);\n"
@@ -184,18 +189,11 @@ class Ui_MainWindow(object):
 "}\n"
 "")
         MainWindow.setCentralWidget(self.centralwidget)
+        self.layoutWidget.raise_()
+        self.pushButton_register.raise_()
+        self.pushButton_kembali.raise_()
         self.label_7.raise_()
         self.label.raise_()
-        self.lineEdit_nama.raise_()
-        self.label_2.raise_()
-        self.label_3.raise_()
-        self.label_4.raise_()
-        self.lineEdit_username.raise_()
-        self.lineEdit_password.raise_()
-        self.label_5.raise_()
-        self.lineEdit_konfirmasipass.raise_()
-        self.label_6.raise_()
-        self.comboBox_pilihRole.raise_()
         self.label_8.raise_()
         self.label_9.raise_()
         self.menubar = QMenuBar(MainWindow)
@@ -222,7 +220,19 @@ class Ui_MainWindow(object):
         self.label_4.setText(QCoreApplication.translate("MainWindow", u"Password:", None))
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"Konfirmasi Password:", None))
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"Pilih Role:", None))
+        self.comboBox_pilihRole.setItemText(0, QCoreApplication.translate("MainWindow", u"Admin", None))
+        self.comboBox_pilihRole.setItemText(1, QCoreApplication.translate("MainWindow", u"Apoteker", None))
+        self.comboBox_pilihRole.setItemText(2, QCoreApplication.translate("MainWindow", u"Kasir", None))
+
         self.pushButton_register.setText(QCoreApplication.translate("MainWindow", u"Register", None))
         self.pushButton_kembali.setText(QCoreApplication.translate("MainWindow", u"\u21a9", None))
     # retranslateUi
 
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(window)
+    window.show()
+    sys.exit(app.exec())

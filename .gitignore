@@ -17,3 +17,8 @@ venv/
 # Local database files
 *.db
 *.sqlite3
+# Qt Designer autosave
+*.autosave
+
+# UI compiler backup
+*.bak

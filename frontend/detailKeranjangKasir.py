@@ -24,7 +24,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(573, 526)
+        MainWindow.resize(742, 526)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout = QVBoxLayout(self.centralwidget)
@@ -60,9 +60,14 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addLayout(self.gridLayout)
 
+        self.label_3 = QLabel(self.centralwidget)
+        self.label_3.setObjectName(u"label_3")
+
+        self.verticalLayout.addWidget(self.label_3)
+
         self.tableWidget = QTableWidget(self.centralwidget)
-        if (self.tableWidget.columnCount() < 5):
-            self.tableWidget.setColumnCount(5)
+        if (self.tableWidget.columnCount() < 8):
+            self.tableWidget.setColumnCount(8)
         __qtablewidgetitem = QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(0, __qtablewidgetitem)
         __qtablewidgetitem1 = QTableWidgetItem()
@@ -73,10 +78,42 @@ class Ui_MainWindow(object):
         self.tableWidget.setHorizontalHeaderItem(3, __qtablewidgetitem3)
         __qtablewidgetitem4 = QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(4, __qtablewidgetitem4)
+        __qtablewidgetitem5 = QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(5, __qtablewidgetitem5)
+        __qtablewidgetitem6 = QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(6, __qtablewidgetitem6)
+        __qtablewidgetitem7 = QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(7, __qtablewidgetitem7)
         self.tableWidget.setObjectName(u"tableWidget")
-        self.tableWidget.horizontalHeader().setDefaultSectionSize(110)
+        self.tableWidget.horizontalHeader().setDefaultSectionSize(90)
 
         self.verticalLayout.addWidget(self.tableWidget)
+
+        self.pushButton_2 = QPushButton(self.centralwidget)
+        self.pushButton_2.setObjectName(u"pushButton_2")
+        self.pushButton_2.setStyleSheet(u"QPushButton { \n"
+"border-radius: 5px; \n"
+"	background-color: rgb(255, 0, 0);\n"
+"    color: white;\n"
+"padding: 6px 20px;\n"
+"  \n"
+"}\n"
+"\n"
+"/* Saat kursor hover */\n"
+"QPushButton:hover {\n"
+"     /* warna saat hover */\n"
+"background-color:rgb(213, 0, 0);\n"
+"	color: white;\n"
+"}\n"
+"\n"
+"/* Saat tombol ditekan */\n"
+"QPushButton:pressed {\n"
+"     /* warna saat ditekan */\n"
+"background-color: rgb(213, 0, 0);\n"
+"	color: white;\n"
+"}")
+
+        self.verticalLayout.addWidget(self.pushButton_2)
 
         self.pushButton = QPushButton(self.centralwidget)
         self.pushButton.setObjectName(u"pushButton")
@@ -108,7 +145,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 573, 22))
+        self.menubar.setGeometry(QRect(0, 0, 742, 22))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -121,9 +158,10 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.label.setText(QCoreApplication.translate("MainWindow", u"Detail Riwayat Keranjang", None))
+        self.label.setText(QCoreApplication.translate("MainWindow", u"Detail Data Keranjang Kasir", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"Nama Pembeli  :", None))
         self.label_namaPembeli.setText("")
+        self.label_3.setText(QCoreApplication.translate("MainWindow", u"Silahkan pilih data obat yang akan", None))
         ___qtablewidgetitem = self.tableWidget.horizontalHeaderItem(0)
         ___qtablewidgetitem.setText(QCoreApplication.translate("MainWindow", u"Keranjang ID", None));
         ___qtablewidgetitem1 = self.tableWidget.horizontalHeaderItem(1)
@@ -131,9 +169,16 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem2 = self.tableWidget.horizontalHeaderItem(2)
         ___qtablewidgetitem2.setText(QCoreApplication.translate("MainWindow", u"Nama Obat", None));
         ___qtablewidgetitem3 = self.tableWidget.horizontalHeaderItem(3)
-        ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"Jumlah", None));
+        ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"Jenis", None));
         ___qtablewidgetitem4 = self.tableWidget.horizontalHeaderItem(4)
-        ___qtablewidgetitem4.setText(QCoreApplication.translate("MainWindow", u"Sub Total", None));
-        self.pushButton.setText(QCoreApplication.translate("MainWindow", u"PushButton", None))
+        ___qtablewidgetitem4.setText(QCoreApplication.translate("MainWindow", u"Kategori", None));
+        ___qtablewidgetitem5 = self.tableWidget.horizontalHeaderItem(5)
+        ___qtablewidgetitem5.setText(QCoreApplication.translate("MainWindow", u"Jumlah", None));
+        ___qtablewidgetitem6 = self.tableWidget.horizontalHeaderItem(6)
+        ___qtablewidgetitem6.setText(QCoreApplication.translate("MainWindow", u"Sub Total", None));
+        ___qtablewidgetitem7 = self.tableWidget.horizontalHeaderItem(7)
+        ___qtablewidgetitem7.setText(QCoreApplication.translate("MainWindow", u"Total", None));
+        self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"Hapus Dari Keranjang", None))
+        self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Kembali", None))
     # retranslateUi
 

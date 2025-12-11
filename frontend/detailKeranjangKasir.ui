@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>573</width>
+    <width>742</width>
     <height>526</height>
    </rect>
   </property>
@@ -24,7 +24,7 @@
        </font>
       </property>
       <property name="text">
-       <string>Detail Riwayat Keranjang</string>
+       <string>Detail Data Keranjang Kasir</string>
       </property>
      </widget>
     </item>
@@ -58,9 +58,16 @@ alternate-background-color: rgb(187, 255, 253);</string>
      </layout>
     </item>
     <item>
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>Silahkan pilih data obat yang akan</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QTableWidget" name="tableWidget">
       <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>110</number>
+       <number>90</number>
       </attribute>
       <column>
        <property name="text">
@@ -79,6 +86,16 @@ alternate-background-color: rgb(187, 255, 253);</string>
       </column>
       <column>
        <property name="text">
+        <string>Jenis</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Kategori</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
         <string>Jumlah</string>
        </property>
       </column>
@@ -87,6 +104,41 @@ alternate-background-color: rgb(187, 255, 253);</string>
         <string>Sub Total</string>
        </property>
       </column>
+      <column>
+       <property name="text">
+        <string>Total</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushButton_2">
+      <property name="styleSheet">
+       <string notr="true">QPushButton { 
+border-radius: 5px; 
+	background-color: rgb(255, 0, 0);
+    color: white;
+padding: 6px 20px;
+  
+}
+
+/* Saat kursor hover */
+QPushButton:hover {
+     /* warna saat hover */
+background-color:rgb(213, 0, 0);
+	color: white;
+}
+
+/* Saat tombol ditekan */
+QPushButton:pressed {
+     /* warna saat ditekan */
+background-color: rgb(213, 0, 0);
+	color: white;
+}</string>
+      </property>
+      <property name="text">
+       <string>Hapus Dari Keranjang</string>
+      </property>
      </widget>
     </item>
     <item alignment="Qt::AlignRight">
@@ -116,7 +168,7 @@ background-color: rgb(213, 0, 0);
 }</string>
       </property>
       <property name="text">
-       <string>PushButton</string>
+       <string>Kembali</string>
       </property>
      </widget>
     </item>
@@ -127,7 +179,7 @@ background-color: rgb(213, 0, 0);
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>573</width>
+     <width>742</width>
      <height>22</height>
     </rect>
    </property>

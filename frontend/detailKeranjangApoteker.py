@@ -24,6 +24,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
+        MainWindow.resize(573, 509)
         MainWindow.resize(666, 526)
         MainWindow.setStyleSheet(u"")
         self.centralwidget = QWidget(MainWindow)
@@ -62,6 +63,9 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addLayout(self.gridLayout)
 
+        self.tableWidget = QTableWidget(self.centralwidget)
+        if (self.tableWidget.columnCount() < 4):
+            self.tableWidget.setColumnCount(4)
         self.label_3 = QLabel(self.centralwidget)
         self.label_3.setObjectName(u"label_3")
 
@@ -78,6 +82,13 @@ class Ui_MainWindow(object):
         self.tableWidget.setHorizontalHeaderItem(2, __qtablewidgetitem2)
         __qtablewidgetitem3 = QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(3, __qtablewidgetitem3)
+        self.tableWidget.setObjectName(u"tableWidget")
+        self.tableWidget.setStyleSheet(u"background-color: rgb(255, 255, 255);\n"
+"border-radius: 5px;")
+        self.tableWidget.horizontalHeader().setDefaultSectionSize(138)
+
+        self.verticalLayout.addWidget(self.tableWidget)
+
         __qtablewidgetitem4 = QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(4, __qtablewidgetitem4)
         __qtablewidgetitem5 = QTableWidgetItem()
@@ -146,6 +157,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
+        self.menubar.setGeometry(QRect(0, 0, 573, 22))
         self.menubar.setGeometry(QRect(0, 0, 666, 22))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
@@ -159,6 +171,9 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
+        self.label.setText(QCoreApplication.translate("MainWindow", u"Detail Data Keranjang", None))
+        self.label_2.setText(QCoreApplication.translate("MainWindow", u"Nama Pembeli  :", None))
+        self.label_namaPembeli.setText("")
         self.label.setText(QCoreApplication.translate("MainWindow", u"Detail Data Keranjang Apoteker", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"Nama Pembeli  :", None))
         self.label_namaPembeli.setText("")
@@ -168,6 +183,9 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem1 = self.tableWidget.horizontalHeaderItem(1)
         ___qtablewidgetitem1.setText(QCoreApplication.translate("MainWindow", u"Nama Obat", None));
         ___qtablewidgetitem2 = self.tableWidget.horizontalHeaderItem(2)
+        ___qtablewidgetitem2.setText(QCoreApplication.translate("MainWindow", u"Jumlah", None));
+        ___qtablewidgetitem3 = self.tableWidget.horizontalHeaderItem(3)
+        ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"Subtotal", None));
         ___qtablewidgetitem2.setText(QCoreApplication.translate("MainWindow", u"Jenis", None));
         ___qtablewidgetitem3 = self.tableWidget.horizontalHeaderItem(3)
         ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"Kategori", None));

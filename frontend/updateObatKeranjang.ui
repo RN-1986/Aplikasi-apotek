@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>463</width>
-    <height>327</height>
+    <width>877</width>
+    <height>485</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -42,16 +42,7 @@
     </item>
     <item>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="1" column="2">
-       <widget class="QLineEdit" name="lineEdit_2">
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 10px;
-padding: 8px 8px;</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
+      <item row="0" column="0">
        <widget class="QLabel" name="label_2">
         <property name="font">
          <font>
@@ -62,26 +53,11 @@ padding: 8px 8px;</string>
          <string notr="true"/>
         </property>
         <property name="text">
-         <string>Nama Obat  :</string>
+         <string>Nama Pembeli  :</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QLabel" name="label_4">
-        <property name="font">
-         <font>
-          <pointsize>8</pointsize>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true"/>
-        </property>
-        <property name="text">
-         <string>Jumlah Baru :</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
+      <item row="0" column="1">
        <widget class="QLineEdit" name="lineEdit">
         <property name="styleSheet">
          <string notr="true">background-color: rgb(255, 255, 255);
@@ -93,7 +69,88 @@ padding: 8px 8px;</string>
      </layout>
     </item>
     <item>
+     <widget class="QTableWidget" name="tableWidget">
+      <property name="styleSheet">
+       <string notr="true">
+</string>
+      </property>
+      <attribute name="horizontalHeaderDefaultSectionSize">
+       <number>172</number>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>Keranjang ID</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Nama Obat</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Kategori</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Jenis</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Jumlah</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+    <item>
      <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QPushButton" name="pushButton_hapus">
+        <property name="styleSheet">
+         <string notr="true">QPushButton { 
+border-radius: 5px;
+padding: 8px 8px;
+	background-color: rgb(255, 0, 0);
+    color: white;
+}
+
+/* Saat kursor hover */
+QPushButton:hover {
+     /* warna saat hover */
+background-color:rgb(213, 0, 0);
+	color: white;
+}
+
+/* Saat tombol ditekan */
+QPushButton:pressed {
+     /* warna saat ditekan */
+background-color: rgb(213, 0, 0);
+	color: white;
+}</string>
+        </property>
+        <property name="text">
+         <string>Hapus Data</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
       <item row="0" column="2">
        <widget class="QPushButton" name="pushButton_simpan">
         <property name="styleSheet">
@@ -124,12 +181,15 @@ QPushButton:pressed {
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QPushButton" name="pushButton_batal">
-        <property name="styleSheet">
-         <string notr="true">QPushButton { 
+     </layout>
+    </item>
+    <item alignment="Qt::AlignRight">
+     <widget class="QPushButton" name="pushButton_batal">
+      <property name="styleSheet">
+       <string notr="true">QPushButton { 
 border-radius: 5px;
-padding: 8px 8px;
+padding: 8px 20px;
+min-width: 100px;   
 	background-color: rgb(255, 0, 0);
     color: white;
 }
@@ -147,29 +207,11 @@ QPushButton:pressed {
 background-color: rgb(213, 0, 0);
 	color: white;
 }</string>
-        </property>
-        <property name="text">
-         <string>Batal</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
+      </property>
+      <property name="text">
+       <string>Batal</string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -178,7 +220,7 @@ background-color: rgb(213, 0, 0);
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>463</width>
+     <width>877</width>
      <height>22</height>
     </rect>
    </property>

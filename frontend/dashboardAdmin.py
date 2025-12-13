@@ -19,7 +19,7 @@ from PySide6.QtWidgets import (QApplication, QGridLayout, QHeaderView, QLabel,
     QLineEdit, QMainWindow, QMenuBar, QPushButton,
     QSizePolicy, QStatusBar, QTabWidget, QTableWidget,
     QTableWidgetItem, QTextBrowser, QVBoxLayout, QWidget)
-import logo-apotek_rc
+import logo_apotek_rc
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -182,8 +182,8 @@ class Ui_MainWindow(object):
         self.gridLayout_3.addLayout(self.gridLayout, 2, 0, 1, 1)
 
         self.tableWidget = QTableWidget(self.tab)
-        if (self.tableWidget.columnCount() < 7):
-            self.tableWidget.setColumnCount(7)
+        if (self.tableWidget.columnCount() < 8):
+            self.tableWidget.setColumnCount(8)
         font1 = QFont()
         font1.setPointSize(12)
         __qtablewidgetitem = QTableWidgetItem()
@@ -201,14 +201,17 @@ class Ui_MainWindow(object):
         __qtablewidgetitem4 = QTableWidgetItem()
         __qtablewidgetitem4.setFont(font1);
         self.tableWidget.setHorizontalHeaderItem(4, __qtablewidgetitem4)
+        __qtablewidgetitem5 = QTableWidgetItem()
+        __qtablewidgetitem5.setFont(font1);
+        self.tableWidget.setHorizontalHeaderItem(5, __qtablewidgetitem5)
         font2 = QFont()
         font2.setPointSize(11)
-        __qtablewidgetitem5 = QTableWidgetItem()
-        __qtablewidgetitem5.setFont(font2);
-        self.tableWidget.setHorizontalHeaderItem(5, __qtablewidgetitem5)
         __qtablewidgetitem6 = QTableWidgetItem()
-        __qtablewidgetitem6.setFont(font1);
+        __qtablewidgetitem6.setFont(font2);
         self.tableWidget.setHorizontalHeaderItem(6, __qtablewidgetitem6)
+        __qtablewidgetitem7 = QTableWidgetItem()
+        __qtablewidgetitem7.setFont(font1);
+        self.tableWidget.setHorizontalHeaderItem(7, __qtablewidgetitem7)
         self.tableWidget.setObjectName(u"tableWidget")
         self.tableWidget.setStyleSheet(u"QHeaderView::section {\n"
 "    background-color: rgb(125, 202, 211);\n"
@@ -473,18 +476,21 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem2 = self.tableWidget.horizontalHeaderItem(2)
         ___qtablewidgetitem2.setText(QCoreApplication.translate("MainWindow", u"Jenis", None));
         ___qtablewidgetitem3 = self.tableWidget.horizontalHeaderItem(3)
-        ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"Harga", None));
+        ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"Kategori", None));
         ___qtablewidgetitem4 = self.tableWidget.horizontalHeaderItem(4)
-        ___qtablewidgetitem4.setText(QCoreApplication.translate("MainWindow", u"Stok", None));
+        ___qtablewidgetitem4.setText(QCoreApplication.translate("MainWindow", u"Harga", None));
         ___qtablewidgetitem5 = self.tableWidget.horizontalHeaderItem(5)
-        ___qtablewidgetitem5.setText(QCoreApplication.translate("MainWindow", u"Tgl Produksi", None));
+        ___qtablewidgetitem5.setText(QCoreApplication.translate("MainWindow", u"Stok", None));
         ___qtablewidgetitem6 = self.tableWidget.horizontalHeaderItem(6)
-        ___qtablewidgetitem6.setText(QCoreApplication.translate("MainWindow", u"Kadaluarsa", None));
+        ___qtablewidgetitem6.setText(QCoreApplication.translate("MainWindow", u"Tgl Produksi", None));
+        ___qtablewidgetitem7 = self.tableWidget.horizontalHeaderItem(7)
+        ___qtablewidgetitem7.setText(QCoreApplication.translate("MainWindow", u"Kadaluarsa", None));
         self.label_2.setText(QCoreApplication.translate("MainWindow", u" Nama atau ID obat", None))
         self.pushButton_search.setText(QCoreApplication.translate("MainWindow", u"Cari", None))
         self.pushButton_refresh.setText(QCoreApplication.translate("MainWindow", u"Refresh", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Kelola Data Obat", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u" Tanggal :", None))
+        self.lineEdit_2.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Cari Tanggal/Jam", None))
         self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Cari", None))
         self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"Refresh", None))
         ___qtablewidgetitem7 = self.tableWidget_2.horizontalHeaderItem(0)
@@ -508,3 +514,303 @@ class Ui_MainWindow(object):
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; font-weight:700;\">ADMIN</span></p></body></html>", None))
     # retranslateUi
 
+
+from PySide6.QtWidgets import QMessageBox, QTableWidgetItem
+from backend.admin import (
+    lihatSemuaDataObat, tambahObat, updateObat, hapusObat,
+    lihatSemuaTransaksi, lihatDetailTransaksi, cariObat
+)
+from backend.login import session
+
+class DashboardAdmin(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
+        
+        # Connect button keluar/logout
+        if hasattr(self.ui, "pushButton_keluar"):
+            self.ui.pushButton_keluar.clicked.connect(self.logout_to_login)
+        
+        # Connect button di tab Kelola Obat
+        if hasattr(self.ui, "pushButton_tambah"):
+            self.ui.pushButton_tambah.clicked.connect(self.open_tambah_obat)
+        if hasattr(self.ui, "pushButton_edit"):
+            self.ui.pushButton_edit.clicked.connect(self.open_edit_obat)
+        if hasattr(self.ui, "pushButton_delete"):
+            self.ui.pushButton_delete.clicked.connect(self.hapus_obat)
+        if hasattr(self.ui, "pushButton_search"):
+            self.ui.pushButton_search.clicked.connect(self.cari_obat_action)
+        if hasattr(self.ui, "pushButton_refresh"):
+            self.ui.pushButton_refresh.clicked.connect(self.refresh_data_obat)
+        
+        # Connect button di tab Riwayat Transaksi
+        if hasattr(self.ui, "pushButton"):  # Button Cari transaksi
+            self.ui.pushButton.clicked.connect(self.cari_transaksi_by_date)
+        if hasattr(self.ui, "pushButton_2"):  # Button Refresh transaksi
+            self.ui.pushButton_2.clicked.connect(self.refresh_data_transaksi)
+        if hasattr(self.ui, "pushButton_LihatDetail"):  # Button Lihat Detail
+            self.ui.pushButton_LihatDetail.clicked.connect(self.open_detail_transaksi)
+        
+        try:
+            username = session.get('dataUser', {}).get('username', 'Admin')
+            self.ui.textBrowser.setHtml(f"<h2 style='text-align:center'>DASHBOARD ADMIN</h2><p style='text-align:center'>Selamat Datang, {username}</p>")
+        except Exception:
+            pass
+        
+        # Load data
+        self.refresh_data_obat()
+        self.refresh_data_transaksi()
+
+    def refresh_data_obat(self):
+        try:
+            if hasattr(self.ui, 'tableWidget'):
+                self.ui.tableWidget.setRowCount(0)
+                data = lihatSemuaDataObat()
+                if isinstance(data, str):
+                    QMessageBox.information(self, "Info", data)
+                    return
+                for d in data:
+                    row = self.ui.tableWidget.rowCount()
+                    self.ui.tableWidget.insertRow(row)
+                    
+                    # Format harga as integer if it's a whole number
+                    harga_val = d.get('harga', '')
+                    if isinstance(harga_val, (int, float)):
+                        harga_str = str(int(harga_val)) if float(harga_val) == int(harga_val) else str(harga_val)
+                    else:
+                        harga_str = str(harga_val)
+                    
+                    self.ui.tableWidget.setItem(row, 0, QTableWidgetItem(str(d.get('obatId', ''))))
+                    self.ui.tableWidget.setItem(row, 1, QTableWidgetItem(str(d.get('namaObat', ''))))
+                    self.ui.tableWidget.setItem(row, 2, QTableWidgetItem(str(d.get('jenis', ''))))
+                    self.ui.tableWidget.setItem(row, 3, QTableWidgetItem(str(d.get('namaKategori', ''))))
+                    self.ui.tableWidget.setItem(row, 4, QTableWidgetItem(harga_str))
+                    self.ui.tableWidget.setItem(row, 5, QTableWidgetItem(str(d.get('stok', ''))))
+                    self.ui.tableWidget.setItem(row, 6, QTableWidgetItem(str(d.get('tgl_produksi', ''))))
+                    self.ui.tableWidget.setItem(row, 7, QTableWidgetItem(str(d.get('kadaluarsa', ''))))
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Gagal load data: {e}")
+
+    def open_tambah_obat(self):
+        """Buka window tambah obat"""
+        try:
+            from tambah_Obat import TambahObatWindow
+            self.tambah_window = TambahObatWindow(parent=self)
+            self.tambah_window.show()
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Gagal membuka form tambah obat: {e}")
+    
+    def open_edit_obat(self):
+        """Buka window edit obat"""
+        try:
+            # Ambil baris yang dipilih
+            selected = self.ui.tableWidget.currentRow()
+            if selected < 0:
+                QMessageBox.warning(self, "Peringatan", "Pilih obat yang akan diedit!")
+                return
+            
+            # Ambil obatId dari kolom pertama
+            obat_id = self.ui.tableWidget.item(selected, 0).text()
+            
+            from updateObat import UpdateObatWindow
+            self.edit_window = UpdateObatWindow(obat_id, parent=self)
+            self.edit_window.show()
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Gagal membuka form edit obat: {e}")
+    
+    def hapus_obat(self):
+        """Hapus obat yang dipilih"""
+        try:
+            # Ambil baris yang dipilih
+            selected = self.ui.tableWidget.currentRow()
+            if selected < 0:
+                QMessageBox.warning(self, "Peringatan", "Pilih obat yang akan dihapus!")
+                return
+            
+            # Ambil obatId dari kolom pertama
+            obat_id = self.ui.tableWidget.item(selected, 0).text()
+            nama_obat = self.ui.tableWidget.item(selected, 1).text()
+            
+            # Konfirmasi hapus
+            reply = QMessageBox.question(
+                self, 
+                "Konfirmasi Hapus", 
+                f"Yakin ingin menghapus obat '{nama_obat}'?",
+                QMessageBox.Yes | QMessageBox.No
+            )
+            
+            if reply == QMessageBox.Yes:
+                pesan = hapusObat(obat_id)
+                QMessageBox.information(self, "Info", pesan)
+                self.refresh_data_obat()
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Gagal menghapus obat: {e}")
+    
+    def cari_obat_action(self):
+        """Cari obat berdasarkan keyword"""
+        try:
+            keyword = self.ui.lineEdit.text().strip()
+            
+            if not keyword:
+                self.refresh_data_obat()
+                return
+            
+            data = cariObat(keyword)
+            
+            if isinstance(data, str):
+                QMessageBox.information(self, "Info", data)
+                return
+            
+            # Tampilkan hasil pencarian
+            self.ui.tableWidget.setRowCount(0)
+            for d in data:
+                row = self.ui.tableWidget.rowCount()
+                self.ui.tableWidget.insertRow(row)
+                
+                if isinstance(d, dict):
+                    # Format harga as integer if it's a whole number
+                    harga_val = d.get('harga', '')
+                    if isinstance(harga_val, (int, float)):
+                        harga_str = str(int(harga_val)) if float(harga_val) == int(harga_val) else str(harga_val)
+                    else:
+                        harga_str = str(harga_val)
+                    
+                    self.ui.tableWidget.setItem(row, 0, QTableWidgetItem(str(d.get('obatId', ''))))
+                    self.ui.tableWidget.setItem(row, 1, QTableWidgetItem(str(d.get('namaObat', ''))))
+                    self.ui.tableWidget.setItem(row, 2, QTableWidgetItem(str(d.get('jenis', ''))))
+                    self.ui.tableWidget.setItem(row, 3, QTableWidgetItem(str(d.get('namaKategori', ''))))
+                    self.ui.tableWidget.setItem(row, 4, QTableWidgetItem(harga_str))
+                    self.ui.tableWidget.setItem(row, 5, QTableWidgetItem(str(d.get('stok', ''))))
+                    self.ui.tableWidget.setItem(row, 6, QTableWidgetItem(str(d.get('tgl_produksi', ''))))
+                    self.ui.tableWidget.setItem(row, 7, QTableWidgetItem(str(d.get('kadaluarsa', ''))))
+                else:
+                    self.ui.tableWidget.setItem(row, 0, QTableWidgetItem(str(d[0])))
+                    self.ui.tableWidget.setItem(row, 1, QTableWidgetItem(str(d[1])))
+                    self.ui.tableWidget.setItem(row, 2, QTableWidgetItem(str(d[2])))
+                    self.ui.tableWidget.setItem(row, 3, QTableWidgetItem(str(d[7]) if len(d) > 7 else ''))
+                    self.ui.tableWidget.setItem(row, 4, QTableWidgetItem(str(d[3])))
+                    self.ui.tableWidget.setItem(row, 5, QTableWidgetItem(str(d[4])))
+                    self.ui.tableWidget.setItem(row, 6, QTableWidgetItem(str(d[5])))
+                    self.ui.tableWidget.setItem(row, 7, QTableWidgetItem(str(d[6])))
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Gagal mencari obat: {e}")
+    
+    def refresh_data_transaksi(self):
+        """Load data riwayat transaksi ke tableWidget_2"""
+        try:
+            if hasattr(self.ui, 'tableWidget_2'):
+                self.ui.tableWidget_2.setRowCount(0)
+                data = lihatSemuaTransaksi()
+                
+                if isinstance(data, str):
+                    return
+                
+                for d in data:
+                    row = self.ui.tableWidget_2.rowCount()
+                    self.ui.tableWidget_2.insertRow(row)
+                    
+                    if isinstance(d, dict):
+                        transaksi_id = str(d.get('transaksiId', ''))
+                        self.ui.tableWidget_2.setItem(row, 0, QTableWidgetItem(transaksi_id))
+                        self.ui.tableWidget_2.setItem(row, 1, QTableWidgetItem(str(d.get('tanggalTransaksi', ''))))
+                        self.ui.tableWidget_2.setItem(row, 2, QTableWidgetItem(str(d.get('Kasir', ''))))
+                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(f"Rp {d.get('totalHarga', 0):,}"))
+                    else:
+                        transaksi_id = str(d[0])
+                        self.ui.tableWidget_2.setItem(row, 0, QTableWidgetItem(transaksi_id))
+                        self.ui.tableWidget_2.setItem(row, 1, QTableWidgetItem(str(d[1])))
+                        self.ui.tableWidget_2.setItem(row, 2, QTableWidgetItem(str(d[2])))
+                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(f"Rp {d[3]:,}"))
+                
+                # Connect double click untuk lihat detail
+                self.ui.tableWidget_2.doubleClicked.connect(self.open_detail_transaksi)
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Gagal load transaksi: {e}")
+    
+    def cari_transaksi_by_date(self):
+        """Cari transaksi berdasarkan tanggal"""
+        try:
+            tanggal = self.ui.lineEdit_2.text().strip()
+            
+            if not tanggal:
+                self.refresh_data_transaksi()
+                return
+            
+            # Load semua data transaksi
+            data = lihatSemuaTransaksi()
+            
+            if isinstance(data, str):
+                QMessageBox.information(self, "Info", data)
+                return
+            
+            # Filter berdasarkan tanggal
+            self.ui.tableWidget_2.setRowCount(0)
+            found = False
+            
+            for d in data:
+                if isinstance(d, dict):
+                    tgl_transaksi = str(d.get('tanggalTransaksi', ''))
+                else:
+                    tgl_transaksi = str(d[1])
+                
+                # Cek apakah tanggal input ada di tanggal transaksi
+                if tanggal in tgl_transaksi:
+                    found = True
+                    row = self.ui.tableWidget_2.rowCount()
+                    self.ui.tableWidget_2.insertRow(row)
+                    
+                    if isinstance(d, dict):
+                        self.ui.tableWidget_2.setItem(row, 0, QTableWidgetItem(str(d.get('transaksiId', ''))))
+                        self.ui.tableWidget_2.setItem(row, 1, QTableWidgetItem(str(d.get('tanggalTransaksi', ''))))
+                        self.ui.tableWidget_2.setItem(row, 2, QTableWidgetItem(str(d.get('Kasir', ''))))
+                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(f"Rp {d.get('totalHarga', 0):,}"))
+                    else:
+                        self.ui.tableWidget_2.setItem(row, 0, QTableWidgetItem(str(d[0])))
+                        self.ui.tableWidget_2.setItem(row, 1, QTableWidgetItem(str(d[1])))
+                        self.ui.tableWidget_2.setItem(row, 2, QTableWidgetItem(str(d[2])))
+                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(f"Rp {d[3]:,}"))
+            
+            if not found:
+                QMessageBox.information(self, "Info", f"Tidak ada transaksi pada tanggal '{tanggal}'")
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Gagal mencari transaksi: {e}")
+    
+    def open_detail_transaksi(self):
+        """Buka window detail transaksi"""
+        try:
+            selected = self.ui.tableWidget_2.currentRow()
+            if selected < 0:
+                QMessageBox.warning(self, "Peringatan", "Pilih transaksi yang akan dilihat detailnya!")
+                return
+            
+            # Ambil transaksiId dari kolom pertama
+            transaksi_id = self.ui.tableWidget_2.item(selected, 0).text()
+            
+            from detailRiwayatTransaksi import DetailRiwayatWindow
+            self.detail_window = DetailRiwayatWindow(transaksi_id, parent=self)
+            self.detail_window.show()
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Gagal membuka detail transaksi: {e}")
+
+    def logout_to_login(self):
+        try:
+            from backend.logout import logout as backend_logout
+            pesan = backend_logout()
+            QMessageBox.information(self, "Logout", pesan)
+        except Exception:
+            pass
+        
+        try:
+            self.close()
+        except Exception:
+            pass
+        
+        try:
+            from Login import Ui_MainWindow as Ui_Login
+            self._login_win = QMainWindow()
+            self._login_ui = Ui_Login()
+            self._login_ui.setupUi(self._login_win)
+            self._login_win.show()
+        except Exception:
+            pass

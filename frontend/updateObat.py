@@ -70,14 +70,13 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.lineEdit_3, 2, 1, 1, 1)
 
-        self.lineEdit_5 = QLineEdit(self.centralwidget)
-        self.lineEdit_5.setObjectName(u"lineEdit_5")
-        self.lineEdit_5.setEnabled(True)
-        self.lineEdit_5.setStyleSheet(u"background-color: rgb(255, 255, 255);\n"
+        self.lineEdit_6 = QLineEdit(self.centralwidget)
+        self.lineEdit_6.setObjectName(u"lineEdit_6")
+        self.lineEdit_6.setStyleSheet(u"background-color: rgb(255, 255, 255);\n"
 "border-radius: 10px;\n"
 "padding: 6px 8px;")
 
-        self.gridLayout.addWidget(self.lineEdit_5, 4, 1, 1, 1)
+        self.gridLayout.addWidget(self.lineEdit_6, 4, 1, 1, 1)
 
         self.label_5 = QLabel(self.centralwidget)
         self.label_5.setObjectName(u"label_5")
@@ -107,7 +106,7 @@ class Ui_MainWindow(object):
         self.label_7.setObjectName(u"label_7")
         self.label_7.setFont(font2)
 
-        self.gridLayout.addWidget(self.label_7, 5, 0, 1, 1)
+        self.gridLayout.addWidget(self.label_7, 4, 0, 1, 1)
 
         self.label_2 = QLabel(self.centralwidget)
         self.label_2.setObjectName(u"label_2")
@@ -128,7 +127,7 @@ class Ui_MainWindow(object):
         self.label_6.setObjectName(u"label_6")
         self.label_6.setFont(font2)
 
-        self.gridLayout.addWidget(self.label_6, 4, 0, 1, 1)
+        self.gridLayout.addWidget(self.label_6, 5, 0, 1, 1)
 
         self.lineEdit_2 = QLineEdit(self.centralwidget)
         self.lineEdit_2.setObjectName(u"lineEdit_2")
@@ -148,13 +147,14 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.lineEdit_4, 3, 1, 1, 1)
 
-        self.lineEdit_6 = QLineEdit(self.centralwidget)
-        self.lineEdit_6.setObjectName(u"lineEdit_6")
-        self.lineEdit_6.setStyleSheet(u"background-color: rgb(255, 255, 255);\n"
+        self.lineEdit_5 = QLineEdit(self.centralwidget)
+        self.lineEdit_5.setObjectName(u"lineEdit_5")
+        self.lineEdit_5.setEnabled(True)
+        self.lineEdit_5.setStyleSheet(u"background-color: rgb(255, 255, 255);\n"
 "border-radius: 10px;\n"
 "padding: 6px 8px;")
 
-        self.gridLayout.addWidget(self.lineEdit_6, 5, 1, 1, 1)
+        self.gridLayout.addWidget(self.lineEdit_5, 5, 1, 1, 1)
 
 
         self.verticalLayout.addLayout(self.gridLayout)
@@ -267,4 +267,115 @@ class Ui_MainWindow(object):
         self.pushButton_simpan.setText(QCoreApplication.translate("MainWindow", u"Update", None))
         self.pushButton_batal.setText(QCoreApplication.translate("MainWindow", u"Batal", None))
     # retranslateUi
+
+
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from PySide6.QtWidgets import QMainWindow, QMessageBox
+from backend.admin import updateObat, ambilDataObatYangAkanDiUpdate
+
+class UpdateObatWindow(QMainWindow):
+    def __init__(self, obat_id, parent=None):
+        super().__init__()
+        self.parent = parent
+        self.obat_id = obat_id
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
+        
+        # Load data obat yang akan diupdate
+        self.load_data_obat()
+        
+        # Connect buttons
+        self.ui.pushButton_simpan.clicked.connect(self.update_obat)
+        self.ui.pushButton_batal.clicked.connect(self.close)
+    
+    def load_data_obat(self):
+        """Load data obat ke form"""
+        try:
+            data = ambilDataObatYangAkanDiUpdate(self.obat_id)
+            if isinstance(data, str):
+                QMessageBox.warning(self, "Peringatan", data)
+                self.close()
+                return
+            
+            # Isi form dengan data existing
+            if isinstance(data, dict):
+                self.ui.lineEdit.setText(str(data.get('namaObat', '')))
+                self.ui.lineEdit_2.setText(str(data.get('jenis', '')))
+                self.ui.lineEdit_3.setText(str(data.get('harga', '')))
+                self.ui.lineEdit_4.setText(str(data.get('stok', '')))
+                self.ui.lineEdit_6.setText(str(data.get('tgl_produksi', '')))  # lineEdit_6 = tgl_produksi (row 4)
+                self.ui.lineEdit_5.setText(str(data.get('kadaluarsa', '')))     # lineEdit_5 = kadaluarsa (row 5)
+                
+                # Set kategori di comboBox - handle None
+                kategori_id = data.get('kategoriId')
+                if kategori_id is None:
+                    kategori_id = 1
+                kategori_index = max(0, int(kategori_id) - 1)
+                self.ui.comboBox.setCurrentIndex(kategori_index)
+            else:
+                # Data tuple format
+                self.ui.lineEdit.setText(str(data[1]))  # namaObat
+                self.ui.lineEdit_2.setText(str(data[2]))  # jenis
+                self.ui.lineEdit_3.setText(str(data[3]))  # harga
+                self.ui.lineEdit_4.setText(str(data[4]))  # stok
+                self.ui.lineEdit_6.setText(str(data[5]))  # tgl_produksi (row 4)
+                self.ui.lineEdit_5.setText(str(data[6]))  # kadaluarsa (row 5)
+                
+                # Handle None untuk kategoriId
+                kategori_id = data[7] if len(data) > 7 and data[7] is not None else 1
+                kategori_index = max(0, int(kategori_id) - 1)
+                self.ui.comboBox.setCurrentIndex(kategori_index)
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Gagal load data: {e}")
+            self.close()
+    
+    def update_obat(self):
+        """Update data obat"""
+        try:
+            # Ambil data dari form
+            nama_obat = self.ui.lineEdit.text().strip()
+            jenis = self.ui.lineEdit_2.text().strip()
+            harga_str = self.ui.lineEdit_3.text().strip()
+            stok_str = self.ui.lineEdit_4.text().strip()
+            tgl_produksi = self.ui.lineEdit_6.text().strip()  # lineEdit_6 = tgl_produksi (row 4)
+            tgl_kadaluarsa = self.ui.lineEdit_5.text().strip()  # lineEdit_5 = kadaluarsa (row 5)
+            kategori = self.ui.comboBox.currentText()
+            
+            # Validasi input
+            if not all([nama_obat, jenis, harga_str, stok_str, tgl_produksi, tgl_kadaluarsa]):
+                QMessageBox.warning(self, "Peringatan", "Semua field harus diisi!")
+                return
+            
+            # Convert kategori text ke kategoriId
+            kategori_map = {
+                "Obat Bebas": 1,
+                "Obat Bebas Terbatas": 2,
+                "Obat Keras": 3,
+                "Obat Narkotika & Psikotropika": 4
+            }
+            kategori_id = kategori_map.get(kategori, 1)
+            
+            # Validasi dan convert angka
+            try:
+                # Convert to float first to handle decimal, then to int for integer values
+                harga = int(float(harga_str.replace(',', '').strip()))
+                stok = int(float(stok_str.replace(',', '').strip()))
+            except ValueError as e:
+                QMessageBox.warning(self, "Peringatan", f"Harga dan Stok harus berupa angka!\nError: {e}")
+                return
+            
+            # Update ke database
+            pesan = updateObat(self.obat_id, nama_obat, jenis, harga, stok, tgl_produksi, tgl_kadaluarsa, kategori_id)
+            QMessageBox.information(self, "Info", pesan)
+            
+            # Refresh parent dashboard
+            if self.parent and hasattr(self.parent, 'refresh_data_obat'):
+                self.parent.refresh_data_obat()
+            
+            # Tutup window
+            self.close()
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Gagal update data: {e}")
 

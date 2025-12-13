@@ -59,23 +59,20 @@ def buatKeranjang(apotekerId, namaPembeli):
     cursor.execute(query,(apotekerId,namaPembeli))
     db.commit()
     
-    keranjangTerbaru = cursor.lastrowid
+    keranjangTerbaru = cursor.lastrowid  # lastrowid adalah int (ID baru)
     cursor.close()
     db.close()
     
-    if keranjangTerbaru :
+    if keranjangTerbaru:
         sessionKeranjangSaatIni['keranjangSaatIni'] = {
-            'keranjangId' : keranjangTerbaru['keranjangId'],
-            'apotekerId' : session['dataUser']['userId'],
-            'namaPembeli' : namaPembeli
+            'keranjangId': keranjangTerbaru,  # langsung pakai int
+            'apotekerId': apotekerId,
+            'namaPembeli': namaPembeli
         }
     
     return keranjangTerbaru
 
 def lihatKeranjang(keranjangId):
-    if not sessionKeranjangSaatIni['keranjangSaatIni']:
-        return 'Buat Keranjang Dulu'
-    
     db = koneksiKeDatabase()
     if db is None:
         pesan = 'Gagal terkoneksi ke database'
@@ -106,6 +103,7 @@ def lihatKeranjang(keranjangId):
         select 
             dk.detailKeranjangId,
             o.namaObat,
+            o.jenis,
             kat.namaKategori,  
             dk.jumlah,
             dk.subtotal
@@ -177,9 +175,6 @@ def tambahObatKeKeranjang(keranjangId, obatId, jumlah):
     return pesan
 
 def updateJumlahObatYangDiBeli(detailKeranjangId, jumlahBaru):
-    if not sessionKeranjangSaatIni['keranjangSaatIni']:
-        return 'Buat Keranjang Dulu'
-    
     if jumlahBaru <= 0:
         return "Jumlah obat tidak boleh kurang dari 1"
     
@@ -230,8 +225,9 @@ def updateJumlahObatYangDiBeli(detailKeranjangId, jumlahBaru):
         # ----------------------------------
         
         # Update Subtotal dan Jumlah di Keranjang
-        subTotalLama = dataLama['subtotal']
-        subTotalBaru = float(dataObat['harga']) * jumlahBaru # Pastikan harga dikali float/int
+        # PENTING: Konversi ke float untuk menghindari error Decimal vs float
+        subTotalLama = float(dataLama['subtotal'])
+        subTotalBaru = float(dataObat['harga']) * jumlahBaru
         selisihSubTotal = subTotalBaru - subTotalLama
         
         queryUpdateDataDetailKeranjang = '''
@@ -263,9 +259,6 @@ def updateJumlahObatYangDiBeli(detailKeranjangId, jumlahBaru):
     return pesan
 
 def hapusObatDariKeranjang(detailKeranjangId):
-    if not sessionKeranjangSaatIni['keranjangSaatIni']:
-        return 'Buat Keranjang Dulu'
-    
     db = koneksiKeDatabase()
     if db is None:
         return "Gagal koneksi ke database"
@@ -307,9 +300,6 @@ def hapusObatDariKeranjang(detailKeranjangId):
     return f"Obat {dataDetailKeranjang['namaObat']} telah berhasil dihapus dari keranjang"
 
 def kirimKeranjangKeKasir(keranjangId):
-    if not sessionKeranjangSaatIni['keranjangSaatIni']:
-        return 'Buat Keranjang Dulu'
-    
     db = koneksiKeDatabase()
     if db is None:
         return "Gagal koneksi ke database"
@@ -326,9 +316,6 @@ def kirimKeranjangKeKasir(keranjangId):
     return f"Keranjang dengan id {keranjangId} berhasil dikirim ke kasir"
 
 def batalkanKeranjang(keranjangId):
-    if not sessionKeranjangSaatIni['keranjangSaatIni']:
-        return 'Buat Keranjang Dulu'
-    
     db = koneksiKeDatabase()
     if db is None:
         return "Gagal koneksi ke database"

@@ -19,7 +19,7 @@ from PySide6.QtWidgets import (QApplication, QGridLayout, QHeaderView, QLabel,
     QLineEdit, QMainWindow, QMenuBar, QPushButton,
     QSizePolicy, QStatusBar, QTabWidget, QTableWidget,
     QTableWidgetItem, QTextBrowser, QVBoxLayout, QWidget)
-import logo-apotek_rc
+import logo_apotek_rc
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -376,6 +376,48 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
 
+        self.label_namaObat = QLabel(self.tab_2)
+        self.label_namaObat.setObjectName(u"label_namaObat")
+        self.label_namaObat.setMaximumSize(QSize(450, 16777215))
+        self.label_namaObat.setFont(font3)
+        self.label_namaObat.setStyleSheet(u"background-color: rgb(255, 255, 255);")
+
+        self.gridLayout.addWidget(self.label_namaObat, 7, 0, 1, 1)
+
+        self.lineEdit_namaObat = QLineEdit(self.tab_2)
+        self.lineEdit_namaObat.setObjectName(u"lineEdit_namaObat")
+        self.lineEdit_namaObat.setStyleSheet(u"background-color: rgb(255, 255, 255);\n"
+"border-radius: 8px;\n"
+"padding: 6px 8px; \n"
+"border: 1px solid black;")
+
+        self.gridLayout.addWidget(self.lineEdit_namaObat, 7, 2, 1, 1)
+
+        self.pushButton_cariObat = QPushButton(self.tab_2)
+        self.pushButton_cariObat.setObjectName(u"pushButton_cariObat")
+        self.pushButton_cariObat.setMaximumSize(QSize(700, 16777215))
+        self.pushButton_cariObat.setStyleSheet(u"QPushButton { \n"
+"background-color: rgb(125, 202, 211);\n"
+"	border-radius: 5px;\n"
+"padding: 6px 40px; \n"
+"}\n"
+"\n"
+"/* Saat kursor hover */\n"
+"QPushButton:hover {\n"
+"     /* warna saat hover */\n"
+"	color: rgb(255, 255, 255);\n"
+"	background-color: rgb(36, 79, 124);\n"
+"}\n"
+"\n"
+"/* Saat tombol ditekan */\n"
+"QPushButton:pressed {\n"
+"     /* warna saat ditekan */\n"
+"	color: rgb(255, 255, 255);\n"
+"	background-color: rgb(36, 79, 124);\n"
+"}")
+
+        self.gridLayout.addWidget(self.pushButton_cariObat, 7, 3, 1, 2)
+
         self.lineEdit_jumlahObat = QLineEdit(self.tab_2)
         self.lineEdit_jumlahObat.setObjectName(u"lineEdit_jumlahObat")
         self.lineEdit_jumlahObat.setStyleSheet(u"background-color: rgb(255, 255, 255);\n"
@@ -540,6 +582,8 @@ class Ui_MainWindow(object):
         self.pushButton_refresh.setText(QCoreApplication.translate("MainWindow", u"Refresh", None))
         self.label_3.setText(QCoreApplication.translate("MainWindow", u" Pilih obat yang ingin ditambahkan!", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"Nama Pembeli  :", None))
+        self.label_namaObat.setText(QCoreApplication.translate("MainWindow", u"Masukkan Nama Obat  :", None))
+        self.pushButton_cariObat.setText(QCoreApplication.translate("MainWindow", u"Cari", None))
         ___qtablewidgetitem5 = self.tableWidget_2.horizontalHeaderItem(0)
         ___qtablewidgetitem5.setText(QCoreApplication.translate("MainWindow", u"Nama Obat", None));
         ___qtablewidgetitem6 = self.tableWidget_2.horizontalHeaderItem(1)
@@ -554,4 +598,431 @@ class Ui_MainWindow(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("MainWindow", u"Tambah Data Keranjang", None))
         self.pushButton_keluar.setText(QCoreApplication.translate("MainWindow", u"Keluar", None))
     # retranslateUi
+
+
+from PySide6.QtWidgets import QMessageBox, QTableWidgetItem
+from backend.apoteker import (
+    cariObatLayakJual, buatKeranjang, lihatKeranjang,
+    tambahObatKeKeranjang, updateJumlahObatYangDiBeli,
+    hapusObatDariKeranjang, kirimKeranjangKeKasir, batalkanKeranjang
+)
+from backend.login import session
+
+class DashboardApoteker(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
+        self.keranjang_id_aktif = None  # Track keranjang yang sedang aktif
+        
+        # Koneksi tombol logout
+        if hasattr(self.ui, "pushButton_keluar"):
+            self.ui.pushButton_keluar.clicked.connect(self.logout_to_login)
+        
+        # Connect buttons Tab Lihat Keranjang (tab index 0)
+        if hasattr(self.ui, "pushButton"):  # Button Cari
+            self.ui.pushButton.clicked.connect(self.cari_keranjang)
+        if hasattr(self.ui, "pushButton_2"):  # Button Refresh
+            self.ui.pushButton_2.clicked.connect(self.refresh_data_keranjang)
+        if hasattr(self.ui, "pushButton_batalKeranjang"):
+            self.ui.pushButton_batalKeranjang.clicked.connect(self.batal_keranjang)
+        if hasattr(self.ui, "pushButton_lihatDetail"):
+            self.ui.pushButton_lihatDetail.clicked.connect(self.lihat_detail_keranjang)
+        if hasattr(self.ui, "pushButton_kirimKasir"):
+            self.ui.pushButton_kirimKasir.clicked.connect(self.kirim_ke_kasir)
+        if hasattr(self.ui, "pushButton_editKeranjang"):
+            self.ui.pushButton_editKeranjang.clicked.connect(self.edit_keranjang)
+        
+        # Connect buttons Tab Tambah Data Keranjang (tab index 1)
+        if hasattr(self.ui, "pushButton_buatKeranjang"):
+            self.ui.pushButton_buatKeranjang.clicked.connect(self.buat_keranjang_baru)
+        if hasattr(self.ui, "pushButton_simpan"):
+            self.ui.pushButton_simpan.clicked.connect(self.tambah_obat_ke_keranjang)
+        if hasattr(self.ui, "pushButton_refresh"):
+            self.ui.pushButton_refresh.clicked.connect(self.refresh_form_tambah)
+        
+        if hasattr(self.ui, "pushButton_cariObat"):
+            self.ui.pushButton_cariObat.clicked.connect(self.cari_obat)
+        
+        # Tampilkan info user
+        try:
+            username = session.get('dataUser', {}).get('username', 'Apoteker')
+            self.ui.textBrowser.setHtml(f"<h2>Selamat Datang, {username}</h2><p>Dashboard Apoteker - Kelola Obat dan Keranjang</p>")
+        except Exception:
+            pass
+        
+        # Load data awal
+        self.refresh_data_keranjang()
+        self.refresh_data_obat()
+
+    # ===== TAB LIHAT KERANJANG =====
+    def refresh_data_keranjang(self):
+        """Load semua data keranjang ke tableWidget"""
+        try:
+            if hasattr(self.ui, 'tableWidget'):
+                self.ui.tableWidget.setRowCount(0)
+                # Query semua keranjang yang statusnya 'pending' atau 'dikirim'
+                from backend.koneksi import koneksiKeDatabase
+                db = koneksiKeDatabase()
+                if db is None:
+                    return
+                
+                cursor = db.cursor()
+                query = """
+                    SELECT k.keranjangId, k.namaPembeli, k.totalHarga, k.status, u.nama
+                    FROM keranjang k
+                    JOIN user u ON k.apotekerId = u.userId
+                    WHERE k.status IN ('draft', 'dikirim')
+                    ORDER BY k.keranjangId DESC
+                """
+                cursor.execute(query)
+                data = cursor.fetchall()
+                cursor.close()
+                db.close()
+                
+                for d in data:
+                    row = self.ui.tableWidget.rowCount()
+                    self.ui.tableWidget.insertRow(row)
+                    
+                    if isinstance(d, dict):
+                        self.ui.tableWidget.setItem(row, 0, QTableWidgetItem(str(d.get('keranjangId', ''))))
+                        self.ui.tableWidget.setItem(row, 1, QTableWidgetItem(str(d.get('namaPembeli', ''))))
+                        self.ui.tableWidget.setItem(row, 2, QTableWidgetItem(f"Rp {d.get('totalHarga', 0):,}"))
+                        self.ui.tableWidget.setItem(row, 3, QTableWidgetItem(str(d.get('status', ''))))
+                        self.ui.tableWidget.setItem(row, 4, QTableWidgetItem(str(d.get('nama', ''))))
+                    else:
+                        self.ui.tableWidget.setItem(row, 0, QTableWidgetItem(str(d[0])))
+                        self.ui.tableWidget.setItem(row, 1, QTableWidgetItem(str(d[1])))
+                        self.ui.tableWidget.setItem(row, 2, QTableWidgetItem(f"Rp {d[2]:,}"))
+                        self.ui.tableWidget.setItem(row, 3, QTableWidgetItem(str(d[3])))
+                        self.ui.tableWidget.setItem(row, 4, QTableWidgetItem(str(d[4])))
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Gagal load keranjang: {e}")
+    
+    def cari_keranjang(self):
+        """Cari keranjang berdasarkan nama pembeli"""
+        try:
+            keyword = self.ui.lineEdit_2.text().strip()
+            if not keyword:
+                self.refresh_data_keranjang()
+                return
+            
+            # Filter data keranjang
+            from backend.koneksi import koneksiKeDatabase
+            db = koneksiKeDatabase()
+            if db is None:
+                return
+            
+            cursor = db.cursor()
+            query = """
+                SELECT k.keranjangId, k.namaPembeli, k.totalHarga, k.status, u.nama
+                FROM keranjang k
+                JOIN user u ON k.apotekerId = u.userId
+                WHERE k.namaPembeli LIKE %s
+                AND k.status IN ('draft', 'dikirim')
+                ORDER BY k.keranjangId DESC
+            """
+            cursor.execute(query, (f"%{keyword}%",))
+            data = cursor.fetchall()
+            cursor.close()
+            db.close()
+            
+            self.ui.tableWidget.setRowCount(0)
+            for d in data:
+                row = self.ui.tableWidget.rowCount()
+                self.ui.tableWidget.insertRow(row)
+                
+                if isinstance(d, dict):
+                    self.ui.tableWidget.setItem(row, 0, QTableWidgetItem(str(d.get('keranjangId', ''))))
+                    self.ui.tableWidget.setItem(row, 1, QTableWidgetItem(str(d.get('namaPembeli', ''))))
+                    self.ui.tableWidget.setItem(row, 2, QTableWidgetItem(f"Rp {d.get('totalHarga', 0):,}"))
+                    self.ui.tableWidget.setItem(row, 3, QTableWidgetItem(str(d.get('status', ''))))
+                    self.ui.tableWidget.setItem(row, 4, QTableWidgetItem(str(d.get('nama', ''))))
+                else:
+                    self.ui.tableWidget.setItem(row, 0, QTableWidgetItem(str(d[0])))
+                    self.ui.tableWidget.setItem(row, 1, QTableWidgetItem(str(d[1])))
+                    self.ui.tableWidget.setItem(row, 2, QTableWidgetItem(f"Rp {d[2]:,}"))
+                    self.ui.tableWidget.setItem(row, 3, QTableWidgetItem(str(d[3])))
+                    self.ui.tableWidget.setItem(row, 4, QTableWidgetItem(str(d[4])))
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Gagal cari keranjang: {e}")
+    
+    def batal_keranjang(self):
+        """Batalkan keranjang yang dipilih"""
+        try:
+            selected = self.ui.tableWidget.currentRow()
+            if selected < 0:
+                QMessageBox.warning(self, "Peringatan", "Pilih keranjang yang akan dibatalkan!")
+                return
+            
+            keranjang_id = self.ui.tableWidget.item(selected, 0).text()
+            nama_pembeli = self.ui.tableWidget.item(selected, 1).text()
+            
+            reply = QMessageBox.question(
+                self,
+                "Konfirmasi Batal",
+                f"Yakin ingin membatalkan keranjang '{nama_pembeli}'?",
+                QMessageBox.Yes | QMessageBox.No
+            )
+            
+            if reply == QMessageBox.Yes:
+                pesan = batalkanKeranjang(keranjang_id)
+                QMessageBox.information(self, "Info", pesan)
+                self.refresh_data_keranjang()
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Gagal batalkan keranjang: {e}")
+    
+    def lihat_detail_keranjang(self):
+        """Buka window detail keranjang"""
+        try:
+            selected = self.ui.tableWidget.currentRow()
+            if selected < 0:
+                QMessageBox.warning(self, "Peringatan", "Pilih keranjang yang akan dilihat detailnya!")
+                return
+            
+            keranjang_id = self.ui.tableWidget.item(selected, 0).text()
+            
+            from detailKeranjangApoteker import DetailKeranjangApotekerWindow
+            self.detail_window = DetailKeranjangApotekerWindow(keranjang_id, parent=self)
+            self.detail_window.show()
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Gagal buka detail: {e}")
+    
+    def edit_keranjang(self):
+        """Buka window edit keranjang"""
+        try:
+            selected = self.ui.tableWidget.currentRow()
+            if selected < 0:
+                QMessageBox.warning(self, "Peringatan", "Pilih keranjang yang akan diedit!")
+                return
+            
+            keranjang_id = self.ui.tableWidget.item(selected, 0).text()
+            nama_pembeli = self.ui.tableWidget.item(selected, 1).text()
+            
+            from updateObatKeranjang import UpdateObatKeranjangWindow
+            self.edit_window = UpdateObatKeranjangWindow(keranjang_id, nama_pembeli, parent=self)
+            self.edit_window.show()
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Gagal buka edit keranjang: {e}")
+    
+    def kirim_ke_kasir(self):
+        """Kirim keranjang ke kasir"""
+        try:
+            selected = self.ui.tableWidget.currentRow()
+            if selected < 0:
+                QMessageBox.warning(self, "Peringatan", "Pilih keranjang yang akan dikirim ke kasir!")
+                return
+            
+            keranjang_id = self.ui.tableWidget.item(selected, 0).text()
+            nama_pembeli = self.ui.tableWidget.item(selected, 1).text()
+            
+            reply = QMessageBox.question(
+                self,
+                "Konfirmasi Kirim",
+                f"Yakin ingin mengirim keranjang '{nama_pembeli}' ke kasir?",
+                QMessageBox.Yes | QMessageBox.No
+            )
+            
+            if reply == QMessageBox.Yes:
+                pesan = kirimKeranjangKeKasir(keranjang_id)
+                QMessageBox.information(self, "Info", pesan)
+                self.refresh_data_keranjang()
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Gagal kirim ke kasir: {e}")
+    
+    # ===== TAB TAMBAH DATA KERANJANG =====
+    def refresh_data_obat(self):
+        """Load data obat layak jual ke tableWidget_2"""
+        try:
+            if hasattr(self.ui, 'tableWidget_2'):
+                self.ui.tableWidget_2.setRowCount(0)
+                data = cariObatLayakJual()  # Tanpa keyword = tampilkan semua
+                
+                if isinstance(data, str):
+                    return
+                
+                for d in data:
+                    row = self.ui.tableWidget_2.rowCount()
+                    self.ui.tableWidget_2.insertRow(row)
+                    
+                    if isinstance(d, dict):
+                        # Headers: Nama Obat | Jenis | Harga | Stok | Kadaluarsa
+                        item_nama = QTableWidgetItem(str(d.get('namaObat', '')))
+                        item_nama.setData(Qt.UserRole, d.get('obatId', ''))  # Simpan obatId sebagai data tersembunyi
+                        self.ui.tableWidget_2.setItem(row, 0, item_nama)
+                        self.ui.tableWidget_2.setItem(row, 1, QTableWidgetItem(str(d.get('jenis', ''))))
+                        self.ui.tableWidget_2.setItem(row, 2, QTableWidgetItem(f"Rp {d.get('harga', 0):,}"))
+                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(str(d.get('stok', ''))))
+                        self.ui.tableWidget_2.setItem(row, 4, QTableWidgetItem(str(d.get('kadaluarsa', ''))))
+                    else:
+                        # d[0]=obatId, d[1]=namaObat, d[2]=jenis, d[3]=kategoriId, d[4]=harga, d[5]=stok, d[6]=tgl_produksi, d[7]=kadaluarsa
+                        # Headers: Nama Obat | Jenis | Harga | Stok | Kadaluarsa
+                        item_nama = QTableWidgetItem(str(d[1]))  # namaObat
+                        item_nama.setData(Qt.UserRole, d[0])  # Simpan obatId sebagai data tersembunyi
+                        self.ui.tableWidget_2.setItem(row, 0, item_nama)
+                        self.ui.tableWidget_2.setItem(row, 1, QTableWidgetItem(str(d[2])))  # jenis
+                        self.ui.tableWidget_2.setItem(row, 2, QTableWidgetItem(f"Rp {d[4]:,}"))  # harga
+                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(str(d[5])))  # stok
+                        self.ui.tableWidget_2.setItem(row, 4, QTableWidgetItem(str(d[7])))  # kadaluarsa
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Gagal load obat: {e}")
+    
+    def buat_keranjang_baru(self):
+        """Buat keranjang baru dengan nama pembeli"""
+        try:
+            nama_pembeli = self.ui.lineEdit.text().strip()
+            
+            if not nama_pembeli:
+                QMessageBox.warning(self, "Peringatan", "Nama pembeli harus diisi!")
+                return
+            
+            # Ambil apotekerId dari session
+            apoteker_id = session.get('userId')
+            if not apoteker_id:
+                QMessageBox.warning(self, "Peringatan", "Session user tidak ditemukan!")
+                return
+            
+            # Buat keranjang
+            keranjang_id = buatKeranjang(apoteker_id, nama_pembeli)
+            
+            if isinstance(keranjang_id, str):
+                QMessageBox.warning(self, "Error", keranjang_id)
+                return
+            
+            self.keranjang_id_aktif = keranjang_id
+            QMessageBox.information(self, "Sukses", f"Keranjang baru berhasil dibuat!\nID Keranjang: {keranjang_id}\nNama Pembeli: {nama_pembeli}\n\nSekarang pilih obat dan tambahkan ke keranjang.")
+            
+            # Update label info
+            self.ui.label_3.setText(f"Keranjang Aktif - ID: {keranjang_id} | Pembeli: {nama_pembeli}\nPilih obat dari tabel, input jumlah, lalu klik Simpan.")
+            
+            # Refresh keranjang tab
+            self.refresh_data_keranjang()
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Gagal buat keranjang: {e}")
+    
+    def tambah_obat_ke_keranjang(self):
+        """Tambahkan obat yang dipilih ke keranjang aktif"""
+        try:
+            if not self.keranjang_id_aktif:
+                QMessageBox.warning(self, "Peringatan", "Buat keranjang terlebih dahulu!")
+                return
+            
+            # Ambil obat yang dipilih dari tabel
+            selected = self.ui.tableWidget_2.currentRow()
+            if selected < 0:
+                QMessageBox.warning(self, "Peringatan", "Pilih obat dari tabel!")
+                return
+            
+            # Ambil obatId dari data tersembunyi di kolom 0 (Nama Obat)
+            obat_id = self.ui.tableWidget_2.item(selected, 0).data(Qt.UserRole)
+            nama_obat = self.ui.tableWidget_2.item(selected, 0).text()
+            
+            # Ambil jumlah
+            jumlah_str = self.ui.lineEdit_jumlahObat.text().strip()
+            if not jumlah_str:
+                QMessageBox.warning(self, "Peringatan", "Jumlah obat harus diisi!")
+                return
+            
+            try:
+                jumlah = int(jumlah_str)
+                if jumlah <= 0:
+                    QMessageBox.warning(self, "Peringatan", "Jumlah harus lebih dari 0!")
+                    return
+            except ValueError:
+                QMessageBox.warning(self, "Peringatan", "Jumlah harus berupa angka!")
+                return
+            
+            # Tambahkan ke keranjang
+            pesan = tambahObatKeKeranjang(self.keranjang_id_aktif, obat_id, jumlah)
+            QMessageBox.information(self, "Info", pesan)
+            
+            # Clear input fields
+            self.ui.lineEdit_jumlahObat.clear()
+            self.ui.lineEdit_namaObat.clear()
+            
+            # Refresh data obat (untuk update stok dan reset tampilan ke semua obat)
+            self.refresh_data_obat()
+            
+            # Refresh keranjang tab
+            self.refresh_data_keranjang()
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Gagal tambah obat: {e}")
+    
+    def cari_obat(self):
+        """Cari obat berdasarkan nama"""
+        try:
+            keyword = self.ui.lineEdit_namaObat.text().strip()
+            
+            if not keyword:
+                QMessageBox.warning(self, "Peringatan", "Masukkan nama obat untuk dicari!")
+                return
+            
+            # Cari obat dengan keyword
+            if hasattr(self.ui, 'tableWidget_2'):
+                self.ui.tableWidget_2.setRowCount(0)
+                data = cariObatLayakJual(keyword)
+                
+                if isinstance(data, str):
+                    QMessageBox.information(self, "Info", data)
+                    return
+                
+                for d in data:
+                    row = self.ui.tableWidget_2.rowCount()
+                    self.ui.tableWidget_2.insertRow(row)
+                    
+                    if isinstance(d, dict):
+                        # Headers: Nama Obat | Jenis | Harga | Stok | Kadaluarsa
+                        item_nama = QTableWidgetItem(str(d.get('namaObat', '')))
+                        item_nama.setData(Qt.UserRole, d.get('obatId', ''))  # Simpan obatId sebagai data tersembunyi
+                        self.ui.tableWidget_2.setItem(row, 0, item_nama)
+                        self.ui.tableWidget_2.setItem(row, 1, QTableWidgetItem(str(d.get('jenis', ''))))
+                        self.ui.tableWidget_2.setItem(row, 2, QTableWidgetItem(f"Rp {d.get('harga', 0):,}"))
+                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(str(d.get('stok', ''))))
+                        self.ui.tableWidget_2.setItem(row, 4, QTableWidgetItem(str(d.get('kadaluarsa', ''))))
+                    else:
+                        # d[0]=obatId, d[1]=namaObat, d[2]=jenis, d[3]=kategoriId, d[4]=harga, d[5]=stok, d[6]=tgl_produksi, d[7]=kadaluarsa
+                        # Headers: Nama Obat | Jenis | Harga | Stok | Kadaluarsa
+                        item_nama = QTableWidgetItem(str(d[1]))  # namaObat
+                        item_nama.setData(Qt.UserRole, d[0])  # Simpan obatId sebagai data tersembunyi
+                        self.ui.tableWidget_2.setItem(row, 0, item_nama)
+                        self.ui.tableWidget_2.setItem(row, 1, QTableWidgetItem(str(d[2])))  # jenis
+                        self.ui.tableWidget_2.setItem(row, 2, QTableWidgetItem(f"Rp {d[4]:,}"))  # harga
+                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(str(d[5])))  # stok
+                        self.ui.tableWidget_2.setItem(row, 4, QTableWidgetItem(str(d[7])))  # kadaluarsa
+                
+                if self.ui.tableWidget_2.rowCount() == 0:
+                    QMessageBox.information(self, "Info", f"Tidak ada obat dengan nama '{keyword}'")
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Gagal mencari obat: {e}")
+    
+    def refresh_form_tambah(self):
+        """Reset form tambah keranjang"""
+        self.ui.lineEdit.clear()
+        self.ui.lineEdit_jumlahObat.clear()
+        self.ui.label_3.setText("Silakan buat keranjang baru dengan mengisi nama pembeli dan klik 'Buat Keranjang'")
+        self.keranjang_id_aktif = None
+        self.refresh_data_obat()
+
+    def logout_to_login(self):
+        """Logout dan kembali ke halaman login"""
+        try:
+            from backend.logout import logout as backend_logout
+            pesan = backend_logout()
+            QMessageBox.information(self, "Logout", pesan)
+        except Exception:
+            pass
+        
+        try:
+            self.close()
+        except Exception:
+            pass
+        
+        try:
+            from Login import Ui_MainWindow as Ui_Login
+            self._login_win = QMainWindow()
+            self._login_ui = Ui_Login()
+            self._login_ui.setupUi(self._login_win)
+            self._login_win.show()
+        except Exception:
+            pass
 

@@ -89,6 +89,33 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addWidget(self.tableWidget)
 
+        self.gridLayout_buttons = QGridLayout()
+        self.gridLayout_buttons.setObjectName(u"gridLayout_buttons")
+        
+        self.pushButton_update = QPushButton(self.centralwidget)
+        self.pushButton_update.setObjectName(u"pushButton_update")
+        self.pushButton_update.setStyleSheet(u"QPushButton { \n"
+"border-radius: 5px; \n"
+"	background-color: rgb(125, 202, 211);\n"
+"    color: white;\n"
+"padding: 6px 20px;\n"
+"}\n"
+"\n"
+"/* Saat kursor hover */\n"
+"QPushButton:hover {\n"
+"     /* warna saat hover */\n"
+"	color: rgb(255, 255, 255);\n"
+"	background-color: rgb(36, 79, 124);\n"
+"}\n"
+"\n"
+"/* Saat tombol ditekan */\n"
+"QPushButton:pressed {\n"
+"     /* warna saat ditekan */\n"
+"	color: rgb(255, 255, 255);\n"
+"	background-color: rgb(36, 79, 124);\n"
+"}")
+        self.gridLayout_buttons.addWidget(self.pushButton_update, 0, 0, 1, 1)
+
         self.pushButton_2 = QPushButton(self.centralwidget)
         self.pushButton_2.setObjectName(u"pushButton_2")
         self.pushButton_2.setStyleSheet(u"QPushButton { \n"
@@ -96,7 +123,6 @@ class Ui_MainWindow(object):
 "	background-color: rgb(255, 0, 0);\n"
 "    color: white;\n"
 "padding: 6px 20px;\n"
-"  \n"
 "}\n"
 "\n"
 "/* Saat kursor hover */\n"
@@ -112,8 +138,9 @@ class Ui_MainWindow(object):
 "background-color: rgb(213, 0, 0);\n"
 "	color: white;\n"
 "}")
+        self.gridLayout_buttons.addWidget(self.pushButton_2, 0, 1, 1, 1)
 
-        self.verticalLayout.addWidget(self.pushButton_2)
+        self.verticalLayout.addLayout(self.gridLayout_buttons)
 
         self.pushButton = QPushButton(self.centralwidget)
         self.pushButton.setObjectName(u"pushButton")
@@ -178,7 +205,216 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem6.setText(QCoreApplication.translate("MainWindow", u"Sub Total", None));
         ___qtablewidgetitem7 = self.tableWidget.horizontalHeaderItem(7)
         ___qtablewidgetitem7.setText(QCoreApplication.translate("MainWindow", u"Total", None));
+        self.pushButton_update.setText(QCoreApplication.translate("MainWindow", u"Update Keranjang", None))
         self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"Hapus Dari Keranjang", None))
         self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Kembali", None))
     # retranslateUi
+
+
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from PySide6.QtWidgets import QMainWindow, QMessageBox, QTableWidgetItem, QGridLayout
+from backend.kasir import lihatDetailKeranjangUntukKasir, hapusItemDiKasir, updateJumlahObatYangDiBeli
+
+class DetailKeranjangKasir(QMainWindow):
+    def __init__(self, keranjang_id, parent=None):
+        super().__init__()
+        self.parent = parent
+        self.keranjang_id = keranjang_id
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
+        
+        # Connect buttons
+        self.ui.pushButton.clicked.connect(self.close)  # Tombol Kembali
+        self.ui.pushButton_2.clicked.connect(self.hapus_item)  # Tombol Hapus
+        self.ui.pushButton_update.clicked.connect(self.update_keranjang)  # Tombol Update
+        
+        # Load data
+        self.load_detail_keranjang()
+    
+    def load_detail_keranjang(self):
+        """Load detail keranjang ke tabel"""
+        try:
+            data = lihatDetailKeranjangUntukKasir(self.keranjang_id)
+            
+            if isinstance(data, str):
+                QMessageBox.warning(self, "Peringatan", data)
+                self.close()
+                return
+            
+            # Set nama pembeli
+            nama_pembeli = data.get('namaPembeli', '')
+            self.ui.label_namaPembeli.setText(nama_pembeli)
+            
+            # Set judul dengan info keranjang
+            self.ui.label.setText(f"Detail Keranjang #{self.keranjang_id} - {nama_pembeli}")
+            
+            # Load detail obat ke tabel
+            self.ui.tableWidget.setRowCount(0)
+            total_keseluruhan = 0
+            
+            detail_items = data.get('detail', [])
+            for item in detail_items:
+                row = self.ui.tableWidget.rowCount()
+                self.ui.tableWidget.insertRow(row)
+                
+                if isinstance(item, dict):
+                    detail_id = item.get('detailKeranjangId', '')
+                    obat_id = item.get('obatId', '')
+                    nama_obat = item.get('namaObat', '')
+                    jenis = item.get('jenis', '-')
+                    kategori = item.get('namaKategori', '-')
+                    jumlah = item.get('jumlah', 0)
+                    subtotal = float(item.get('subtotal', 0))
+                else:
+                    # Tuple format: detailKeranjangId, obatId, namaObat, jenis, namaKategori, jumlah, subtotal
+                    detail_id = item[0] if len(item) > 0 else ''
+                    obat_id = item[1] if len(item) > 1 else ''
+                    nama_obat = item[2] if len(item) > 2 else ''
+                    jenis = item[3] if len(item) > 3 else '-'
+                    kategori = item[4] if len(item) > 4 else '-'
+                    jumlah = item[5] if len(item) > 5 else 0
+                    subtotal = float(item[6]) if len(item) > 6 else 0
+                
+                total_keseluruhan += float(subtotal)
+                
+                # Kolom: Keranjang ID, ID Obat, Nama Obat, Jenis, Kategori, Jumlah, Sub Total, Total
+                # Semua kolom tidak bisa diedit kecuali Jumlah
+                item_keranjang_id = QTableWidgetItem(str(self.keranjang_id))
+                item_keranjang_id.setFlags(item_keranjang_id.flags() & ~Qt.ItemIsEditable)
+                self.ui.tableWidget.setItem(row, 0, item_keranjang_id)
+                
+                item_obat_id = QTableWidgetItem(str(obat_id))
+                item_obat_id.setFlags(item_obat_id.flags() & ~Qt.ItemIsEditable)
+                self.ui.tableWidget.setItem(row, 1, item_obat_id)
+                
+                item_nama_obat = QTableWidgetItem(str(nama_obat))
+                item_nama_obat.setFlags(item_nama_obat.flags() & ~Qt.ItemIsEditable)
+                self.ui.tableWidget.setItem(row, 2, item_nama_obat)
+                
+                item_jenis = QTableWidgetItem(str(jenis))
+                item_jenis.setFlags(item_jenis.flags() & ~Qt.ItemIsEditable)
+                self.ui.tableWidget.setItem(row, 3, item_jenis)
+                
+                item_kategori = QTableWidgetItem(str(kategori))
+                item_kategori.setFlags(item_kategori.flags() & ~Qt.ItemIsEditable)
+                self.ui.tableWidget.setItem(row, 4, item_kategori)
+                
+                # Kolom Jumlah - BISA DIEDIT
+                item_jumlah = QTableWidgetItem(str(jumlah))
+                self.ui.tableWidget.setItem(row, 5, item_jumlah)
+                
+                item_subtotal = QTableWidgetItem(f"Rp {subtotal:,.0f}")
+                item_subtotal.setFlags(item_subtotal.flags() & ~Qt.ItemIsEditable)
+                self.ui.tableWidget.setItem(row, 6, item_subtotal)
+                
+                # Simpan detailKeranjangId di kolom tersembunyi (untuk keperluan hapus dan update)
+                item_detail_id = QTableWidgetItem(str(detail_id))
+                item_detail_id.setFlags(item_detail_id.flags() & ~Qt.ItemIsEditable)
+                self.ui.tableWidget.setItem(row, 7, item_detail_id)
+            
+            # Update label total di header tabel (gunakan kolom terakhir untuk total)
+            self.ui.label_3.setText(f"Total Keseluruhan: Rp {total_keseluruhan:,.0f}")
+            
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Gagal load detail: {e}")
+            self.close()
+    
+    def hapus_item(self):
+        """Hapus item yang dipilih dari keranjang"""
+        try:
+            selected = self.ui.tableWidget.currentRow()
+            if selected < 0:
+                QMessageBox.warning(self, "Peringatan", "Pilih item yang akan dihapus!")
+                return
+            
+            # Ambil data item
+            nama_obat = self.ui.tableWidget.item(selected, 2).text()
+            detail_keranjang_id = self.ui.tableWidget.item(selected, 7).text()  # Kolom terakhir (hidden)
+            
+            # Konfirmasi hapus
+            reply = QMessageBox.question(
+                self,
+                "Konfirmasi Hapus",
+                f"Yakin ingin menghapus '{nama_obat}' dari keranjang?",
+                QMessageBox.Yes | QMessageBox.No
+            )
+            
+            if reply == QMessageBox.Yes:
+                pesan = hapusItemDiKasir(detail_keranjang_id)
+                QMessageBox.information(self, "Info", pesan)
+                
+                # Reload data
+                self.load_detail_keranjang()
+                
+                # Refresh parent dashboard jika ada
+                if self.parent and hasattr(self.parent, 'refresh_keranjang_dikirim'):
+                    self.parent.refresh_keranjang_dikirim()
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Gagal hapus item: {e}")
+    
+    def update_keranjang(self):
+        """Update jumlah obat yang telah diubah di tabel"""
+        try:
+            # Konfirmasi update
+            reply = QMessageBox.question(
+                self,
+                "Konfirmasi Update",
+                "Yakin ingin menyimpan semua perubahan?",
+                QMessageBox.Yes | QMessageBox.No
+            )
+            
+            if reply == QMessageBox.Yes:
+                updated_count = 0
+                errors = []
+                
+                # Loop semua baris di tabel
+                for row in range(self.ui.tableWidget.rowCount()):
+                    try:
+                        # Ambil detail_keranjang_id dari kolom tersembunyi (kolom 7)
+                        detail_keranjang_id = self.ui.tableWidget.item(row, 7).text()
+                        
+                        # Ambil jumlah baru dari kolom 5 (Jumlah)
+                        jumlah_item = self.ui.tableWidget.item(row, 5)
+                        if jumlah_item:
+                            jumlah_baru_str = jumlah_item.text().strip()
+                            
+                            # Validasi jumlah adalah angka
+                            try:
+                                jumlah_baru = int(jumlah_baru_str)
+                                if jumlah_baru <= 0:
+                                    nama_obat = self.ui.tableWidget.item(row, 2).text()
+                                    errors.append(f"{nama_obat}: Jumlah harus lebih dari 0")
+                                    continue
+                                
+                                # Update ke database
+                                pesan = updateJumlahObatYangDiBeli(detail_keranjang_id, jumlah_baru)
+                                if "berhasil" in pesan.lower() or "sukses" in pesan.lower():
+                                    updated_count += 1
+                                else:
+                                    nama_obat = self.ui.tableWidget.item(row, 2).text()
+                                    errors.append(f"{nama_obat}: {pesan}")
+                            except ValueError:
+                                nama_obat = self.ui.tableWidget.item(row, 2).text()
+                                errors.append(f"{nama_obat}: Jumlah harus berupa angka")
+                    except Exception as e:
+                        errors.append(f"Baris {row + 1}: {str(e)}")
+                
+                # Tampilkan hasil
+                if errors:
+                    error_msg = "\n".join(errors)
+                    QMessageBox.warning(self, "Peringatan", f"Beberapa update gagal:\n\n{error_msg}")
+                else:
+                    QMessageBox.information(self, "Sukses", f"{updated_count} item berhasil diupdate!")
+                
+                # Reload data untuk sinkronisasi
+                self.load_detail_keranjang()
+                
+                # Refresh parent dashboard jika ada
+                if self.parent and hasattr(self.parent, 'refresh_keranjang_dikirim'):
+                    self.parent.refresh_keranjang_dikirim()
+                    
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Gagal update keranjang: {e}")
 

@@ -247,11 +247,11 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"Tambah Obat + ", None))
-        self.label_6.setText(QCoreApplication.translate("MainWindow", u"Tgl Produksi        :", None))
+        self.label_6.setText(QCoreApplication.translate("MainWindow", u"Tgl Kadaluarsa     :", None))
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"Stok                   :", None))
         self.label_4.setText(QCoreApplication.translate("MainWindow", u"Harga                :", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"Nama Obat       :", None))
-        self.label_7.setText(QCoreApplication.translate("MainWindow", u"Tgl Kadaluarsa     :", None))
+        self.label_7.setText(QCoreApplication.translate("MainWindow", u"Tgl Produksi        :", None))
         self.label_8.setText(QCoreApplication.translate("MainWindow", u"Kategori Obat     :", None))
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"Jenis Obat         :", None))
         self.comboBox.setItemText(0, QCoreApplication.translate("MainWindow", u"Obat Bebas", None))
@@ -262,4 +262,79 @@ class Ui_MainWindow(object):
         self.pushButton_batal.setText(QCoreApplication.translate("MainWindow", u"Batal", None))
         self.pushButton_simpan.setText(QCoreApplication.translate("MainWindow", u"Simpan", None))
     # retranslateUi
+
+
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from PySide6.QtWidgets import QMainWindow, QMessageBox
+from backend.admin import tambahObat
+
+class TambahObatWindow(QMainWindow):
+    def __init__(self, parent=None):
+        super().__init__()
+        self.parent = parent
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
+        
+        # Connect buttons
+        self.ui.pushButton_simpan.clicked.connect(self.simpan_obat)
+        self.ui.pushButton_batal.clicked.connect(self.close)
+    
+    def simpan_obat(self):
+        """Simpan data obat baru"""
+        try:
+            # Ambil data dari form
+            nama_obat = self.ui.lineEdit.text().strip()
+            jenis = self.ui.lineEdit_2.text().strip()
+            harga = self.ui.lineEdit_3.text().strip()
+            stok = self.ui.lineEdit_4.text().strip()
+            tgl_produksi = self.ui.lineEdit_6.text().strip()
+            tgl_kadaluarsa = self.ui.lineEdit_5.text().strip()
+            kategori = self.ui.comboBox.currentText()
+            
+            # Validasi input
+            if not all([nama_obat, jenis, harga, stok, tgl_produksi, tgl_kadaluarsa]):
+                QMessageBox.warning(self, "Peringatan", "Semua field harus diisi!")
+                return
+            
+            # Convert kategori text ke kategoriId
+            kategori_map = {
+                "Obat Bebas": 1,
+                "Obat Bebas Terbatas": 2,
+                "Obat Keras": 3,
+                "Obat Narkotika & Psikotropika": 4
+            }
+            kategori_id = kategori_map.get(kategori, 1)
+            
+            # Validasi angka
+            try:
+                # Convert to float first to handle decimal, then to int for integer values
+                harga = int(float(harga.replace(',', '').strip()))
+                stok = int(float(stok.replace(',', '').strip()))
+            except ValueError:
+                QMessageBox.warning(self, "Peringatan", "Harga dan Stok harus berupa angka!")
+                return
+            
+            # Simpan ke database
+            pesan = tambahObat(nama_obat, jenis, harga, stok, tgl_produksi, tgl_kadaluarsa, kategori_id)
+            QMessageBox.information(self, "Info", pesan)
+            
+            # Refresh parent dashboard
+            if self.parent and hasattr(self.parent, 'refresh_data_obat'):
+                self.parent.refresh_data_obat()
+            
+            # Clear form
+            self.ui.lineEdit.clear()
+            self.ui.lineEdit_2.clear()
+            self.ui.lineEdit_3.clear()
+            self.ui.lineEdit_4.clear()
+            self.ui.lineEdit_5.clear()
+            self.ui.lineEdit_6.clear()
+            self.ui.comboBox.setCurrentIndex(0)
+            
+            # Tutup window
+            self.close()
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Gagal menyimpan data: {e}")
 

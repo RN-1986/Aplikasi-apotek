@@ -1,9 +1,6 @@
 from .koneksi import koneksiKeDatabase
 from .login import session
 from .apoteker import batalkanKeranjang
-
-from .koneksi import koneksiKeDatabase
-from .login import session
 from datetime import date
 
 sessionKeranjangSaatIni = {
@@ -219,8 +216,7 @@ def tambahObatKeKeranjang(keranjangId, obatId, jumlah):
     return pesan
 
 def updateJumlahObatYangDiBeli(detailKeranjangId, jumlahBaru):
-    if not sessionKeranjangSaatIni['keranjangSaatIni']:
-        return 'Buat Keranjang Dulu'
+    # Pengecekan session dihapus agar bisa digunakan dari detail view
     
     if jumlahBaru <= 0:
         return "Jumlah obat tidak boleh kurang dari 1"
@@ -272,8 +268,9 @@ def updateJumlahObatYangDiBeli(detailKeranjangId, jumlahBaru):
         # ----------------------------------
         
         # Update Subtotal dan Jumlah di Keranjang
-        subTotalLama = dataLama['subtotal']
-        subTotalBaru = float(dataObat['harga']) * jumlahBaru # Pastikan harga dikali float/int
+        # PENTING: Konversi ke float untuk menghindari error Decimal vs float
+        subTotalLama = float(dataLama['subtotal'])
+        subTotalBaru = float(dataObat['harga']) * jumlahBaru
         selisihSubTotal = subTotalBaru - subTotalLama
         
         queryUpdateDataDetailKeranjang = '''
@@ -417,7 +414,8 @@ def lihatDaftarKeranjangDikirim():
         return "Gagal koneksi ke database"
     
     cursor = db.cursor()
-    # Tambahin AND DATE(k.tanggalDibuat) = CURDATE()
+    # Tampilkan semua keranjang dengan status 'dikirim' (tidak dibatasi tanggal)
+    # Agar kasir bisa lihat semua keranjang yang menunggu pembayaran
     query = """
         SELECT 
             k.keranjangId,
@@ -428,13 +426,14 @@ def lihatDaftarKeranjangDikirim():
             k.tanggalDibuat
         FROM keranjang AS k
         JOIN user AS u ON u.userId = k.apotekerId
-        WHERE k.status = 'dikirim' 
-        AND DATE(k.tanggalDibuat) = CURDATE()
+        WHERE k.status = 'dikirim'
+        ORDER BY k.tanggalDibuat DESC
     """
     cursor.execute(query)
     data = cursor.fetchall()
     cursor.close()
     db.close()
+    
     return data
 
 def lihatDetailKeranjangUntukKasir(keranjangId):
@@ -467,12 +466,13 @@ def lihatDetailKeranjangUntukKasir(keranjangId):
             d.detailKeranjangId,
             o.obatId,
             o.namaObat,
-            kat.namaKategori,  -- Nambah ini doang
+            o.jenis,
+            kat.namaKategori,
             d.jumlah,
             d.subtotal
         FROM keranjangdetail AS d
         JOIN obat AS o ON o.obatId = d.obatId
-        LEFT JOIN kategoriObat AS kat ON kat.kategoriId = o.kategoriId -- Join ke tabel baru
+        LEFT JOIN kategoriObat AS kat ON kat.kategoriId = o.kategoriId
         WHERE d.keranjangId = %s
     """
     cursor.execute(queryDetail, (keranjangId,))

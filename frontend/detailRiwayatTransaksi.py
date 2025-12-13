@@ -115,3 +115,67 @@ class Ui_MainWindow(object):
         self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Keluar", None))
     # retranslateUi
 
+
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from PySide6.QtWidgets import QMainWindow, QTableWidgetItem, QMessageBox
+from backend.admin import lihatDetailTransaksi
+
+class DetailRiwayatWindow(QMainWindow):
+    def __init__(self, transaksi_id, parent=None):
+        super().__init__()
+        self.parent = parent
+        self.transaksi_id = transaksi_id
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
+        
+        # Load data detail transaksi
+        self.load_detail_transaksi()
+        
+        # Connect button keluar
+        self.ui.pushButton.clicked.connect(self.close)
+    
+    def load_detail_transaksi(self):
+        """Load detail transaksi ke table"""
+        try:
+            data = lihatDetailTransaksi(self.transaksi_id)
+            
+            if isinstance(data, str):
+                QMessageBox.warning(self, "Peringatan", data)
+                return
+            
+            # Set jumlah row
+            self.ui.tableWidget.setRowCount(len(data))
+            
+            total_keseluruhan = 0
+            
+            # Isi data ke table
+            for row_idx, row_data in enumerate(data):
+                # Support dict dan tuple format
+                if isinstance(row_data, dict):
+                    detail_id = row_data.get('detailId', '')
+                    nama_obat = row_data.get('namaObat', '')
+                    jumlah = row_data.get('jumlah', 0)
+                    subtotal = row_data.get('subtotal', 0)
+                else:
+                    detail_id = row_data[0]
+                    nama_obat = row_data[1]
+                    jumlah = row_data[2]
+                    subtotal = row_data[3]
+                
+                total_keseluruhan += subtotal
+                
+                # Set items ke table
+                self.ui.tableWidget.setItem(row_idx, 0, QTableWidgetItem(str(detail_id)))
+                self.ui.tableWidget.setItem(row_idx, 1, QTableWidgetItem(str(nama_obat)))
+                self.ui.tableWidget.setItem(row_idx, 2, QTableWidgetItem(str(jumlah)))
+                self.ui.tableWidget.setItem(row_idx, 3, QTableWidgetItem(f"Rp {subtotal:,}"))
+                self.ui.tableWidget.setItem(row_idx, 4, QTableWidgetItem(f"Rp {total_keseluruhan:,}"))
+            
+            # Update label dengan total
+            self.ui.label.setText(f"DETAIL RIWAYAT TRANSAKSI - Total: Rp {total_keseluruhan:,}")
+            
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Gagal load detail: {e}")
+

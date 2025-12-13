@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>967</width>
+    <width>962</width>
     <height>601</height>
    </rect>
   </property>
@@ -44,6 +44,134 @@ li.checked::marker { content: &quot;\2612&quot;; }
      </widget>
     </item>
     <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="styleSheet">
+       <string notr="true">QTabBar::tab {       
+	
+	
+	background-color: rgb(125, 192, 211);
+         padding: 8px 20px;
+         border-radius: 6px;
+         margin-right: 5px;
+       }
+       QTabBar::tab:selected {
+	background-color: rgb(48, 93, 124);
+	color: rgb(255, 255, 255);
+       }
+
+QTabWidget::pane {
+    border: none;
+    /* samakan dengan QWidget */
+	
+	background-color: rgb(125, 202, 211);
+}
+
+</string>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>Daftar Keranjang Dikirim</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QTableWidget" name="tableWidget">
+          <property name="styleSheet">
+           <string notr="true">QHeaderView::section {
+    background-color: rgb(125, 202, 211);
+    color: black;
+    font-weight: bold;
+    padding: 4px;
+    border: 1px solid #ccc;
+}
+</string>
+          </property>
+          <attribute name="horizontalHeaderDefaultSectionSize">
+           <number>186</number>
+          </attribute>
+          <column>
+           <property name="text">
+            <string>Keranjang ID</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Nama Pembeli</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Total Harga (Rp)</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Nama Apoteker</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Status</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>Riwayat Transaksi Hari Ini</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="0" column="0">
+         <widget class="QTableWidget" name="tableWidget_2">
+          <property name="styleSheet">
+           <string notr="true">QHeaderView::section {
+    background-color: rgb(125, 202, 211);
+    color: black;
+    font-weight: bold;
+    padding: 4px;
+    border: 1px solid #ccc;
+}
+</string>
+          </property>
+          <attribute name="horizontalHeaderDefaultSectionSize">
+           <number>185</number>
+          </attribute>
+          <column>
+           <property name="text">
+            <string>Tanggal Transaksi</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>ID Transaksi</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Nama Pembeli</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Kategori</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Total Harga (Rp)</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+    <item>
      <widget class="QFrame" name="frame">
       <property name="maximumSize">
        <size>
@@ -63,7 +191,37 @@ border-radius: 5px;
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="3" column="3">
+       <item row="2" column="4">
+        <widget class="QPushButton" name="pushButton_Batalkan">
+         <property name="styleSheet">
+          <string notr="true">QPushButton { 
+border-radius: 5px;
+padding: 8px 20px; 
+	background-color: rgb(255, 0, 0);
+    color: white;
+min-width: 60px;
+}
+
+/* Saat kursor hover */
+QPushButton:hover {
+     /* warna saat hover */
+background-color:rgb(213, 0, 0);
+	color: white;
+}
+
+/* Saat tombol ditekan */
+QPushButton:pressed {
+     /* warna saat ditekan */
+background-color: rgb(213, 0, 0);
+	color: white;
+}</string>
+         </property>
+         <property name="text">
+          <string>Batalkan Pemesanan</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="3">
         <widget class="QPushButton" name="pushButton_Bayar">
          <property name="styleSheet">
           <string notr="true">QPushButton { 
@@ -93,7 +251,7 @@ QPushButton:pressed {
          </property>
         </widget>
        </item>
-       <item row="3" column="2">
+       <item row="2" column="2">
         <widget class="QPushButton" name="pushButton_lihatDetail">
          <property name="styleSheet">
           <string notr="true">QPushButton { 
@@ -123,55 +281,7 @@ QPushButton:pressed {
          </property>
         </widget>
        </item>
-       <item row="1" column="1" colspan="4">
-        <widget class="QTableWidget" name="tableWidget">
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(255, 255, 255);</string>
-         </property>
-         <attribute name="horizontalHeaderDefaultSectionSize">
-          <number>186</number>
-         </attribute>
-         <column>
-          <property name="text">
-           <string>Keranjang ID</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Nama Pembeli</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Total Harga</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Nama Apoteker</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Status</string>
-          </property>
-         </column>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLabel" name="label">
-         <property name="font">
-          <font>
-           <pointsize>13</pointsize>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>DAFTAR KERANJANG DIKIRIM</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
+       <item row="2" column="1">
         <widget class="QPushButton" name="pushButton_refresh">
          <property name="styleSheet">
           <string notr="true">QPushButton { 
@@ -198,36 +308,6 @@ QPushButton:pressed {
          </property>
          <property name="text">
           <string>Refresh</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="4">
-        <widget class="QPushButton" name="pushButton_Batalkan">
-         <property name="styleSheet">
-          <string notr="true">QPushButton { 
-border-radius: 5px;
-padding: 8px 20px; 
-	background-color: rgb(255, 0, 0);
-    color: white;
-min-width: 60px;
-}
-
-/* Saat kursor hover */
-QPushButton:hover {
-     /* warna saat hover */
-background-color:rgb(213, 0, 0);
-	color: white;
-}
-
-/* Saat tombol ditekan */
-QPushButton:pressed {
-     /* warna saat ditekan */
-background-color: rgb(213, 0, 0);
-	color: white;
-}</string>
-         </property>
-         <property name="text">
-          <string>Batalkan Pemesanan</string>
          </property>
         </widget>
        </item>
@@ -280,15 +360,13 @@ background-color: rgb(213, 0, 0);
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>967</width>
+     <width>962</width>
      <height>22</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources>
-  <include location="logo-apotek.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

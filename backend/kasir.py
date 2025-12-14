@@ -389,11 +389,11 @@ def batalkanKeranjang(keranjangId):
             queryKembalikanStok = 'update obat set stok = stok + %s where obatId = %s'
             cursor.execute(queryKembalikanStok,(item['jumlah'], item['obatId']))
             
-        queryHapusDetailKeranjang = 'delete from keranjangdetail where keranjangId = %s'
-        cursor.execute(queryHapusDetailKeranjang,(keranjangId,))
+        # queryHapusDetailKeranjang = 'delete from keranjangdetail where keranjangId = %s'
+        # cursor.execute(queryHapusDetailKeranjang,(keranjangId,))
         
-        queryHapusKeranjang = 'delete from keranjang where keranjangId = %s'
-        cursor.execute(queryHapusKeranjang,(keranjangId,))
+        # queryHapusKeranjang = 'delete from keranjang where keranjangId = %s'
+        # cursor.execute(queryHapusKeranjang,(keranjangId,))
         
         db.commit()
         pesan = f"Keranjang dengan id {keranjangId} berhasil di batalkan"

@@ -370,6 +370,24 @@ class Ui_MainWindow(object):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    # --- TAMBAHAN KODE DI SINI ---
+    # Paksa aplikasi menggunakan palette warna Light Mode standar
+    palette = QPalette()
+    palette.setColor(QPalette.Window, Qt.white)
+    palette.setColor(QPalette.WindowText, Qt.black)
+    palette.setColor(QPalette.Base, Qt.white)
+    palette.setColor(QPalette.AlternateBase, Qt.lightGray)
+    palette.setColor(QPalette.ToolTipBase, Qt.white)
+    palette.setColor(QPalette.ToolTipText, Qt.black)
+    palette.setColor(QPalette.Text, Qt.black)
+    palette.setColor(QPalette.Button, Qt.white)
+    palette.setColor(QPalette.ButtonText, Qt.black)
+    palette.setColor(QPalette.BrightText, Qt.red)
+    palette.setColor(QPalette.Link, QColor(42, 130, 218))
+    palette.setColor(QPalette.Highlight, QColor(42, 130, 218))
+    palette.setColor(QPalette.HighlightedText, Qt.white)
+    app.setPalette(palette)
+    # -----------------------------
     window = QMainWindow()
     ui = Ui_MainWindow()
     ui.setupUi(window)

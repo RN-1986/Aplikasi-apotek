@@ -15,7 +15,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHeaderView,
+from PySide6.QtWidgets import (QAbstractItemView, QApplication, QFrame, QGridLayout, QHeaderView,
     QMainWindow, QMenuBar, QPushButton, QSizePolicy,
     QStatusBar, QTabWidget, QTableWidget, QTableWidgetItem,
     QTextBrowser, QVBoxLayout, QWidget)
@@ -86,47 +86,17 @@ class Ui_MainWindow(object):
 "    padding: 4px;\n"
 "    border: 1px solid #ccc;\n"
 "}\n"
+"QTableWidget::item:selected {\n"
+"    background-color: rgb(173, 216, 230);\n"
+"    color: black;\n"
+"}\n"
 "")
+        self.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.tableWidget.horizontalHeader().setDefaultSectionSize(186)
 
         self.gridLayout_2.addWidget(self.tableWidget, 0, 0, 1, 1)
 
-        self.tabWidget.addTab(self.tab, "")
-        self.tab_2 = QWidget()
-        self.tab_2.setObjectName(u"tab_2")
-        self.gridLayout_3 = QGridLayout(self.tab_2)
-        self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.tableWidget_2 = QTableWidget(self.tab_2)
-        if (self.tableWidget_2.columnCount() < 5):
-            self.tableWidget_2.setColumnCount(5)
-        __qtablewidgetitem5 = QTableWidgetItem()
-        self.tableWidget_2.setHorizontalHeaderItem(0, __qtablewidgetitem5)
-        __qtablewidgetitem6 = QTableWidgetItem()
-        self.tableWidget_2.setHorizontalHeaderItem(1, __qtablewidgetitem6)
-        __qtablewidgetitem7 = QTableWidgetItem()
-        self.tableWidget_2.setHorizontalHeaderItem(2, __qtablewidgetitem7)
-        __qtablewidgetitem8 = QTableWidgetItem()
-        self.tableWidget_2.setHorizontalHeaderItem(3, __qtablewidgetitem8)
-        __qtablewidgetitem9 = QTableWidgetItem()
-        self.tableWidget_2.setHorizontalHeaderItem(4, __qtablewidgetitem9)
-        self.tableWidget_2.setObjectName(u"tableWidget_2")
-        self.tableWidget_2.setStyleSheet(u"QHeaderView::section {\n"
-"    background-color: rgb(125, 202, 211);\n"
-"    color: black;\n"
-"    font-weight: bold;\n"
-"    padding: 4px;\n"
-"    border: 1px solid #ccc;\n"
-"}\n"
-"")
-        self.tableWidget_2.horizontalHeader().setDefaultSectionSize(185)
-
-        self.gridLayout_3.addWidget(self.tableWidget_2, 0, 0, 1, 1)
-
-        self.tabWidget.addTab(self.tab_2, "")
-
-        self.verticalLayout.addWidget(self.tabWidget)
-
-        self.frame = QFrame(self.centralwidget)
+        self.frame = QFrame(self.tab)
         self.frame.setObjectName(u"frame")
         self.frame.setMaximumSize(QSize(16777215, 450))
         self.frame.setStyleSheet(u"background-color: rgb(125, 202, 211);\n"
@@ -240,8 +210,47 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.pushButton_refresh, 2, 1, 1, 1)
 
+        self.gridLayout_2.addWidget(self.frame, 1, 0, 1, 1)
 
-        self.verticalLayout.addWidget(self.frame)
+        self.tabWidget.addTab(self.tab, "")
+        self.tab_2 = QWidget()
+        self.tab_2.setObjectName(u"tab_2")
+        self.gridLayout_3 = QGridLayout(self.tab_2)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.tableWidget_2 = QTableWidget(self.tab_2)
+        if (self.tableWidget_2.columnCount() < 5):
+            self.tableWidget_2.setColumnCount(5)
+        __qtablewidgetitem5 = QTableWidgetItem()
+        self.tableWidget_2.setHorizontalHeaderItem(0, __qtablewidgetitem5)
+        __qtablewidgetitem6 = QTableWidgetItem()
+        self.tableWidget_2.setHorizontalHeaderItem(1, __qtablewidgetitem6)
+        __qtablewidgetitem7 = QTableWidgetItem()
+        self.tableWidget_2.setHorizontalHeaderItem(2, __qtablewidgetitem7)
+        __qtablewidgetitem8 = QTableWidgetItem()
+        self.tableWidget_2.setHorizontalHeaderItem(3, __qtablewidgetitem8)
+        __qtablewidgetitem9 = QTableWidgetItem()
+        self.tableWidget_2.setHorizontalHeaderItem(4, __qtablewidgetitem9)
+        self.tableWidget_2.setObjectName(u"tableWidget_2")
+        self.tableWidget_2.setStyleSheet(u"QHeaderView::section {\n"
+"    background-color: rgb(125, 202, 211);\n"
+"    color: black;\n"
+"    font-weight: bold;\n"
+"    padding: 4px;\n"
+"    border: 1px solid #ccc;\n"
+"}\n"
+"QTableWidget::item:selected {\n"
+"    background-color: rgb(173, 216, 230);\n"
+"    color: black;\n"
+"}\n"
+"")
+        self.tableWidget_2.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.tableWidget_2.horizontalHeader().setDefaultSectionSize(185)
+
+        self.gridLayout_3.addWidget(self.tableWidget_2, 0, 0, 1, 1)
+
+        self.tabWidget.addTab(self.tab_2, "")
+
+        self.verticalLayout.addWidget(self.tabWidget)
 
         self.pushButton_keluar = QPushButton(self.centralwidget)
         self.pushButton_keluar.setObjectName(u"pushButton_keluar")
@@ -568,6 +577,7 @@ class DashboardKasir(QMainWindow):
                         <th style='text-align: left; padding: 5px 0;'>Item</th>
                         <th style='text-align: center;'>Jml</th>
                         <th style='text-align: right;'>Harga</th>
+                        <th style='text-align: right;'>Subtotal</th>
                     </tr>
             """
             
@@ -583,11 +593,14 @@ class DashboardKasir(QMainWindow):
                     jumlah = item[4] if len(item) > 4 else 0
                     subtotal = item[5] if len(item) > 5 else 0
                 
+                # Hitung harga per unit
+                harga_per_unit = float(subtotal) / float(jumlah) if float(jumlah) > 0 else 0
                 total += float(subtotal)
                 struk_text += f"""
                     <tr>
                         <td style='padding: 3px 0;'>{nama}</td>
                         <td style='text-align: center;'>{jumlah}</td>
+                        <td style='text-align: right;'>Rp {harga_per_unit:,.0f}</td>
                         <td style='text-align: right;'>Rp {subtotal:,.0f}</td>
                     </tr>
                 """

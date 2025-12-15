@@ -15,7 +15,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QGridLayout, QHeaderView, QLabel,
+from PySide6.QtWidgets import (QAbstractItemView, QApplication, QDateEdit, QGridLayout, QHeaderView, QLabel,
     QLineEdit, QMainWindow, QMenuBar, QPushButton,
     QSizePolicy, QStatusBar, QTabWidget, QTableWidget,
     QTableWidgetItem, QTextBrowser, QVBoxLayout, QWidget)
@@ -220,7 +220,12 @@ class Ui_MainWindow(object):
 "    padding: 4px;\n"
 "    border: 1px solid #ccc;\n"
 "}\n"
+"QTableWidget::item:selected {\n"
+"    background-color: rgb(173, 216, 230);\n"
+"    color: black;\n"
+"}\n"
 "")
+        self.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.tableWidget.horizontalHeader().setMinimumSectionSize(32)
         self.tableWidget.horizontalHeader().setDefaultSectionSize(121)
 
@@ -318,11 +323,14 @@ class Ui_MainWindow(object):
 
         self.gridLayout_5.addWidget(self.label, 0, 0, 1, 1)
 
-        self.lineEdit_2 = QLineEdit(self.tab_2)
+        self.lineEdit_2 = QDateEdit(self.tab_2)
         self.lineEdit_2.setObjectName(u"lineEdit_2")
         self.lineEdit_2.setStyleSheet(u"border-radius: 5px;\n"
 "padding: 6px 8px; \n"
 "background-color: rgb(226, 226, 226);")
+        self.lineEdit_2.setCalendarPopup(True)
+        self.lineEdit_2.setDisplayFormat("yyyy-MM-dd")
+        self.lineEdit_2.setDate(QDate.currentDate())
 
         self.gridLayout_5.addWidget(self.lineEdit_2, 0, 1, 1, 1)
 
@@ -402,7 +410,12 @@ class Ui_MainWindow(object):
 "    padding: 4px;\n"
 "    border: 1px solid #ccc;\n"
 "}\n"
+"QTableWidget::item:selected {\n"
+"    background-color: rgb(173, 216, 230);\n"
+"    color: black;\n"
+"}\n"
 "")
+        self.tableWidget_2.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.tableWidget_2.horizontalHeader().setDefaultSectionSize(210)
 
         self.verticalLayout.addWidget(self.tableWidget_2)
@@ -490,7 +503,6 @@ class Ui_MainWindow(object):
         self.pushButton_refresh.setText(QCoreApplication.translate("MainWindow", u"Refresh", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Kelola Data Obat", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u" Tanggal :", None))
-        self.lineEdit_2.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Cari Tanggal/Jam", None))
         self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Cari", None))
         self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"Refresh", None))
         ___qtablewidgetitem7 = self.tableWidget_2.horizontalHeaderItem(0)
@@ -731,11 +743,9 @@ class DashboardAdmin(QMainWindow):
     def cari_transaksi_by_date(self):
         """Cari transaksi berdasarkan tanggal"""
         try:
-            tanggal = self.ui.lineEdit_2.text().strip()
-            
-            if not tanggal:
-                self.refresh_data_transaksi()
-                return
+            # Ambil tanggal yang dipilih dan format sebagai string
+            selected_date = self.ui.lineEdit_2.date()
+            tanggal_str = selected_date.toString("yyyy-MM-dd")
             
             # Load semua data transaksi
             data = lihatSemuaTransaksi()
@@ -754,8 +764,8 @@ class DashboardAdmin(QMainWindow):
                 else:
                     tgl_transaksi = str(d[1])
                 
-                # Cek apakah tanggal input ada di tanggal transaksi
-                if tanggal in tgl_transaksi:
+                # Cek apakah tanggal ada di tanggal transaksi
+                if tanggal_str in tgl_transaksi:
                     found = True
                     row = self.ui.tableWidget_2.rowCount()
                     self.ui.tableWidget_2.insertRow(row)
@@ -764,7 +774,8 @@ class DashboardAdmin(QMainWindow):
                         self.ui.tableWidget_2.setItem(row, 0, QTableWidgetItem(str(d.get('transaksiId', ''))))
                         self.ui.tableWidget_2.setItem(row, 1, QTableWidgetItem(str(d.get('tanggalTransaksi', ''))))
                         self.ui.tableWidget_2.setItem(row, 2, QTableWidgetItem(str(d.get('Kasir', ''))))
-                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(f"Rp {d.get('totalHarga', 0):,}"))
+                        total_harga = d.get('totalHarga', 0)
+                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(f"Rp {total_harga:,}"))
                     else:
                         self.ui.tableWidget_2.setItem(row, 0, QTableWidgetItem(str(d[0])))
                         self.ui.tableWidget_2.setItem(row, 1, QTableWidgetItem(str(d[1])))
@@ -772,7 +783,7 @@ class DashboardAdmin(QMainWindow):
                         self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(f"Rp {d[3]:,}"))
             
             if not found:
-                QMessageBox.information(self, "Info", f"Tidak ada transaksi pada tanggal '{tanggal}'")
+                QMessageBox.information(self, "Info", f"Tidak ada transaksi pada tanggal '{tanggal_str}'")
         except Exception as e:
             QMessageBox.warning(self, "Error", f"Gagal mencari transaksi: {e}")
     

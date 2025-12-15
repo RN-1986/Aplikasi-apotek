@@ -17,7 +17,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QAbstractItemView, QApplication, QDateEdit, QGridLayout, QHeaderView, QLabel,
     QLineEdit, QMainWindow, QMenuBar, QPushButton,
-    QSizePolicy, QStatusBar, QTabWidget, QTableWidget,
+    QSizePolicy, QSpinBox, QStatusBar, QTabWidget, QTableWidget,
     QTableWidgetItem, QTextBrowser, QVBoxLayout, QWidget)
 import logo_apotek_rc
 
@@ -334,6 +334,25 @@ class Ui_MainWindow(object):
 
         self.gridLayout_5.addWidget(self.lineEdit_2, 0, 1, 1, 1)
 
+        self.label_jam = QLabel(self.tab_2)
+        self.label_jam.setObjectName(u"label_jam")
+        self.label_jam.setStyleSheet(u"\n"
+"border radius: 5px;")
+
+        self.gridLayout_5.addWidget(self.label_jam, 0, 2, 1, 1)
+
+        self.spinBox_jam = QSpinBox(self.tab_2)
+        self.spinBox_jam.setObjectName(u"spinBox_jam")
+        self.spinBox_jam.setStyleSheet(u"border-radius: 5px;\n"
+"padding: 6px 8px; \n"
+"background-color: rgb(226, 226, 226);")
+        self.spinBox_jam.setMinimum(-1)
+        self.spinBox_jam.setMaximum(23)
+        self.spinBox_jam.setValue(-1)
+        self.spinBox_jam.setSpecialValueText("Semua")
+
+        self.gridLayout_5.addWidget(self.spinBox_jam, 0, 3, 1, 1)
+
         self.pushButton = QPushButton(self.tab_2)
         self.pushButton.setObjectName(u"pushButton")
         self.pushButton.setStyleSheet(u"\n"
@@ -359,7 +378,7 @@ class Ui_MainWindow(object):
 "\n"
 "")
 
-        self.gridLayout_5.addWidget(self.pushButton, 0, 2, 1, 1)
+        self.gridLayout_5.addWidget(self.pushButton, 0, 4, 1, 1)
 
         self.pushButton_2 = QPushButton(self.tab_2)
         self.pushButton_2.setObjectName(u"pushButton_2")
@@ -386,7 +405,7 @@ class Ui_MainWindow(object):
 "\n"
 "")
 
-        self.gridLayout_5.addWidget(self.pushButton_2, 0, 3, 1, 1)
+        self.gridLayout_5.addWidget(self.pushButton_2, 0, 5, 1, 1)
 
 
         self.verticalLayout.addLayout(self.gridLayout_5)
@@ -503,6 +522,7 @@ class Ui_MainWindow(object):
         self.pushButton_refresh.setText(QCoreApplication.translate("MainWindow", u"Refresh", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Kelola Data Obat", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u" Tanggal :", None))
+        self.label_jam.setText(QCoreApplication.translate("MainWindow", u" Jam :", None))
         self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Cari", None))
         self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"Refresh", None))
         ___qtablewidgetitem7 = self.tableWidget_2.horizontalHeaderItem(0)
@@ -741,11 +761,15 @@ class DashboardAdmin(QMainWindow):
             QMessageBox.warning(self, "Error", f"Gagal load transaksi: {e}")
     
     def cari_transaksi_by_date(self):
-        """Cari transaksi berdasarkan tanggal"""
+        """Cari transaksi berdasarkan tanggal dan jam"""
         try:
-            # Ambil tanggal yang dipilih dan format sebagai string
+            # Ambil tanggal dan jam yang dipilih
             selected_date = self.ui.lineEdit_2.date()
             tanggal_str = selected_date.toString("yyyy-MM-dd")
+            jam_pilihan = int(self.ui.spinBox_jam.value())
+            
+            tanggalDanJam = f"{tanggal_str} {jam_pilihan:02d}:00:00"
+            print("Mencari transaksi pada:", tanggalDanJam)
             
             # Load semua data transaksi
             data = lihatSemuaTransaksi()
@@ -754,7 +778,7 @@ class DashboardAdmin(QMainWindow):
                 QMessageBox.information(self, "Info", data)
                 return
             
-            # Filter berdasarkan tanggal
+            # Filter berdasarkan tanggal dan jam
             self.ui.tableWidget_2.setRowCount(0)
             found = False
             
@@ -764,8 +788,26 @@ class DashboardAdmin(QMainWindow):
                 else:
                     tgl_transaksi = str(d[1])
                 
-                # Cek apakah tanggal ada di tanggal transaksi
+                # Cek apakah tanggal cocok
                 if tanggal_str in tgl_transaksi:
+                    # Jika jam dipilih (bukan -1/Semua), filter berdasarkan jam
+                    if jam_pilihan >= 0:
+                        # Extract jam dari datetime string
+                        # Format biasanya: 2025-12-15 13:45:30
+                        try:
+                            waktu_parts = tgl_transaksi.split()
+                            if len(waktu_parts) >= 2:
+                                jam_parts = waktu_parts[1].split(':')
+                                jam_transaksi = int(jam_parts[0])
+                                
+                                # Hanya tampilkan jika jam cocok
+                                if jam_transaksi != jam_pilihan:
+                                    continue
+                        except:
+                            # Jika gagal parse, skip filter jam
+                            pass
+                    
+                    # Tambahkan ke tabel
                     found = True
                     row = self.ui.tableWidget_2.rowCount()
                     self.ui.tableWidget_2.insertRow(row)
@@ -783,7 +825,8 @@ class DashboardAdmin(QMainWindow):
                         self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(f"Rp {d[3]:,}"))
             
             if not found:
-                QMessageBox.information(self, "Info", f"Tidak ada transaksi pada tanggal '{tanggal_str}'")
+                jam_info = f" jam {jam_pilihan}" if jam_pilihan >= 0 else ""
+                QMessageBox.information(self, "Info", f"Tidak ada transaksi pada tanggal '{tanggal_str}'{jam_info}")
         except Exception as e:
             QMessageBox.warning(self, "Error", f"Gagal mencari transaksi: {e}")
     

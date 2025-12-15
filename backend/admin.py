@@ -131,10 +131,24 @@ def cariObat(keyword):
         
     try:
         obatId = int(keyword)
-        query = "SELECT * FROM obat WHERE obatId = %s"
+        query = '''
+            SELECT 
+                o.*, 
+                k.namaKategori 
+            FROM obat o
+            LEFT JOIN kategoriObat k ON o.kategoriId = k.kategoriId
+            WHERE o.obatId = %s
+        '''
         cursor.execute(query, (obatId,))
     except ValueError:
-        query = "SELECT * FROM obat WHERE namaObat LIKE %s"
+        query = '''
+            SELECT 
+                o.*, 
+                k.namaKategori 
+            FROM obat o
+            LEFT JOIN kategoriObat k ON o.kategoriId = k.kategoriId
+            WHERE o.namaObat LIKE %s
+        '''
         cursor.execute(query, (f"%{keyword}%",))
     
     hasil = cursor.fetchall()

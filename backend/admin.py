@@ -259,3 +259,45 @@ def lihatObatKadaluarsa():
         return 'Tidak ada obat yang kadaluarsa'
     
     return dataObat
+
+def filterTransaksiBerdasarkanWaktu(waktu):
+    """
+    Menampilkan transaksi mulai dari waktu yang dipilih (Format: 'YYYY-MM-DD HH:MM:SS').
+    Contoh: filterTransaksiBerdasarkanWaktu('2021-04-05 06:00:00')
+    """
+    db = koneksiKeDatabase()
+    if db is None:
+        pesan = "Gagal koneksi ke database"
+        return pesan
+    
+    cursor = db.cursor()
+    
+    # Query: Ambil transaksi yang tanggalnya LEBIH BESAR ATAU SAMA DENGAN waktu input
+    query = '''
+        SELECT
+            t.transaksiId,
+            t.tanggalTransaksi,
+            u.username as Kasir,
+            t.totalHarga
+        FROM transaksi as t
+        JOIN user as u on t.kasirId = u.userId
+        WHERE t.tanggalTransaksi >= %s
+        ORDER BY t.tanggalTransaksi ASC
+    '''
+    
+    try:
+        cursor.execute(query, (waktu,))
+        dataTransaksi = cursor.fetchall()
+    except Exception as e:
+        pesan = f"Terjadi kesalahan query: {e}"
+        return pesan
+    
+    cursor.close()
+    db.close()
+    
+    # Cek apakah data kosong
+    if not dataTransaksi:
+        pesan = 'Tidak ada transaksi mulai dari waktu tersebut.'
+        return pesan
+    
+    return dataTransaksi

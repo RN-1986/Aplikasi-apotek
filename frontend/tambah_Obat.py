@@ -14,11 +14,11 @@ from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
 from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
+    QPalette, QPixmap, QRadialGradient, QTransform, QIntValidator)
 from PySide6.QtWidgets import (QApplication, QComboBox, QGridLayout, QLabel,
     QLineEdit, QMainWindow, QMenuBar, QPushButton,
     QSizePolicy, QSpacerItem, QStatusBar, QVBoxLayout,
-    QWidget)
+    QWidget, QDateEdit)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -51,20 +51,88 @@ class Ui_MainWindow(object):
         self.gridLayout_2 = QGridLayout()
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.gridLayout_2.setContentsMargins(-1, -1, -1, 0)
-        self.lineEdit_5 = QLineEdit(self.centralwidget)
+        
+        self.lineEdit_5 = QDateEdit(self.centralwidget)
         self.lineEdit_5.setObjectName(u"lineEdit_5")
-        self.lineEdit_5.setStyleSheet(u"background-color: rgb(255, 255, 255);\n"
-"border-radius: 10px;\n"
-"padding: 6px 8px;")
+        self.lineEdit_5.setCalendarPopup(True)
+        self.lineEdit_5.setDisplayFormat("yyyy-MM-dd")
+        self.lineEdit_5.setStyleSheet(u"""
+            /* 1. Style Kotak Input Utama */
+            QDateEdit {
+                background-color: rgb(255, 255, 255);
+                border-radius: 10px;
+                padding: 6px 8px;
+                color: black; /* Pastikan teks input item */
+            }
+
+            /* 3. Style POPUP KALENDER (Bagian Paling Penting) */
+            QCalendarWidget QToolButton {
+                color: black;        /* Warna teks bulan/tahun */
+                background-color: transparent; 
+                icon-size: 20px;
+            }
+            
+            QCalendarWidget QMenu {
+                background-color: white; /* Latar menu bulan jadi PUTIH */
+                color: black;            /* Teks menu bulan jadi HITAM */
+            }
+
+            QCalendarWidget QSpinBox {
+                background-color: white; /* Latar ganti tahun jadi PUTIH */
+                color: black;
+                selection-background-color: #31f52e;
+            }
+            
+            /* Warna angka tanggal di kalender */
+            QCalendarWidget QAbstractItemView:enabled {
+                color: black;
+                background-color: white;
+                selection-background-color: #31f52e; /* Hijau pas tanggal dipilih */
+                selection-color: black;
+            }
+        """)
 
         self.gridLayout_2.addWidget(self.lineEdit_5, 5, 1, 1, 1)
 
-        self.lineEdit_6 = QLineEdit(self.centralwidget)
+        self.lineEdit_6 = QDateEdit(self.centralwidget)
         self.lineEdit_6.setObjectName(u"lineEdit_6")
-        self.lineEdit_6.setEnabled(True)
-        self.lineEdit_6.setStyleSheet(u"background-color: rgb(255, 255, 255);\n"
-"border-radius: 10px;\n"
-"padding: 6px 8px;")
+        self.lineEdit_6.setCalendarPopup(True)
+        self.lineEdit_6.setDisplayFormat("yyyy-MM-dd")
+        self.lineEdit_6.setStyleSheet(u"""
+            /* 1. Style Kotak Input Utama */
+            QDateEdit {
+                background-color: rgb(255, 255, 255);
+                border-radius: 10px;
+                padding: 6px 8px;
+                color: black; /* Pastikan teks input item */
+            }
+
+            /* 3. Style POPUP KALENDER (Bagian Paling Penting) */
+            QCalendarWidget QToolButton {
+                color: black;        /* Warna teks bulan/tahun */
+                background-color: transparent; 
+                icon-size: 20px;
+            }
+            
+            QCalendarWidget QMenu {
+                background-color: white; /* Latar menu bulan jadi PUTIH */
+                color: black;            /* Teks menu bulan jadi HITAM */
+            }
+
+            QCalendarWidget QSpinBox {
+                background-color: white; /* Latar ganti tahun jadi PUTIH */
+                color: black;
+                selection-background-color: #31f52e;
+            }
+            
+            /* Warna angka tanggal di kalender */
+            QCalendarWidget QAbstractItemView:enabled {
+                color: black;
+                background-color: white;
+                selection-background-color: #31f52e; /* Hijau pas tanggal dipilih */
+                selection-color: black;
+            }
+        """)
 
         self.gridLayout_2.addWidget(self.lineEdit_6, 4, 1, 1, 1)
 
@@ -102,6 +170,7 @@ class Ui_MainWindow(object):
         self.lineEdit_3 = QLineEdit(self.centralwidget)
         self.lineEdit_3.setObjectName(u"lineEdit_3")
         self.lineEdit_3.setEnabled(True)
+        self.lineEdit_3.setValidator(QIntValidator())
         self.lineEdit_3.setStyleSheet(u"background-color: rgb(255, 255, 255);\n"
 "border-radius: 10px;\n"
 "padding: 6px 8px;")
@@ -132,6 +201,7 @@ class Ui_MainWindow(object):
         self.lineEdit_4 = QLineEdit(self.centralwidget)
         self.lineEdit_4.setObjectName(u"lineEdit_4")
         self.lineEdit_4.setEnabled(True)
+        self.lineEdit_4.setValidator(QIntValidator())
         self.lineEdit_4.setStyleSheet(u"background-color: rgb(255, 255, 255);\n"
 "border-radius: 10px;\n"
 "padding: 6px 8px;")
@@ -289,8 +359,8 @@ class TambahObatWindow(QMainWindow):
             jenis = self.ui.lineEdit_2.text().strip()
             harga = self.ui.lineEdit_3.text().strip()
             stok = self.ui.lineEdit_4.text().strip()
-            tgl_produksi = self.ui.lineEdit_6.text().strip()
-            tgl_kadaluarsa = self.ui.lineEdit_5.text().strip()
+            tgl_produksi = self.ui.lineEdit_6.date().toString("yyyy-MM-dd")
+            tgl_kadaluarsa = self.ui.lineEdit_5.date().toString("yyyy-MM-dd")
             kategori = self.ui.comboBox.currentText()
             
             # Validasi input

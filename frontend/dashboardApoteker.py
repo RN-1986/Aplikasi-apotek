@@ -15,7 +15,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QGridLayout, QHeaderView, QLabel,
+from PySide6.QtWidgets import (QAbstractItemView, QApplication, QGridLayout, QHeaderView, QLabel,
     QLineEdit, QMainWindow, QMenuBar, QPushButton,
     QSizePolicy, QStatusBar, QTabWidget, QTableWidget,
     QTableWidgetItem, QTextBrowser, QVBoxLayout, QWidget)
@@ -171,7 +171,12 @@ class Ui_MainWindow(object):
 "    padding: 4px;\n"
 "    border: 1px solid #ccc;\n"
 "}\n"
+"QTableWidget::item:selected {\n"
+"    background-color: rgb(173, 216, 230);\n"
+"    color: black;\n"
+"}\n"
 "")
+        self.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.tableWidget.horizontalHeader().setDefaultSectionSize(163)
 
         self.verticalLayout_2.addWidget(self.tableWidget)
@@ -453,7 +458,12 @@ class Ui_MainWindow(object):
 "    padding: 4px;\n"
 "    border: 1px solid #ccc;\n"
 "}\n"
+"QTableWidget::item:selected {\n"
+"    background-color: rgb(173, 216, 230);\n"
+"    color: black;\n"
+"}\n"
 "")
+        self.tableWidget_2.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.tableWidget_2.horizontalHeader().setDefaultSectionSize(163)
 
         self.gridLayout.addWidget(self.tableWidget_2, 6, 0, 1, 6)
@@ -577,7 +587,7 @@ class Ui_MainWindow(object):
         self.pushButton_kirimKasir.setText(QCoreApplication.translate("MainWindow", u"Kirim Kasir", None))
         self.pushButton_batalKeranjang.setText(QCoreApplication.translate("MainWindow", u"Batalkan Keranjang", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Lihat Keranjang", None))
-        self.label_8.setText(QCoreApplication.translate("MainWindow", u"Masukkan jumlah obat   :", None))
+        self.label_8.setText(QCoreApplication.translate("MainWindow", u"Masukkan Jumlah Obat   :", None))
         self.pushButton_buatKeranjang.setText(QCoreApplication.translate("MainWindow", u"Buat Keranjang", None))
         self.pushButton_refresh.setText(QCoreApplication.translate("MainWindow", u"Refresh", None))
         self.label_3.setText(QCoreApplication.translate("MainWindow", u" Pilih obat yang ingin ditambahkan!", None))
@@ -700,7 +710,7 @@ class DashboardApoteker(QMainWindow):
             QMessageBox.warning(self, "Error", f"Gagal load keranjang: {e}")
     
     def cari_keranjang(self):
-        """Cari keranjang berdasarkan nama pembeli"""
+        """Cari keranjang berdasarkan nama pembeli atau keranjang ID"""
         try:
             keyword = self.ui.lineEdit_2.text().strip()
             if not keyword:
@@ -714,15 +724,22 @@ class DashboardApoteker(QMainWindow):
                 return
             
             cursor = db.cursor()
+            # Cek apakah keyword adalah angka (keranjangId) atau string (nama pembeli)
             query = """
                 SELECT k.keranjangId, k.namaPembeli, k.totalHarga, k.status, u.nama
                 FROM keranjang k
                 JOIN user u ON k.apotekerId = u.userId
-                WHERE k.namaPembeli LIKE %s
+                WHERE (k.namaPembeli LIKE %s OR k.keranjangId = %s)
                 AND k.status IN ('draft', 'dikirim')
                 ORDER BY k.keranjangId DESC
             """
-            cursor.execute(query, (f"%{keyword}%",))
+            # Coba konversi ke int untuk keranjangId, jika gagal set ke -1
+            try:
+                keranjang_id_search = int(keyword)
+            except ValueError:
+                keranjang_id_search = -1
+            
+            cursor.execute(query, (f"%{keyword}%", keranjang_id_search))
             data = cursor.fetchall()
             cursor.close()
             db.close()

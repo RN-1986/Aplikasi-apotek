@@ -214,7 +214,7 @@ def lihatDetailTransaksi(transaksiId):
             o.namaObat,
             d.jumlah,
             d.subtotal,
-            COALESCE(k.namaPembeli, '-') as namaPembeli
+            k.namaPembeli
         from detailtransaksi as d
         join obat as o on d.obatId = o.obatId
         join transaksi as t on d.transaksiId = t.transaksiId

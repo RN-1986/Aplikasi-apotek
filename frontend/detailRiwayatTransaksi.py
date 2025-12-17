@@ -248,4 +248,3 @@ class DetailRiwayatWindow(QMainWindow):
             
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Gagal load detail: {e}")
-

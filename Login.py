@@ -289,7 +289,7 @@ class Ui_MainWindow(object):
                 self.login_window.close()
             elif role == "kasir":
                 import sys
-                sys.path.append(os.path.join(os.path.dirname(__file__), "frontend"))
+                sys.path.append(os.path.dirname(__file__))
                 from frontend.dashboardKasir import DashboardKasir
                 self.window = DashboardKasir()
                 self.window.show()

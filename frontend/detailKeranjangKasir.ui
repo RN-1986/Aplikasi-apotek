@@ -13,9 +13,12 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(255, 255, 255);</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0">
      <widget class="QLabel" name="label">
       <property name="font">
        <font>
@@ -28,43 +31,7 @@
       </property>
      </widget>
     </item>
-    <item>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="font">
-         <font>
-          <pointsize>13</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Nama Pembeli  :</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QLabel" name="label_namaPembeli">
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 5px;
-padding: 6px 8px; 
-alternate-background-color: rgb(187, 255, 253);</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QLabel" name="label_3">
-      <property name="text">
-       <string>Silahkan pilih data obat yang akan</string>
-      </property>
-     </widget>
-    </item>
-    <item>
+    <item row="3" column="0" colspan="5">
      <widget class="QTableWidget" name="tableWidget">
       <attribute name="horizontalHeaderDefaultSectionSize">
        <number>90</number>
@@ -111,7 +78,126 @@ alternate-background-color: rgb(187, 255, 253);</string>
       </column>
      </widget>
     </item>
-    <item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>Silahkan pilih data obat yang akan</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0" colspan="5">
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="font">
+         <font>
+          <pointsize>13</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Nama Pembeli  :</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_namaPembeli">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(226, 226, 226);
+border-radius: 5px;
+padding: 6px 8px; 
+alternate-background-color: rgb(187, 255, 253);</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="font">
+         <font>
+          <pointsize>13</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Total Pembelian :</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="label_5">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(226, 226, 226);
+border-radius: 5px;
+padding: 6px 8px; 
+alternate-background-color: rgb(187, 255, 253);</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="4" column="4">
+     <widget class="QPushButton" name="pushButton_4">
+      <property name="styleSheet">
+       <string notr="true">QPushButton { 
+background-color: rgb(255, 255, 0);	
+	border-radius: 5px;
+padding: 8px 8px; 
+}
+
+/* Saat kursor hover */
+QPushButton:hover {
+     /* warna saat hover */
+	background-color: rgb(255, 255, 127);
+    color: black;
+}
+
+/* Saat tombol ditekan */
+QPushButton:pressed {
+     /* warna saat ditekan */
+	background-color: rgb(255, 255, 127);
+    color: black;
+}</string>
+      </property>
+      <property name="text">
+       <string>Update Data Keranjang</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="3">
+     <widget class="QPushButton" name="pushButton_3">
+      <property name="styleSheet">
+       <string notr="true">QPushButton { 
+background-color: rgb(49, 245, 46);
+	border-radius: 5px;
+padding: 6px 8px; 
+}
+
+/* Saat kursor hover */
+QPushButton:hover {
+     /* warna saat hover */
+	background-color: rgb(85, 255, 127);
+    color: black;
+}
+
+/* Saat tombol ditekan */
+QPushButton:pressed {
+     /* warna saat ditekan */
+		background-color: rgb(85, 255, 127);
+    color: black;
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>Tambah Data Keranjang</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="2">
      <widget class="QPushButton" name="pushButton_2">
       <property name="styleSheet">
        <string notr="true">QPushButton { 
@@ -141,7 +227,7 @@ background-color: rgb(213, 0, 0);
       </property>
      </widget>
     </item>
-    <item alignment="Qt::AlignRight">
+    <item row="5" column="4">
      <widget class="QPushButton" name="pushButton">
       <property name="styleSheet">
        <string notr="true">QPushButton { 

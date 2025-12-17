@@ -279,7 +279,7 @@ background-color: rgb(213, 0, 0);
 }</string>
        </property>
        <property name="text">
-        <string>Logout</string>
+        <string>Keluar</string>
        </property>
       </widget>
      </item>

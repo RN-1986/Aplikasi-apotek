@@ -16,7 +16,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QHeaderView, QLabel, QMainWindow,
-    QMenuBar, QPushButton, QSizePolicy, QStatusBar,
+    QMenuBar, QPushButton, QSizePolicy, QStatusBar, QAbstractItemView,
     QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
@@ -101,6 +101,7 @@ class Ui_MainWindow(object):
         self.tableWidget.horizontalHeader().setDefaultSectionSize(117)
         self.tableWidget.horizontalHeader().setStretchLastSection(True)
         self.tableWidget.verticalHeader().setDefaultSectionSize(40)
+        self.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
         self.verticalLayout.addWidget(self.tableWidget)
 
@@ -228,12 +229,26 @@ class DetailRiwayatWindow(QMainWindow):
                 
                 total_keseluruhan += subtotal
                 
-                # Set items ke table
-                self.ui.tableWidget.setItem(row_idx, 0, QTableWidgetItem(str(detail_id)))
-                self.ui.tableWidget.setItem(row_idx, 1, QTableWidgetItem(str(nama_obat)))
-                self.ui.tableWidget.setItem(row_idx, 2, QTableWidgetItem(str(jumlah)))
-                self.ui.tableWidget.setItem(row_idx, 3, QTableWidgetItem(f"Rp {subtotal:,}"))
-                self.ui.tableWidget.setItem(row_idx, 4, QTableWidgetItem(f"Rp {total_keseluruhan:,}"))
+                # Set items ke table (read-only)
+                item0 = QTableWidgetItem(str(detail_id))
+                item0.setFlags(item0.flags() & ~Qt.ItemIsEditable)
+                self.ui.tableWidget.setItem(row_idx, 0, item0)
+
+                item1 = QTableWidgetItem(str(nama_obat))
+                item1.setFlags(item1.flags() & ~Qt.ItemIsEditable)
+                self.ui.tableWidget.setItem(row_idx, 1, item1)
+
+                item2 = QTableWidgetItem(str(jumlah))
+                item2.setFlags(item2.flags() & ~Qt.ItemIsEditable)
+                self.ui.tableWidget.setItem(row_idx, 2, item2)
+
+                item3 = QTableWidgetItem(f"Rp {subtotal:,}")
+                item3.setFlags(item3.flags() & ~Qt.ItemIsEditable)
+                self.ui.tableWidget.setItem(row_idx, 3, item3)
+
+                item4 = QTableWidgetItem(f"Rp {total_keseluruhan:,}")
+                item4.setFlags(item4.flags() & ~Qt.ItemIsEditable)
+                self.ui.tableWidget.setItem(row_idx, 4, item4)
             
             # Update labels for buyer and total
             # Keep the main header label as-is and show buyer and total on separate lines

@@ -331,7 +331,7 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem7 = self.tableWidget_2.horizontalHeaderItem(2)
         ___qtablewidgetitem7.setText(QCoreApplication.translate("MainWindow", u"Nama Pembeli", None));
         ___qtablewidgetitem8 = self.tableWidget_2.horizontalHeaderItem(3)
-        ___qtablewidgetitem8.setText(QCoreApplication.translate("MainWindow", u"Kategori", None));
+        ___qtablewidgetitem8.setText(QCoreApplication.translate("MainWindow", u"Status", None));
         ___qtablewidgetitem9 = self.tableWidget_2.horizontalHeaderItem(4)
         ___qtablewidgetitem9.setText(QCoreApplication.translate("MainWindow", u"Total Harga (Rp)", None));
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("MainWindow", u"Riwayat Transaksi Hari Ini", None))
@@ -439,13 +439,13 @@ class DashboardKasir(QMainWindow):
                     return
                 
                 cursor = db.cursor()
-                # Ambil transaksi hari ini dengan status 'bayar'
+                # Ambil transaksi hari ini dan sertakan status + kategori obat pada transaksi
                 query = """
                     SELECT 
                         t.tanggalTransaksi,
                         t.transaksiId,
                         k.namaPembeli,
-                        'Lunas' as kategori,
+                        k.status AS status,
                         t.totalHarga
                     FROM transaksi t
                     JOIN keranjang k ON k.keranjangId = t.keranjangId
@@ -471,7 +471,14 @@ class DashboardKasir(QMainWindow):
                         self.ui.tableWidget_2.setItem(row, 0, QTableWidgetItem(tanggal_str))
                         self.ui.tableWidget_2.setItem(row, 1, QTableWidgetItem(str(d.get('transaksiId', ''))))
                         self.ui.tableWidget_2.setItem(row, 2, QTableWidgetItem(str(d.get('namaPembeli', ''))))
-                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(str(d.get('kategori', ''))))
+                        # Show status column (human readable)
+                        status_val = d.get('status', '')
+                        # Map status 'bayar' -> 'Lunas' for display if desired
+                        if status_val == 'bayar':
+                            status_display = 'Lunas'
+                        else:
+                            status_display = str(status_val).capitalize() if status_val else '-'
+                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(status_display))
                         total = d.get('totalHarga', 0)
                         self.ui.tableWidget_2.setItem(row, 4, QTableWidgetItem(f"Rp {total:,.0f}"))
                     else:
@@ -484,7 +491,10 @@ class DashboardKasir(QMainWindow):
                         self.ui.tableWidget_2.setItem(row, 0, QTableWidgetItem(tanggal_str))
                         self.ui.tableWidget_2.setItem(row, 1, QTableWidgetItem(str(d[1])))
                         self.ui.tableWidget_2.setItem(row, 2, QTableWidgetItem(str(d[2])))
-                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(str(d[3])))
+                        # d[3] = status, d[4] = total
+                        status_val = d[3]
+                        status_display = 'Lunas' if status_val == 'bayar' else (str(status_val).capitalize() if status_val else '-')
+                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(status_display))
                         self.ui.tableWidget_2.setItem(row, 4, QTableWidgetItem(f"Rp {d[4]:,.0f}"))
         except Exception as e:
             QMessageBox.warning(self, "Error", f"Gagal load riwayat: {e}")

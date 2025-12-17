@@ -10,6 +10,10 @@ def tambahObat(namaObat, jenis, harga, stok, tgl_produksi, kadaluarsa, kategoriI
         return pesan
     
     try:
+        # Format nama obat dan jenis ke title case (awal kata kapital)
+        namaObat = namaObat.strip().title()
+        jenis = jenis.strip().title()
+        
         query = '''
             insert into obat(namaObat, jenis, harga, stok, tgl_produksi, kadaluarsa, kategoriId) 
             values(%s, %s, %s, %s, %s, %s, %s)
@@ -77,6 +81,10 @@ def updateObat(obatId, namaObat, jenis, harga, stok, tgl_produksi, kadaluarsa, k
     
     cursor = db.cursor()
     try:
+        # Format nama obat dan jenis ke title case (awal kata kapital)
+        namaObat = namaObat.strip().title()
+        jenis = jenis.strip().title()
+        
         query = '''
             update obat 
             set 

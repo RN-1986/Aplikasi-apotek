@@ -27,6 +27,7 @@ class Ui_MainWindow(object):
         MainWindow.setStyleSheet(u"")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
+        self.centralwidget.setStyleSheet(u"background-color: rgb(255, 255, 255);")
         self.verticalLayout = QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.label = QLabel(self.centralwidget)
@@ -52,8 +53,35 @@ class Ui_MainWindow(object):
         __qtablewidgetitem4 = QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(4, __qtablewidgetitem4)
         self.tableWidget.setObjectName(u"tableWidget")
-        self.tableWidget.setStyleSheet(u"background-color: rgb(255, 255, 255);")
+        self.tableWidget.setStyleSheet(u"QTableWidget {\n"
+"    background-color: rgb(255, 255, 255);\n"
+"    border-radius: 5px;\n"
+"    selection-background-color: rgb(173, 216, 230);\n"
+"    selection-color: black;\n"
+"    gridline-color: rgb(200, 200, 200);\n"
+"}\n"
+"QTableWidget::item:selected {\n"
+"    background-color: rgb(173, 216, 230);\n"
+"    color: black;\n"
+"}\n"
+"QHeaderView::section {\n"
+"    background-color: rgb(70, 130, 180);\n"
+"    color: white;\n"
+"    padding: 5px;\n"
+"    border: none;\n"
+"    border-right: 1px solid rgb(100, 149, 237);\n"
+"    border-bottom: 2px solid rgb(100, 149, 237);\n"
+"    font-weight: bold;\n"
+"}\n"
+"QHeaderView {\n"
+"    background-color: transparent;\n"
+"}\n"
+"QTableView::corner {\n"
+"    background-color: rgb(70, 130, 180);\n"
+"}")
         self.tableWidget.horizontalHeader().setDefaultSectionSize(117)
+        self.tableWidget.horizontalHeader().setStretchLastSection(True)
+        self.tableWidget.verticalHeader().setDefaultSectionSize(40)
 
         self.verticalLayout.addWidget(self.tableWidget)
 
@@ -102,6 +130,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"                                    DETAIL RIWAYAT TRANSAKSI", None))
+        self.tableWidget.setColumnHidden(4, True)
         ___qtablewidgetitem = self.tableWidget.horizontalHeaderItem(0)
         ___qtablewidgetitem.setText(QCoreApplication.translate("MainWindow", u"Detail ID", None));
         ___qtablewidgetitem1 = self.tableWidget.horizontalHeaderItem(1)

@@ -183,30 +183,6 @@ class Ui_MainWindow(object):
 
         self.gridLayout_3 = QGridLayout()
         self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.pushButton_editKeranjang = QPushButton(self.tab)
-        self.pushButton_editKeranjang.setObjectName(u"pushButton_editKeranjang")
-        self.pushButton_editKeranjang.setStyleSheet(u"QPushButton { \n"
-"background-color: rgb(125, 202, 211);\n"
-"	border-radius: 5px;\n"
-"padding: 6px 8px; \n"
-"}\n"
-"\n"
-"/* Saat kursor hover */\n"
-"QPushButton:hover {\n"
-"     /* warna saat hover */\n"
-"	color: rgb(255, 255, 255);\n"
-"	background-color: rgb(36, 79, 124);\n"
-"}\n"
-"\n"
-"/* Saat tombol ditekan */\n"
-"QPushButton:pressed {\n"
-"     /* warna saat ditekan */\n"
-"	color: rgb(255, 255, 255);\n"
-"	background-color: rgb(36, 79, 124);\n"
-"}\n"
-"")
-
-        self.gridLayout_3.addWidget(self.pushButton_editKeranjang, 1, 3, 1, 1)
 
         self.pushButton_lihatDetail = QPushButton(self.tab)
         self.pushButton_lihatDetail.setObjectName(u"pushButton_lihatDetail")
@@ -232,7 +208,7 @@ class Ui_MainWindow(object):
 "}\n"
 "")
 
-        self.gridLayout_3.addWidget(self.pushButton_lihatDetail, 1, 4, 1, 1)
+        self.gridLayout_3.addWidget(self.pushButton_lihatDetail, 1, 2, 1, 1)
 
         self.pushButton_kirimKasir = QPushButton(self.tab)
         self.pushButton_kirimKasir.setObjectName(u"pushButton_kirimKasir")
@@ -256,7 +232,7 @@ class Ui_MainWindow(object):
 "    color: black;\n"
 "}")
 
-        self.gridLayout_3.addWidget(self.pushButton_kirimKasir, 1, 6, 1, 1)
+        self.gridLayout_3.addWidget(self.pushButton_kirimKasir, 1, 3, 1, 1)
 
         self.pushButton_batalKeranjang = QPushButton(self.tab)
         self.pushButton_batalKeranjang.setObjectName(u"pushButton_batalKeranjang")
@@ -433,8 +409,8 @@ class Ui_MainWindow(object):
         self.gridLayout.addWidget(self.lineEdit_jumlahObat, 8, 2, 1, 1)
 
         self.tableWidget_2 = QTableWidget(self.tab_2)
-        if (self.tableWidget_2.columnCount() < 5):
-            self.tableWidget_2.setColumnCount(5)
+        if (self.tableWidget_2.columnCount() < 6):
+            self.tableWidget_2.setColumnCount(6)
         __qtablewidgetitem5 = QTableWidgetItem()
         __qtablewidgetitem5.setFont(font2);
         self.tableWidget_2.setHorizontalHeaderItem(0, __qtablewidgetitem5)
@@ -450,6 +426,9 @@ class Ui_MainWindow(object):
         __qtablewidgetitem9 = QTableWidgetItem()
         __qtablewidgetitem9.setFont(font2);
         self.tableWidget_2.setHorizontalHeaderItem(4, __qtablewidgetitem9)
+        __qtablewidgetitem10 = QTableWidgetItem()
+        __qtablewidgetitem10.setFont(font2);
+        self.tableWidget_2.setHorizontalHeaderItem(5, __qtablewidgetitem10)
         self.tableWidget_2.setObjectName(u"tableWidget_2")
         self.tableWidget_2.setStyleSheet(u"QHeaderView::section {\n"
 "    background-color: rgb(125, 202, 211);\n"
@@ -582,10 +561,9 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"Status", None));
         ___qtablewidgetitem4 = self.tableWidget.horizontalHeaderItem(4)
         ___qtablewidgetitem4.setText(QCoreApplication.translate("MainWindow", u"Apoteker", None));
-        self.pushButton_editKeranjang.setText(QCoreApplication.translate("MainWindow", u"Edit Keranjang", None))
+        self.pushButton_batalKeranjang.setText(QCoreApplication.translate("MainWindow", u"Batalkan", None))
         self.pushButton_lihatDetail.setText(QCoreApplication.translate("MainWindow", u"Lihat Detail", None))
         self.pushButton_kirimKasir.setText(QCoreApplication.translate("MainWindow", u"Kirim Kasir", None))
-        self.pushButton_batalKeranjang.setText(QCoreApplication.translate("MainWindow", u"Batalkan Keranjang", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Lihat Keranjang", None))
         self.label_8.setText(QCoreApplication.translate("MainWindow", u"Masukkan Jumlah Obat   :", None))
         self.pushButton_buatKeranjang.setText(QCoreApplication.translate("MainWindow", u"Buat Keranjang", None))
@@ -599,11 +577,13 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem6 = self.tableWidget_2.horizontalHeaderItem(1)
         ___qtablewidgetitem6.setText(QCoreApplication.translate("MainWindow", u"Jenis", None));
         ___qtablewidgetitem7 = self.tableWidget_2.horizontalHeaderItem(2)
-        ___qtablewidgetitem7.setText(QCoreApplication.translate("MainWindow", u"Harga", None));
+        ___qtablewidgetitem7.setText(QCoreApplication.translate("MainWindow", u"Kategori", None));
         ___qtablewidgetitem8 = self.tableWidget_2.horizontalHeaderItem(3)
-        ___qtablewidgetitem8.setText(QCoreApplication.translate("MainWindow", u"Stok", None));
+        ___qtablewidgetitem8.setText(QCoreApplication.translate("MainWindow", u"Harga", None));
         ___qtablewidgetitem9 = self.tableWidget_2.horizontalHeaderItem(4)
-        ___qtablewidgetitem9.setText(QCoreApplication.translate("MainWindow", u"Kadaluarsa", None));
+        ___qtablewidgetitem9.setText(QCoreApplication.translate("MainWindow", u"Stok", None));
+        ___qtablewidgetitem10 = self.tableWidget_2.horizontalHeaderItem(5)
+        ___qtablewidgetitem10.setText(QCoreApplication.translate("MainWindow", u"Kadaluarsa", None));
         self.pushButton_simpan.setText(QCoreApplication.translate("MainWindow", u"Simpan", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("MainWindow", u"Tambah Data Keranjang", None))
         self.pushButton_keluar.setText(QCoreApplication.translate("MainWindow", u"Keluar", None))
@@ -640,8 +620,6 @@ class DashboardApoteker(QMainWindow):
             self.ui.pushButton_lihatDetail.clicked.connect(self.lihat_detail_keranjang)
         if hasattr(self.ui, "pushButton_kirimKasir"):
             self.ui.pushButton_kirimKasir.clicked.connect(self.kirim_ke_kasir)
-        if hasattr(self.ui, "pushButton_editKeranjang"):
-            self.ui.pushButton_editKeranjang.clicked.connect(self.edit_keranjang)
         
         # Connect buttons Tab Tambah Data Keranjang (tab index 1)
         if hasattr(self.ui, "pushButton_buatKeranjang"):
@@ -805,23 +783,6 @@ class DashboardApoteker(QMainWindow):
         except Exception as e:
             QMessageBox.warning(self, "Error", f"Gagal buka detail: {e}")
     
-    def edit_keranjang(self):
-        """Buka window edit keranjang"""
-        try:
-            selected = self.ui.tableWidget.currentRow()
-            if selected < 0:
-                QMessageBox.warning(self, "Peringatan", "Pilih keranjang yang akan diedit!")
-                return
-            
-            keranjang_id = self.ui.tableWidget.item(selected, 0).text()
-            nama_pembeli = self.ui.tableWidget.item(selected, 1).text()
-            
-            from updateObatKeranjang import UpdateObatKeranjangWindow
-            self.edit_window = UpdateObatKeranjangWindow(keranjang_id, nama_pembeli, parent=self)
-            self.edit_window.show()
-        except Exception as e:
-            QMessageBox.warning(self, "Error", f"Gagal buka edit keranjang: {e}")
-    
     def kirim_ke_kasir(self):
         """Kirim keranjang ke kasir"""
         try:
@@ -863,24 +824,26 @@ class DashboardApoteker(QMainWindow):
                     self.ui.tableWidget_2.insertRow(row)
                     
                     if isinstance(d, dict):
-                        # Headers: Nama Obat | Jenis | Harga | Stok | Kadaluarsa
-                        item_nama = QTableWidgetItem(str(d.get('namaObat', '')))
+                        # Headers: Nama Obat | Jenis | Kategori | Harga | Stok | Kadaluarsa
+                        item_nama = QTableWidgetItem(str(d.get('namaObat', '')).title())
                         item_nama.setData(Qt.UserRole, d.get('obatId', ''))  # Simpan obatId sebagai data tersembunyi
                         self.ui.tableWidget_2.setItem(row, 0, item_nama)
-                        self.ui.tableWidget_2.setItem(row, 1, QTableWidgetItem(str(d.get('jenis', ''))))
-                        self.ui.tableWidget_2.setItem(row, 2, QTableWidgetItem(f"Rp {d.get('harga', 0):,}"))
-                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(str(d.get('stok', ''))))
-                        self.ui.tableWidget_2.setItem(row, 4, QTableWidgetItem(str(d.get('kadaluarsa', ''))))
+                        self.ui.tableWidget_2.setItem(row, 1, QTableWidgetItem(str(d.get('jenis', '')).title()))
+                        self.ui.tableWidget_2.setItem(row, 2, QTableWidgetItem(str(d.get('namaKategori', '-'))))
+                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(f"Rp {d.get('harga', 0):,}"))
+                        self.ui.tableWidget_2.setItem(row, 4, QTableWidgetItem(str(d.get('stok', ''))))
+                        self.ui.tableWidget_2.setItem(row, 5, QTableWidgetItem(str(d.get('kadaluarsa', ''))))
                     else:
-                        # d[0]=obatId, d[1]=namaObat, d[2]=jenis, d[3]=kategoriId, d[4]=harga, d[5]=stok, d[6]=tgl_produksi, d[7]=kadaluarsa
-                        # Headers: Nama Obat | Jenis | Harga | Stok | Kadaluarsa
-                        item_nama = QTableWidgetItem(str(d[1]))  # namaObat
+                        # d[0]=obatId, d[1]=namaObat, d[2]=jenis, d[3]=kategoriId, d[4]=harga, d[5]=stok, d[6]=tgl_produksi, d[7]=kadaluarsa, d[8]=namaKategori
+                        # Headers: Nama Obat | Jenis | Kategori | Harga | Stok | Kadaluarsa
+                        item_nama = QTableWidgetItem(str(d[1]).title())  # namaObat
                         item_nama.setData(Qt.UserRole, d[0])  # Simpan obatId sebagai data tersembunyi
                         self.ui.tableWidget_2.setItem(row, 0, item_nama)
-                        self.ui.tableWidget_2.setItem(row, 1, QTableWidgetItem(str(d[2])))  # jenis
-                        self.ui.tableWidget_2.setItem(row, 2, QTableWidgetItem(f"Rp {d[4]:,}"))  # harga
-                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(str(d[5])))  # stok
-                        self.ui.tableWidget_2.setItem(row, 4, QTableWidgetItem(str(d[7])))  # kadaluarsa
+                        self.ui.tableWidget_2.setItem(row, 1, QTableWidgetItem(str(d[2]).title()))  # jenis
+                        self.ui.tableWidget_2.setItem(row, 2, QTableWidgetItem(str(d[8]) if len(d) > 8 and d[8] else '-'))  # namaKategori
+                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(f"Rp {d[4]:,}"))  # harga
+                        self.ui.tableWidget_2.setItem(row, 4, QTableWidgetItem(str(d[5])))  # stok
+                        self.ui.tableWidget_2.setItem(row, 5, QTableWidgetItem(str(d[7])))  # kadaluarsa
         except Exception as e:
             QMessageBox.warning(self, "Error", f"Gagal load obat: {e}")
     
@@ -988,24 +951,26 @@ class DashboardApoteker(QMainWindow):
                     self.ui.tableWidget_2.insertRow(row)
                     
                     if isinstance(d, dict):
-                        # Headers: Nama Obat | Jenis | Harga | Stok | Kadaluarsa
-                        item_nama = QTableWidgetItem(str(d.get('namaObat', '')))
+                        # Headers: Nama Obat | Jenis | Kategori | Harga | Stok | Kadaluarsa
+                        item_nama = QTableWidgetItem(str(d.get('namaObat', '')).title())
                         item_nama.setData(Qt.UserRole, d.get('obatId', ''))  # Simpan obatId sebagai data tersembunyi
                         self.ui.tableWidget_2.setItem(row, 0, item_nama)
-                        self.ui.tableWidget_2.setItem(row, 1, QTableWidgetItem(str(d.get('jenis', ''))))
-                        self.ui.tableWidget_2.setItem(row, 2, QTableWidgetItem(f"Rp {d.get('harga', 0):,}"))
-                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(str(d.get('stok', ''))))
-                        self.ui.tableWidget_2.setItem(row, 4, QTableWidgetItem(str(d.get('kadaluarsa', ''))))
+                        self.ui.tableWidget_2.setItem(row, 1, QTableWidgetItem(str(d.get('jenis', '')).title()))
+                        self.ui.tableWidget_2.setItem(row, 2, QTableWidgetItem(str(d.get('namaKategori', '-'))))
+                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(f"Rp {d.get('harga', 0):,}"))
+                        self.ui.tableWidget_2.setItem(row, 4, QTableWidgetItem(str(d.get('stok', ''))))
+                        self.ui.tableWidget_2.setItem(row, 5, QTableWidgetItem(str(d.get('kadaluarsa', ''))))
                     else:
-                        # d[0]=obatId, d[1]=namaObat, d[2]=jenis, d[3]=kategoriId, d[4]=harga, d[5]=stok, d[6]=tgl_produksi, d[7]=kadaluarsa
-                        # Headers: Nama Obat | Jenis | Harga | Stok | Kadaluarsa
-                        item_nama = QTableWidgetItem(str(d[1]))  # namaObat
+                        # d[0]=obatId, d[1]=namaObat, d[2]=jenis, d[3]=kategoriId, d[4]=harga, d[5]=stok, d[6]=tgl_produksi, d[7]=kadaluarsa, d[8]=namaKategori
+                        # Headers: Nama Obat | Jenis | Kategori | Harga | Stok | Kadaluarsa
+                        item_nama = QTableWidgetItem(str(d[1]).title())  # namaObat
                         item_nama.setData(Qt.UserRole, d[0])  # Simpan obatId sebagai data tersembunyi
                         self.ui.tableWidget_2.setItem(row, 0, item_nama)
-                        self.ui.tableWidget_2.setItem(row, 1, QTableWidgetItem(str(d[2])))  # jenis
-                        self.ui.tableWidget_2.setItem(row, 2, QTableWidgetItem(f"Rp {d[4]:,}"))  # harga
-                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(str(d[5])))  # stok
-                        self.ui.tableWidget_2.setItem(row, 4, QTableWidgetItem(str(d[7])))  # kadaluarsa
+                        self.ui.tableWidget_2.setItem(row, 1, QTableWidgetItem(str(d[2]).title()))  # jenis
+                        self.ui.tableWidget_2.setItem(row, 2, QTableWidgetItem(str(d[8]) if len(d) > 8 and d[8] else '-'))  # namaKategori
+                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(f"Rp {d[4]:,}"))  # harga
+                        self.ui.tableWidget_2.setItem(row, 4, QTableWidgetItem(str(d[5])))  # stok
+                        self.ui.tableWidget_2.setItem(row, 5, QTableWidgetItem(str(d[7])))  # kadaluarsa
                 
                 if self.ui.tableWidget_2.rowCount() == 0:
                     QMessageBox.information(self, "Info", f"Tidak ada obat dengan nama '{keyword}'")

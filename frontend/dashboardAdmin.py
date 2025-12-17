@@ -614,8 +614,8 @@ class DashboardAdmin(QMainWindow):
                         harga_str = str(harga_val)
                     
                     self.ui.tableWidget.setItem(row, 0, QTableWidgetItem(str(d.get('obatId', ''))))
-                    self.ui.tableWidget.setItem(row, 1, QTableWidgetItem(str(d.get('namaObat', ''))))
-                    self.ui.tableWidget.setItem(row, 2, QTableWidgetItem(str(d.get('jenis', ''))))
+                    self.ui.tableWidget.setItem(row, 1, QTableWidgetItem(str(d.get('namaObat', '')).title()))
+                    self.ui.tableWidget.setItem(row, 2, QTableWidgetItem(str(d.get('jenis', '')).title()))
                     self.ui.tableWidget.setItem(row, 3, QTableWidgetItem(str(d.get('namaKategori', ''))))
                     self.ui.tableWidget.setItem(row, 4, QTableWidgetItem(harga_str))
                     self.ui.tableWidget.setItem(row, 5, QTableWidgetItem(str(d.get('stok', ''))))
@@ -769,7 +769,6 @@ class DashboardAdmin(QMainWindow):
             jam_pilihan = int(self.ui.spinBox_jam.value())
             
             tanggalDanJam = f"{tanggal_str} {jam_pilihan:02d}:00:00"
-            print("Mencari transaksi pada:", tanggalDanJam)
             
             # Load semua data transaksi
             data = lihatSemuaTransaksi()

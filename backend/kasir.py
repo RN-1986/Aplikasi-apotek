@@ -165,19 +165,36 @@ def lihatKeranjang(keranjangId):
     return dataKeranjang
 
 def tambahObatKeKeranjang(keranjangId, obatId, jumlah):
-    if not sessionKeranjangSaatIni['keranjangSaatIni']:
-        return 'Buat Keranjang Dulu'
+    # --- REVISI KHUSUS KASIR ---
+    # 1. Tidak butuh sessionKeranjangSaatIni (karena id dikirim dari UI)
     
+    if not keranjangId:
+        return "ID Keranjang tidak valid"
+
     if jumlah <= 0:
         return "Jumlah obat tidak boleh kurang dari 1"
     
     db = koneksiKeDatabase()
     if db is None:
-        pesan = 'Gagal terkoneksi ke database'
-        return pesan
+        return 'Gagal terkoneksi ke database'
 
     cursor = db.cursor()
     
+    # 2. Cek Status Keranjang (Harus 'dikirim' biar Kasir bisa edit)
+    cursor.execute("SELECT status FROM keranjang WHERE keranjangId = %s", (keranjangId,))
+    cekStatus = cursor.fetchone()
+    
+    if not cekStatus:
+        cursor.close(); db.close()
+        return "Keranjang tidak ditemukan"
+    
+    # Kasir cuma boleh ngedit yang statusnya 'dikirim'. 
+    # Kalau udah 'bayar' (selesai) atau 'dibatalkan', gaboleh sentuh.
+    if cekStatus['status'] != 'dikirim':
+        cursor.close(); db.close()
+        return f"Gagal: Status keranjang '{cekStatus['status']}'. Kasir hanya bisa edit yang statusnya 'dikirim'."
+
+    # 3. Ambil Data Obat
     query = 'select * from obat where obatId = %s'
     cursor.execute(query,(obatId,))
     dataObat = cursor.fetchone()
@@ -186,12 +203,10 @@ def tambahObatKeKeranjang(keranjangId, obatId, jumlah):
         cursor.close(); db.close()
         return "Data obat tidak ditemukan"
     
-    # --- VALIDASI TAMBAHAN: KADALUARSA ---
-    # Cek apakah tanggal hari ini lebih besar dari tanggal kadaluarsa obat
+    # 4. Validasi Stok & Kadaluarsa
     if dataObat['kadaluarsa'] and dataObat['kadaluarsa'] < date.today():
         cursor.close(); db.close()
-        return f"GAGAL! Obat {dataObat['namaObat']} sudah kadaluarsa ({dataObat['kadaluarsa']}). Tidak boleh dijual!"
-    # -------------------------------------
+        return f"GAGAL! Obat {dataObat['namaObat']} sudah kadaluarsa."
 
     if dataObat['stok'] < jumlah:
         cursor.close(); db.close()
@@ -219,14 +234,41 @@ def tambahObatKeKeranjang(keranjangId, obatId, jumlah):
     
     queryKurangiStok = 'update obat set stok = stok - %s where obatId = %s'
     cursor.execute(queryKurangiStok, (jumlah, dataObat['obatId']))
+        return 'Stok obat tidak mencukupi'
     
-    queryUpdateTotalPembayaranDiKeranjang = 'update keranjang set totalHarga = totalHarga + %s where keranjangId = %s'
-    cursor.execute(queryUpdateTotalPembayaranDiKeranjang, (subTotal, keranjangId))
+    # 5. LOGIKA CEK DUPLIKASI (Sama kayak Apoteker)
+    # Cek apakah obat ini UDAH ADA di keranjang?
+    queryCekDouble = "SELECT detailKeranjangId, jumlah FROM keranjangdetail WHERE keranjangId = %s AND obatId = %s"
+    cursor.execute(queryCekDouble, (keranjangId, obatId))
+    existingItem = cursor.fetchone()
     
-    db.commit()
+    try:
+        subTotal = float(dataObat['harga']) * jumlah
+        
+        if existingItem:
+            # KALAU UDAH ADA -> Update jumlahnya
+            jumlahBaru = existingItem['jumlah'] + jumlah
+            cursor.execute("UPDATE keranjangdetail SET jumlah = %s, subtotal = subtotal + %s WHERE detailKeranjangId = %s", 
+                           (jumlahBaru, subTotal, existingItem['detailKeranjangId']))
+            pesan = f"Jumlah obat {dataObat['namaObat']} berhasil ditambahkan"
+        else:
+            # KALAU BELUM ADA -> Insert Baru
+            queryTambahKeKeranjang = 'insert into keranjangdetail(keranjangId, obatId, jumlah, subtotal) values(%s,%s,%s,%s)'
+            cursor.execute(queryTambahKeKeranjang,(keranjangId, obatId, jumlah, subTotal))
+            pesan = f"Obat {dataObat['namaObat']} berhasil ditambahkan ke keranjang"
+    
+        # 6. Update Stok Gudang & Total Harga Keranjang
+        cursor.execute('update obat set stok = stok - %s where obatId = %s', (jumlah, dataObat['obatId']))
+        cursor.execute('update keranjang set totalHarga = totalHarga + %s where keranjangId = %s', (subTotal, keranjangId))
+        
+        db.commit()
+        
+    except Exception as e:
+        db.rollback()
+        pesan = f"Error: {e}"
+        
     cursor.close()
     db.close()
-    pesan = f"Obat {dataObat['namaObat']} berhasil ditambahkan ke keranjang"
     return pesan
 
 def updateJumlahObatYangDiBeli(detailKeranjangId, jumlahBaru):
@@ -358,25 +400,6 @@ def hapusObatDariKeranjang(detailKeranjangId):
     cursor.close()
     db.close()
     return f"Obat {dataDetailKeranjang['namaObat']} telah berhasil dihapus dari keranjang"
-
-def kirimKeranjangKeKasir(keranjangId):
-    if not sessionKeranjangSaatIni['keranjangSaatIni']:
-        return 'Buat Keranjang Dulu'
-    
-    db = koneksiKeDatabase()
-    if db is None:
-        return "Gagal koneksi ke database"
-    
-    cursor = db.cursor()
-    queryKirim = "update keranjang set status = 'dikirim' where keranjangId = %s"
-    cursor.execute(queryKirim,(keranjangId,))
-
-    db.commit()
-    cursor.close()
-    db.close()
-    
-    sessionKeranjangSaatIni['keranjangSaatIni'] = None
-    return f"Keranjang dengan id {keranjangId} berhasil dikirim ke kasir"
 
 def batalkanKeranjang(keranjangId):
     if not sessionKeranjangSaatIni['keranjangSaatIni']:

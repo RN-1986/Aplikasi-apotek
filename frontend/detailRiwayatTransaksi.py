@@ -39,6 +39,25 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addWidget(self.label)
 
+        # Label for buyer name
+        self.label_namaPembeli = QLabel(self.centralwidget)
+        self.label_namaPembeli.setObjectName(u"label_namaPembeli")
+        font_buyer = QFont()
+        font_buyer.setPointSize(11)
+        self.label_namaPembeli.setFont(font_buyer)
+        self.label_namaPembeli.setStyleSheet(u"padding:4px 0px;")
+        self.verticalLayout.addWidget(self.label_namaPembeli)
+
+        # Label for total price (will be updated after loading detail)
+        self.label_totalHarga = QLabel(self.centralwidget)
+        self.label_totalHarga.setObjectName(u"label_totalHarga")
+        font_total = QFont()
+        font_total.setPointSize(11)
+        font_total.setBold(True)
+        self.label_totalHarga.setFont(font_total)
+        self.label_totalHarga.setStyleSheet(u"padding:4px 0px;")
+        self.verticalLayout.addWidget(self.label_totalHarga)
+
         self.tableWidget = QTableWidget(self.centralwidget)
         if (self.tableWidget.columnCount() < 5):
             self.tableWidget.setColumnCount(5)
@@ -130,6 +149,9 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"                                    DETAIL RIWAYAT TRANSAKSI", None))
+        # Default texts for buyer and total (will be replaced when loading data)
+        self.label_namaPembeli.setText(QCoreApplication.translate("MainWindow", u"Nama Pembeli: -", None))
+        self.label_totalHarga.setText(QCoreApplication.translate("MainWindow", u"Total: Rp 0", None))
         self.tableWidget.setColumnHidden(4, True)
         ___qtablewidgetitem = self.tableWidget.horizontalHeaderItem(0)
         ___qtablewidgetitem.setText(QCoreApplication.translate("MainWindow", u"Detail ID", None));
@@ -173,6 +195,17 @@ class DetailRiwayatWindow(QMainWindow):
             if isinstance(data, str):
                 QMessageBox.warning(self, "Peringatan", data)
                 return
+
+            if not data:
+                QMessageBox.warning(self, "Peringatan", "Tidak ada detail transaksi")
+                return
+            
+            # Determine buyer name from first row
+            first_row = data[0]
+            if isinstance(first_row, dict):
+                nama_pembeli = first_row.get('namaPembeli', '-')
+            else:
+                nama_pembeli = first_row[4] if len(first_row) > 4 else '-'
             
             # Set jumlah row
             self.ui.tableWidget.setRowCount(len(data))
@@ -202,8 +235,16 @@ class DetailRiwayatWindow(QMainWindow):
                 self.ui.tableWidget.setItem(row_idx, 3, QTableWidgetItem(f"Rp {subtotal:,}"))
                 self.ui.tableWidget.setItem(row_idx, 4, QTableWidgetItem(f"Rp {total_keseluruhan:,}"))
             
-            # Update label dengan total
-            self.ui.label.setText(f"DETAIL RIWAYAT TRANSAKSI - Total: Rp {total_keseluruhan:,}")
+            # Update labels for buyer and total
+            # Keep the main header label as-is and show buyer and total on separate lines
+            try:
+                self.ui.label_namaPembeli.setText(f"Nama Pembeli: {nama_pembeli}")
+            except Exception:
+                pass
+            try:
+                self.ui.label_totalHarga.setText(f"Total: Rp {total_keseluruhan:,}")
+            except Exception:
+                pass
             
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Gagal load detail: {e}")

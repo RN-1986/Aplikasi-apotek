@@ -32,9 +32,47 @@
      </widget>
     </item>
     <item>
+     <widget class="QLabel" name="label_2">
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Nama Pembeli:</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_3">
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>9</pointsize>
+        <italic>false</italic>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 700 9pt &quot;Segoe UI&quot;;</string>
+      </property>
+      <property name="text">
+       <string>Total:</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QTableWidget" name="tableWidget">
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 255, 255);</string>
+       <string notr="true">QHeaderView::section {
+    
+	background-color: rgb(50, 111, 172);
+    color: white;
+    font-weight: bold;
+    padding: 4px;
+    border: 1px solid #ccc;
+}
+</string>
       </property>
       <attribute name="horizontalHeaderDefaultSectionSize">
        <number>117</number>

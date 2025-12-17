@@ -80,18 +80,6 @@ padding: 6px 8px;</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
-       <widget class="QLineEdit" name="lineEdit_5">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 10px;
-padding: 6px 8px;</string>
-        </property>
-       </widget>
-      </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_5">
         <property name="font">
@@ -217,8 +205,17 @@ padding: 6px 8px;</string>
         </property>
        </widget>
       </item>
+      <item row="4" column="1">
+       <widget class="QDateEdit" name="dateEdit">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(255, 255, 255);
+border-radius: 10px;
+padding: 6px 8px;</string>
+        </property>
+       </widget>
+      </item>
       <item row="5" column="1">
-       <widget class="QLineEdit" name="lineEdit_6">
+       <widget class="QDateEdit" name="dateEdit_2">
         <property name="styleSheet">
          <string notr="true">background-color: rgb(255, 255, 255);
 border-radius: 10px;
@@ -286,26 +283,24 @@ padding: 6px 8px;</string>
        <widget class="QPushButton" name="pushButton_simpan">
         <property name="styleSheet">
          <string notr="true">QPushButton { 
-background-color: rgb(49, 245, 46);
+background-color: rgb(255, 255, 0);	
 	border-radius: 5px;
-padding: 6px 8px; 
+padding: 8px 8px; 
 }
 
 /* Saat kursor hover */
 QPushButton:hover {
      /* warna saat hover */
-	background-color: rgb(85, 255, 127);
+	background-color: rgb(255, 255, 127);
     color: black;
 }
 
 /* Saat tombol ditekan */
 QPushButton:pressed {
      /* warna saat ditekan */
-		background-color: rgb(85, 255, 127);
+	background-color: rgb(255, 255, 127);
     color: black;
-}
-
-</string>
+}</string>
         </property>
         <property name="text">
          <string>Update</string>

@@ -181,9 +181,11 @@ def lihatSemuaTransaksi():
         select
             t.transaksiId,
             t.tanggalTransaksi,
+            COALESCE(k.namaPembeli, '-') as namaPembeli,
             u.username as Kasir,
             t.totalHarga
         from transaksi as t
+        left join keranjang k on t.keranjangId = k.keranjangId
         join user as u on t.kasirId = u.userId
         order by t.tanggalTransaksi desc
     '''    

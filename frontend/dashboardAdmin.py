@@ -411,8 +411,8 @@ class Ui_MainWindow(object):
         self.verticalLayout.addLayout(self.gridLayout_5)
 
         self.tableWidget_2 = QTableWidget(self.tab_2)
-        if (self.tableWidget_2.columnCount() < 4):
-            self.tableWidget_2.setColumnCount(4)
+        if (self.tableWidget_2.columnCount() < 5):
+            self.tableWidget_2.setColumnCount(5)
         __qtablewidgetitem7 = QTableWidgetItem()
         self.tableWidget_2.setHorizontalHeaderItem(0, __qtablewidgetitem7)
         __qtablewidgetitem8 = QTableWidgetItem()
@@ -421,6 +421,8 @@ class Ui_MainWindow(object):
         self.tableWidget_2.setHorizontalHeaderItem(2, __qtablewidgetitem9)
         __qtablewidgetitem10 = QTableWidgetItem()
         self.tableWidget_2.setHorizontalHeaderItem(3, __qtablewidgetitem10)
+        __qtablewidgetitem11 = QTableWidgetItem()
+        self.tableWidget_2.setHorizontalHeaderItem(4, __qtablewidgetitem11)
         self.tableWidget_2.setObjectName(u"tableWidget_2")
         self.tableWidget_2.setStyleSheet(u"QHeaderView::section {\n"
 "    background-color: rgb(125, 202, 211);\n"
@@ -500,7 +502,7 @@ class Ui_MainWindow(object):
         self.pushButton_keluar.setText(QCoreApplication.translate("MainWindow", u"Keluar", None))
         self.pushButton_delete.setText(QCoreApplication.translate("MainWindow", u"Delete Data -", None))
         self.pushButton_tambah.setText(QCoreApplication.translate("MainWindow", u"Tambah Data +", None))
-        self.pushButton_edit.setText(QCoreApplication.translate("MainWindow", u"Edit Data", None))
+        self.pushButton_edit.setText(QCoreApplication.translate("MainWindow", u"Update Obat", None))
         ___qtablewidgetitem = self.tableWidget.horizontalHeaderItem(0)
         ___qtablewidgetitem.setText(QCoreApplication.translate("MainWindow", u"ID Obat", None));
         ___qtablewidgetitem1 = self.tableWidget.horizontalHeaderItem(1)
@@ -530,9 +532,11 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem8 = self.tableWidget_2.horizontalHeaderItem(1)
         ___qtablewidgetitem8.setText(QCoreApplication.translate("MainWindow", u"Tanggal Transaksi", None));
         ___qtablewidgetitem9 = self.tableWidget_2.horizontalHeaderItem(2)
-        ___qtablewidgetitem9.setText(QCoreApplication.translate("MainWindow", u"Kasir", None));
+        ___qtablewidgetitem9.setText(QCoreApplication.translate("MainWindow", u"Nama Pembeli", None));
         ___qtablewidgetitem10 = self.tableWidget_2.horizontalHeaderItem(3)
-        ___qtablewidgetitem10.setText(QCoreApplication.translate("MainWindow", u"Total Harga(Rp)", None));
+        ___qtablewidgetitem10.setText(QCoreApplication.translate("MainWindow", u"Kasir", None));
+        ___qtablewidgetitem11 = self.tableWidget_2.horizontalHeaderItem(4)
+        ___qtablewidgetitem11.setText(QCoreApplication.translate("MainWindow", u"Total Harga(Rp)", None));
         self.pushButton_LihatDetail.setText(QCoreApplication.translate("MainWindow", u"Lihat Detail", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("MainWindow", u"Riwayat Transaksi", None))
         self.textBrowser.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
@@ -746,14 +750,16 @@ class DashboardAdmin(QMainWindow):
                         transaksi_id = str(d.get('transaksiId', ''))
                         self.ui.tableWidget_2.setItem(row, 0, QTableWidgetItem(transaksi_id))
                         self.ui.tableWidget_2.setItem(row, 1, QTableWidgetItem(str(d.get('tanggalTransaksi', ''))))
-                        self.ui.tableWidget_2.setItem(row, 2, QTableWidgetItem(str(d.get('Kasir', ''))))
-                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(f"Rp {d.get('totalHarga', 0):,}"))
+                        self.ui.tableWidget_2.setItem(row, 2, QTableWidgetItem(str(d.get('namaPembeli', '-'))))
+                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(str(d.get('Kasir', ''))))
+                        self.ui.tableWidget_2.setItem(row, 4, QTableWidgetItem(f"Rp {d.get('totalHarga', 0):,}"))
                     else:
                         transaksi_id = str(d[0])
                         self.ui.tableWidget_2.setItem(row, 0, QTableWidgetItem(transaksi_id))
                         self.ui.tableWidget_2.setItem(row, 1, QTableWidgetItem(str(d[1])))
                         self.ui.tableWidget_2.setItem(row, 2, QTableWidgetItem(str(d[2])))
-                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(f"Rp {d[3]:,}"))
+                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(str(d[3])))
+                        self.ui.tableWidget_2.setItem(row, 4, QTableWidgetItem(f"Rp {d[4]:,}"))
                 
                 # Connect double click untuk lihat detail
                 self.ui.tableWidget_2.doubleClicked.connect(self.open_detail_transaksi)
@@ -814,14 +820,16 @@ class DashboardAdmin(QMainWindow):
                     if isinstance(d, dict):
                         self.ui.tableWidget_2.setItem(row, 0, QTableWidgetItem(str(d.get('transaksiId', ''))))
                         self.ui.tableWidget_2.setItem(row, 1, QTableWidgetItem(str(d.get('tanggalTransaksi', ''))))
-                        self.ui.tableWidget_2.setItem(row, 2, QTableWidgetItem(str(d.get('Kasir', ''))))
+                        self.ui.tableWidget_2.setItem(row, 2, QTableWidgetItem(str(d.get('namaPembeli', '-'))))
+                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(str(d.get('Kasir', ''))))
                         total_harga = d.get('totalHarga', 0)
-                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(f"Rp {total_harga:,}"))
+                        self.ui.tableWidget_2.setItem(row, 4, QTableWidgetItem(f"Rp {total_harga:,}"))
                     else:
                         self.ui.tableWidget_2.setItem(row, 0, QTableWidgetItem(str(d[0])))
                         self.ui.tableWidget_2.setItem(row, 1, QTableWidgetItem(str(d[1])))
                         self.ui.tableWidget_2.setItem(row, 2, QTableWidgetItem(str(d[2])))
-                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(f"Rp {d[3]:,}"))
+                        self.ui.tableWidget_2.setItem(row, 3, QTableWidgetItem(str(d[3])))
+                        self.ui.tableWidget_2.setItem(row, 4, QTableWidgetItem(f"Rp {d[4]:,}"))
             
             if not found:
                 jam_info = f" jam {jam_pilihan}" if jam_pilihan >= 0 else ""

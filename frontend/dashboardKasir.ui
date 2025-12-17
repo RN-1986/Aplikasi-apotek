@@ -69,7 +69,7 @@ QTabWidget::pane {
 </string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -116,6 +116,149 @@ QTabWidget::pane {
             <string>Status</string>
            </property>
           </column>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QFrame" name="frame">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>450</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(125, 202, 211);
+border-radius: 5px;
+</string>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QGridLayout" name="gridLayout">
+           <item row="2" column="4">
+            <widget class="QPushButton" name="pushButton_Batalkan">
+             <property name="styleSheet">
+              <string notr="true">QPushButton { 
+border-radius: 5px;
+padding: 8px 20px; 
+	background-color: rgb(255, 0, 0);
+    color: white;
+min-width: 60px;
+}
+
+/* Saat kursor hover */
+QPushButton:hover {
+     /* warna saat hover */
+background-color:rgb(213, 0, 0);
+	color: white;
+}
+
+/* Saat tombol ditekan */
+QPushButton:pressed {
+     /* warna saat ditekan */
+background-color: rgb(213, 0, 0);
+	color: white;
+}</string>
+             </property>
+             <property name="text">
+              <string>Batalkan Pemesanan</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="3">
+            <widget class="QPushButton" name="pushButton_Bayar">
+             <property name="styleSheet">
+              <string notr="true">QPushButton { 
+background-color: rgb(49, 245, 46);
+	border-radius: 5px;
+padding: 8px 8px; 
+}
+
+/* Saat kursor hover */
+QPushButton:hover {
+     /* warna saat hover */
+	background-color: rgb(85, 255, 127);
+    color: black;
+}
+
+/* Saat tombol ditekan */
+QPushButton:pressed {
+     /* warna saat ditekan */
+		background-color: rgb(85, 255, 127);
+    color: black;
+}
+
+</string>
+             </property>
+             <property name="text">
+              <string>Bayar</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QPushButton" name="pushButton_lihatDetail">
+             <property name="styleSheet">
+              <string notr="true">QPushButton { 
+	background-color: rgb(255, 255, 255);
+    color: black;
+	border-radius: 5px;
+    padding: 8px 20px;
+}
+
+/* Saat kursor hover */
+QPushButton:hover {
+     /* warna saat hover */
+	color: rgb(255, 255, 255);
+	background-color: rgb(36, 79, 124);
+}
+
+/* Saat tombol ditekan */
+QPushButton:pressed {
+     /* warna saat ditekan */
+	color: rgb(255, 255, 255);
+	background-color: rgb(36, 79, 124);
+}
+</string>
+             </property>
+             <property name="text">
+              <string>Lihat Detail</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QPushButton" name="pushButton_refresh">
+             <property name="styleSheet">
+              <string notr="true">QPushButton { 
+	background-color: rgb(255, 255, 255);
+    color: black;
+	border-radius: 5px;
+    padding: 8px 20px;
+}
+
+/* Saat kursor hover */
+QPushButton:hover {
+     /* warna saat hover */
+	color: rgb(255, 255, 255);
+	background-color: rgb(36, 79, 124);
+}
+
+/* Saat tombol ditekan */
+QPushButton:pressed {
+     /* warna saat ditekan */
+	color: rgb(255, 255, 255);
+	background-color: rgb(36, 79, 124);
+}
+</string>
+             </property>
+             <property name="text">
+              <string>Refresh</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </item>
        </layout>
@@ -169,149 +312,6 @@ QTabWidget::pane {
         </item>
        </layout>
       </widget>
-     </widget>
-    </item>
-    <item>
-     <widget class="QFrame" name="frame">
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>450</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(125, 202, 211);
-border-radius: 5px;
-</string>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="2" column="4">
-        <widget class="QPushButton" name="pushButton_Batalkan">
-         <property name="styleSheet">
-          <string notr="true">QPushButton { 
-border-radius: 5px;
-padding: 8px 20px; 
-	background-color: rgb(255, 0, 0);
-    color: white;
-min-width: 60px;
-}
-
-/* Saat kursor hover */
-QPushButton:hover {
-     /* warna saat hover */
-background-color:rgb(213, 0, 0);
-	color: white;
-}
-
-/* Saat tombol ditekan */
-QPushButton:pressed {
-     /* warna saat ditekan */
-background-color: rgb(213, 0, 0);
-	color: white;
-}</string>
-         </property>
-         <property name="text">
-          <string>Batalkan Pemesanan</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="3">
-        <widget class="QPushButton" name="pushButton_Bayar">
-         <property name="styleSheet">
-          <string notr="true">QPushButton { 
-background-color: rgb(49, 245, 46);
-	border-radius: 5px;
-padding: 8px 8px; 
-}
-
-/* Saat kursor hover */
-QPushButton:hover {
-     /* warna saat hover */
-	background-color: rgb(85, 255, 127);
-    color: black;
-}
-
-/* Saat tombol ditekan */
-QPushButton:pressed {
-     /* warna saat ditekan */
-		background-color: rgb(85, 255, 127);
-    color: black;
-}
-
-</string>
-         </property>
-         <property name="text">
-          <string>Bayar</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="QPushButton" name="pushButton_lihatDetail">
-         <property name="styleSheet">
-          <string notr="true">QPushButton { 
-	background-color: rgb(255, 255, 255);
-    color: black;
-	border-radius: 5px;
-    padding: 8px 20px;
-}
-
-/* Saat kursor hover */
-QPushButton:hover {
-     /* warna saat hover */
-	color: rgb(255, 255, 255);
-	background-color: rgb(36, 79, 124);
-}
-
-/* Saat tombol ditekan */
-QPushButton:pressed {
-     /* warna saat ditekan */
-	color: rgb(255, 255, 255);
-	background-color: rgb(36, 79, 124);
-}
-</string>
-         </property>
-         <property name="text">
-          <string>Lihat Detail</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QPushButton" name="pushButton_refresh">
-         <property name="styleSheet">
-          <string notr="true">QPushButton { 
-	background-color: rgb(255, 255, 255);
-    color: black;
-	border-radius: 5px;
-    padding: 8px 20px;
-}
-
-/* Saat kursor hover */
-QPushButton:hover {
-     /* warna saat hover */
-	color: rgb(255, 255, 255);
-	background-color: rgb(36, 79, 124);
-}
-
-/* Saat tombol ditekan */
-QPushButton:pressed {
-     /* warna saat ditekan */
-	color: rgb(255, 255, 255);
-	background-color: rgb(36, 79, 124);
-}
-</string>
-         </property>
-         <property name="text">
-          <string>Refresh</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
      </widget>
     </item>
     <item alignment="Qt::AlignRight">

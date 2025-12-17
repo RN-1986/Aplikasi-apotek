@@ -211,9 +211,12 @@ def lihatDetailTransaksi(transaksiId):
             d.detailId,
             o.namaObat,
             d.jumlah,
-            d.subtotal
+            d.subtotal,
+            COALESCE(k.namaPembeli, '-') as namaPembeli
         from detailtransaksi as d
         join obat as o on d.obatId = o.obatId
+        join transaksi as t on d.transaksiId = t.transaksiId
+        left join keranjang as k on t.keranjangId = k.keranjangId
         where d.transaksiId = %s
     '''
     cursor.execute(query,(transaksiId,))

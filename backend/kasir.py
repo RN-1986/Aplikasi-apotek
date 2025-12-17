@@ -232,43 +232,17 @@ def tambahObatKeKeranjang(keranjangId, obatId, jumlah):
         queryTambahKeKeranjang = 'insert into keranjangdetail(keranjangId, obatId, jumlah, subtotal) values(%s,%s,%s,%s)'
         cursor.execute(queryTambahKeKeranjang, (keranjangId, obatId, jumlah, subTotal))
     
+    # Update Stok Gudang & Total Harga Keranjang
     queryKurangiStok = 'update obat set stok = stok - %s where obatId = %s'
     cursor.execute(queryKurangiStok, (jumlah, dataObat['obatId']))
-        return 'Stok obat tidak mencukupi'
     
-    # 5. LOGIKA CEK DUPLIKASI (Sama kayak Apoteker)
-    # Cek apakah obat ini UDAH ADA di keranjang?
-    queryCekDouble = "SELECT detailKeranjangId, jumlah FROM keranjangdetail WHERE keranjangId = %s AND obatId = %s"
-    cursor.execute(queryCekDouble, (keranjangId, obatId))
-    existingItem = cursor.fetchone()
+    queryUpdateTotalPembayaranDiKeranjang = 'update keranjang set totalHarga = totalHarga + %s where keranjangId = %s'
+    cursor.execute(queryUpdateTotalPembayaranDiKeranjang, (subTotal, keranjangId))
     
-    try:
-        subTotal = float(dataObat['harga']) * jumlah
-        
-        if existingItem:
-            # KALAU UDAH ADA -> Update jumlahnya
-            jumlahBaru = existingItem['jumlah'] + jumlah
-            cursor.execute("UPDATE keranjangdetail SET jumlah = %s, subtotal = subtotal + %s WHERE detailKeranjangId = %s", 
-                           (jumlahBaru, subTotal, existingItem['detailKeranjangId']))
-            pesan = f"Jumlah obat {dataObat['namaObat']} berhasil ditambahkan"
-        else:
-            # KALAU BELUM ADA -> Insert Baru
-            queryTambahKeKeranjang = 'insert into keranjangdetail(keranjangId, obatId, jumlah, subtotal) values(%s,%s,%s,%s)'
-            cursor.execute(queryTambahKeKeranjang,(keranjangId, obatId, jumlah, subTotal))
-            pesan = f"Obat {dataObat['namaObat']} berhasil ditambahkan ke keranjang"
-    
-        # 6. Update Stok Gudang & Total Harga Keranjang
-        cursor.execute('update obat set stok = stok - %s where obatId = %s', (jumlah, dataObat['obatId']))
-        cursor.execute('update keranjang set totalHarga = totalHarga + %s where keranjangId = %s', (subTotal, keranjangId))
-        
-        db.commit()
-        
-    except Exception as e:
-        db.rollback()
-        pesan = f"Error: {e}"
-        
+    db.commit()
     cursor.close()
     db.close()
+    pesan = f"Obat {dataObat['namaObat']} berhasil ditambahkan ke keranjang"
     return pesan
 
 def updateJumlahObatYangDiBeli(detailKeranjangId, jumlahBaru):

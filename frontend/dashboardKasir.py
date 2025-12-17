@@ -561,9 +561,9 @@ class DashboardKasir(QMainWindow):
             now = datetime.now()
             struk_text = f"""
             <div style='font-family: Courier New; padding: 20px;'>
-                <h2 style='text-align: center; margin: 0;'>APOTEK XYZ</h2>
-                <p style='text-align: center; margin: 5px 0;'>Jl. Contoh No. 123</p>
-                <p style='text-align: center; margin: 5px 0;'>Telp: (021) 12345678</p>
+                <h2 style='text-align: center; margin: 0;'>APOTEK PRIMA</h2>
+                <p style='text-align: center; margin: 5px 0;'>Jl Hayam Wuruk, No.20C, Balowerti, Kota Kediri</p>
+                <p style='text-align: center; margin: 5px 0;'>Telp: (+62) 83863901736</p>
                 <hr style='border: 1px dashed #000;'>
                 
                 <p style='margin: 5px 0;'>Tanggal: {now.strftime('%d-%m-%Y %H:%M:%S')}</p>
@@ -585,11 +585,11 @@ class DashboardKasir(QMainWindow):
             total = 0
             for item in data_keranjang.get('detail', []):
                 if isinstance(item, dict):
-                    nama = item.get('namaObat', '')
+                    nama = item.get('namaObat', '').title()
                     jumlah = item.get('jumlah', 0)
                     subtotal = item.get('subtotal', 0)
                 else:
-                    nama = item[2] if len(item) > 2 else ''
+                    nama = (item[2] if len(item) > 2 else '').title()
                     jumlah = item[4] if len(item) > 4 else 0
                     subtotal = item[5] if len(item) > 5 else 0
                 

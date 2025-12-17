@@ -17,10 +17,12 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QComboBox, QLabel, QLineEdit,
     QMainWindow, QMenuBar, QPushButton, QSizePolicy,
-    QStatusBar, QVBoxLayout, QWidget)
+    QStatusBar, QVBoxLayout, QWidget, QMessageBox)
 import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "qrc"))
 import logo_apotek_rc
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+from backend.register import register as backend_register
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -100,6 +102,7 @@ class Ui_MainWindow(object):
         self.lineEdit_password.setStyleSheet(u"border-radius: 5px;\n"
 "background-color: rgb(226, 226, 226);\n"
 "padding: 6px 8px;")
+        self.lineEdit_password.setEchoMode(QLineEdit.Password)
 
         self.verticalLayout.addWidget(self.lineEdit_password)
 
@@ -113,6 +116,7 @@ class Ui_MainWindow(object):
         self.lineEdit_konfirmasipass.setStyleSheet(u"border-radius: 5px;\n"
 "background-color: rgb(226, 226, 226);\n"
 "padding: 6px 8px;")
+        self.lineEdit_konfirmasipass.setEchoMode(QLineEdit.Password)
 
         self.verticalLayout.addWidget(self.lineEdit_konfirmasipass)
 
@@ -207,6 +211,15 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
 
         QMetaObject.connectSlotsByName(MainWindow)
+        
+        # Koneksi tombol Register
+        self.pushButton_register.clicked.connect(lambda: self.proses_register(MainWindow))
+        
+        # Koneksi tombol Kembali
+        self.pushButton_kembali.clicked.connect(MainWindow.close)
+        
+        # Enter key di field terakhir juga trigger register
+        self.lineEdit_konfirmasipass.returnPressed.connect(lambda: self.proses_register(MainWindow))
     # setupUi
 
     def retranslateUi(self, MainWindow):
@@ -223,10 +236,46 @@ class Ui_MainWindow(object):
         self.comboBox_pilihRole.setItemText(0, QCoreApplication.translate("MainWindow", u"Admin", None))
         self.comboBox_pilihRole.setItemText(1, QCoreApplication.translate("MainWindow", u"Apoteker", None))
         self.comboBox_pilihRole.setItemText(2, QCoreApplication.translate("MainWindow", u"Kasir", None))
-
         self.pushButton_register.setText(QCoreApplication.translate("MainWindow", u"Register", None))
         self.pushButton_kembali.setText(QCoreApplication.translate("MainWindow", u"\u21a9", None))
     # retranslateUi
+
+    def proses_register(self, MainWindow):
+        """Proses registrasi user baru"""
+        nama = self.lineEdit_nama.text().strip()
+        username = self.lineEdit_username.text().strip()
+        password = self.lineEdit_password.text().strip()
+        konfirmasi = self.lineEdit_konfirmasipass.text().strip()
+        role = self.comboBox_pilihRole.currentText().lower()
+
+        # Validasi semua field harus diisi
+        if not all([nama, username, password, konfirmasi]):
+            QMessageBox.warning(MainWindow, "Peringatan", "Semua field harus diisi!")
+            return
+
+        # Validasi password match
+        if password != konfirmasi:
+            QMessageBox.warning(MainWindow, "Peringatan", "Password dan konfirmasi tidak cocok!")
+            return
+
+        # Proses register ke backend
+        try:
+            pesan = backend_register(nama, username, password, role)
+            
+            if "berhasil" in pesan.lower():
+                QMessageBox.information(MainWindow, "Berhasil", pesan)
+                # Clear form setelah berhasil
+                self.lineEdit_nama.clear()
+                self.lineEdit_username.clear()
+                self.lineEdit_password.clear()
+                self.lineEdit_konfirmasipass.clear()
+                self.comboBox_pilihRole.setCurrentIndex(0)
+                # Tutup window register
+                MainWindow.close()
+            else:
+                QMessageBox.warning(MainWindow, "Gagal", pesan)
+        except Exception as e:
+            QMessageBox.critical(MainWindow, "Error", f"Terjadi kesalahan: {str(e)}")
 
 
 if __name__ == "__main__":

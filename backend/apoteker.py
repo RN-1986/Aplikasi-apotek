@@ -16,9 +16,12 @@ def cariObatLayakJual(keyword=""):
     # Kalau keyword kosong, tampilin semua yang AMAN
     if not keyword:
         query = """
-            SELECT * FROM obat 
-            WHERE kadaluarsa >= CURDATE() 
-            AND stok > 0
+            SELECT o.obatId, o.namaObat, o.jenis, o.kategoriId, o.harga, o.stok, 
+                   o.tgl_produksi, o.kadaluarsa, k.namaKategori
+            FROM obat o
+            LEFT JOIN kategoriobat k ON o.kategoriId = k.kategoriId
+            WHERE o.kadaluarsa >= CURDATE() 
+            AND o.stok > 0
         """
         cursor.execute(query)
     else:
@@ -26,16 +29,22 @@ def cariObatLayakJual(keyword=""):
         try:
             obatId = int(keyword)
             query = """
-                SELECT * FROM obat 
-                WHERE obatId = %s 
-                AND kadaluarsa >= CURDATE()
+                SELECT o.obatId, o.namaObat, o.jenis, o.kategoriId, o.harga, o.stok, 
+                       o.tgl_produksi, o.kadaluarsa, k.namaKategori
+                FROM obat o
+                LEFT JOIN kategoriobat k ON o.kategoriId = k.kategoriId
+                WHERE o.obatId = %s 
+                AND o.kadaluarsa >= CURDATE()
             """
             cursor.execute(query, (obatId,))
         except ValueError:
             query = """
-                SELECT * FROM obat 
-                WHERE namaObat LIKE %s 
-                AND kadaluarsa >= CURDATE()
+                SELECT o.obatId, o.namaObat, o.jenis, o.kategoriId, o.harga, o.stok, 
+                       o.tgl_produksi, o.kadaluarsa, k.namaKategori
+                FROM obat o
+                LEFT JOIN kategoriobat k ON o.kategoriId = k.kategoriId
+                WHERE o.namaObat LIKE %s 
+                AND o.kadaluarsa >= CURDATE()
             """
             cursor.execute(query, (f"%{keyword}%",))
     
@@ -124,8 +133,9 @@ def lihatKeranjang(keranjangId):
     return dataKeranjang
 
 def tambahObatKeKeranjang(keranjangId, obatId, jumlah):
-    if not sessionKeranjangSaatIni['keranjangSaatIni']:
-        return 'Buat Keranjang Dulu'
+    # Validasi keranjangId
+    if not keranjangId:
+        return 'Keranjang ID tidak valid'
     
     if jumlah <= 0:
         return "Jumlah obat tidak boleh kurang dari 1"
@@ -157,10 +167,24 @@ def tambahObatKeKeranjang(keranjangId, obatId, jumlah):
         pesan = 'Stok obat tidak mencukupi'
         return pesan
     
-    subTotal =  float(dataObat['harga']) * jumlah
+    # CEK APAKAH OBAT SUDAH ADA DI KERANJANG
+    queryCekObatDiKeranjang = 'select * from keranjangdetail where keranjangId = %s and obatId = %s'
+    cursor.execute(queryCekObatDiKeranjang, (keranjangId, obatId))
+    dataObatDiKeranjang = cursor.fetchone()
     
-    queryTambahKeKeranjang = 'insert into keranjangdetail(keranjangId, obatId, jumlah, subtotal) values(%s,%s,%s,%s)'
-    cursor.execute(queryTambahKeKeranjang,(keranjangId, obatId, jumlah, subTotal))
+    subTotal = float(dataObat['harga']) * jumlah
+    
+    if dataObatDiKeranjang:
+        # OBAT SUDAH ADA, UPDATE JUMLAHNYA
+        jumlahBaru = dataObatDiKeranjang['jumlah'] + jumlah
+        subtotalBaru = float(dataObatDiKeranjang['subtotal']) + subTotal
+        
+        queryUpdateKeranjang = 'update keranjangdetail set jumlah = %s, subtotal = %s where detailKeranjangId = %s'
+        cursor.execute(queryUpdateKeranjang, (jumlahBaru, subtotalBaru, dataObatDiKeranjang['detailKeranjangId']))
+    else:
+        # OBAT BELUM ADA, INSERT BARU
+        queryTambahKeKeranjang = 'insert into keranjangdetail(keranjangId, obatId, jumlah, subtotal) values(%s,%s,%s,%s)'
+        cursor.execute(queryTambahKeKeranjang, (keranjangId, obatId, jumlah, subTotal))
     
     queryKurangiStok = 'update obat set stok = stok - %s where obatId = %s'
     cursor.execute(queryKurangiStok, (jumlah, dataObat['obatId']))
@@ -336,15 +360,13 @@ def batalkanKeranjang(keranjangId):
         for item in daftarObat:
             queryKembalikanStok = 'update obat set stok = stok + %s where obatId = %s'
             cursor.execute(queryKembalikanStok,(item['jumlah'], item['obatId']))
-            
-        # queryHapusDetailKeranjang = 'delete from keranjangdetail where keranjangId = %s'
-        # cursor.execute(queryHapusDetailKeranjang,(keranjangId,))
         
-        # queryHapusKeranjang = 'delete from keranjang where keranjangId = %s'
-        # cursor.execute(queryHapusKeranjang,(keranjangId,))
+        # Update status keranjang menjadi 'dibatalkan'
+        queryUpdateStatus = "update keranjang set status = 'dibatalkan' where keranjangId = %s"
+        cursor.execute(queryUpdateStatus,(keranjangId,))
         
         db.commit()
-        pesan = f"Keranjang dengan id {keranjangId} berhasil di batalkan"
+        pesan = f"Keranjang dengan id {keranjangId} berhasil dibatalkan"
     except Exception as e:
         db.rollback()
         pesan = f"Gagal membatalkan keranjang : {e}"

@@ -198,10 +198,24 @@ def tambahObatKeKeranjang(keranjangId, obatId, jumlah):
         pesan = 'Stok obat tidak mencukupi'
         return pesan
     
-    subTotal =  float(dataObat['harga']) * jumlah
+    # CEK APAKAH OBAT SUDAH ADA DI KERANJANG
+    queryCekObatDiKeranjang = 'select * from keranjangdetail where keranjangId = %s and obatId = %s'
+    cursor.execute(queryCekObatDiKeranjang, (keranjangId, obatId))
+    dataObatDiKeranjang = cursor.fetchone()
     
-    queryTambahKeKeranjang = 'insert into keranjangdetail(keranjangId, obatId, jumlah, subtotal) values(%s,%s,%s,%s)'
-    cursor.execute(queryTambahKeKeranjang,(keranjangId, obatId, jumlah, subTotal))
+    subTotal = float(dataObat['harga']) * jumlah
+    
+    if dataObatDiKeranjang:
+        # OBAT SUDAH ADA, UPDATE JUMLAHNYA
+        jumlahBaru = dataObatDiKeranjang['jumlah'] + jumlah
+        subtotalBaru = float(dataObatDiKeranjang['subtotal']) + subTotal
+        
+        queryUpdateKeranjang = 'update keranjangdetail set jumlah = %s, subtotal = %s where detailKeranjangId = %s'
+        cursor.execute(queryUpdateKeranjang, (jumlahBaru, subtotalBaru, dataObatDiKeranjang['detailKeranjangId']))
+    else:
+        # OBAT BELUM ADA, INSERT BARU
+        queryTambahKeKeranjang = 'insert into keranjangdetail(keranjangId, obatId, jumlah, subtotal) values(%s,%s,%s,%s)'
+        cursor.execute(queryTambahKeKeranjang, (keranjangId, obatId, jumlah, subTotal))
     
     queryKurangiStok = 'update obat set stok = stok - %s where obatId = %s'
     cursor.execute(queryKurangiStok, (jumlah, dataObat['obatId']))

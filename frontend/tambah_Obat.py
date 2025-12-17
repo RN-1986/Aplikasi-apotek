@@ -27,6 +27,7 @@ class Ui_MainWindow(object):
         MainWindow.resize(453, 415)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
+        self.centralwidget.setStyleSheet(u"background-color: rgb(230, 230, 230);")
         self.verticalLayout = QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.label = QLabel(self.centralwidget)
@@ -264,7 +265,7 @@ class Ui_MainWindow(object):
 "background-color: rgb(213, 0, 0);\n"
 "	color: white;\n"
 "}")
-
+ 
         self.gridLayout.addWidget(self.pushButton_batal, 0, 0, 1, 1)
 
         self.pushButton_simpan = QPushButton(self.centralwidget)
@@ -355,8 +356,8 @@ class TambahObatWindow(QMainWindow):
         """Simpan data obat baru"""
         try:
             # Ambil data dari form
-            nama_obat = self.ui.lineEdit.text().strip()
-            jenis = self.ui.lineEdit_2.text().strip()
+            nama_obat = self.ui.lineEdit.text().strip().title()
+            jenis = self.ui.lineEdit_2.text().strip().title()
             harga = self.ui.lineEdit_3.text().strip()
             stok = self.ui.lineEdit_4.text().strip()
             tgl_produksi = self.ui.lineEdit_6.date().toString("yyyy-MM-dd")

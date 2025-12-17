@@ -17,20 +17,24 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QGridLayout, QHeaderView, QLabel,
     QMainWindow, QMenuBar, QPushButton, QSizePolicy,
-    QStatusBar, QTableWidget, QTableWidgetItem, QVBoxLayout,
-    QWidget)
+    QStatusBar, QTableWidget, QTableWidgetItem, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(573, 509)
-        MainWindow.resize(666, 526)
+        MainWindow.resize(769, 526)
         MainWindow.setStyleSheet(u"")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.verticalLayout = QVBoxLayout(self.centralwidget)
-        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.centralwidget.setStyleSheet(u"background-color: rgb(255, 255, 255);")
+        self.gridLayout_2 = QGridLayout(self.centralwidget)
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.label_3 = QLabel(self.centralwidget)
+        self.label_3.setObjectName(u"label_3")
+
+        self.gridLayout_2.addWidget(self.label_3, 2, 0, 1, 1)
+
         self.label = QLabel(self.centralwidget)
         self.label.setObjectName(u"label")
         font = QFont()
@@ -39,7 +43,7 @@ class Ui_MainWindow(object):
         self.label.setFont(font)
         self.label.setStyleSheet(u"")
 
-        self.verticalLayout.addWidget(self.label)
+        self.gridLayout_2.addWidget(self.label, 0, 0, 1, 7)
 
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
@@ -53,23 +57,28 @@ class Ui_MainWindow(object):
 
         self.label_namaPembeli = QLabel(self.centralwidget)
         self.label_namaPembeli.setObjectName(u"label_namaPembeli")
-        self.label_namaPembeli.setStyleSheet(u"background-color: rgb(255, 255, 255);\n"
+        self.label_namaPembeli.setStyleSheet(u"background-color: rgb(230, 230, 230);\n"
 "border-radius: 5px;\n"
-"padding: 6px 8px; \n"
-"alternate-background-color: rgb(187, 255, 253);")
+"padding: 6px 8px;")
 
         self.gridLayout.addWidget(self.label_namaPembeli, 0, 1, 1, 1)
 
+        self.label_4 = QLabel(self.centralwidget)
+        self.label_4.setObjectName(u"label_4")
+        self.label_4.setFont(font1)
 
-        self.verticalLayout.addLayout(self.gridLayout)
+        self.gridLayout.addWidget(self.label_4, 1, 0, 1, 1)
 
-        self.tableWidget = QTableWidget(self.centralwidget)
-        if (self.tableWidget.columnCount() < 4):
-            self.tableWidget.setColumnCount(4)
-        self.label_3 = QLabel(self.centralwidget)
-        self.label_3.setObjectName(u"label_3")
+        self.label_totalPembelian = QLabel(self.centralwidget)
+        self.label_totalPembelian.setObjectName(u"label_totalPembelian")
+        self.label_totalPembelian.setStyleSheet(u"background-color: rgb(230, 230, 230);\n"
+"border-radius: 5px;\n"
+"padding: 6px 8px;")
 
-        self.verticalLayout.addWidget(self.label_3)
+        self.gridLayout.addWidget(self.label_totalPembelian, 1, 1, 1, 1)
+
+
+        self.gridLayout_2.addLayout(self.gridLayout, 1, 0, 1, 1)
 
         self.tableWidget = QTableWidget(self.centralwidget)
         if (self.tableWidget.columnCount() < 7):
@@ -82,13 +91,6 @@ class Ui_MainWindow(object):
         self.tableWidget.setHorizontalHeaderItem(2, __qtablewidgetitem2)
         __qtablewidgetitem3 = QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(3, __qtablewidgetitem3)
-        self.tableWidget.setObjectName(u"tableWidget")
-        self.tableWidget.setStyleSheet(u"background-color: rgb(255, 255, 255);\n"
-"border-radius: 5px;")
-        self.tableWidget.horizontalHeader().setDefaultSectionSize(138)
-
-        self.verticalLayout.addWidget(self.tableWidget)
-
         __qtablewidgetitem4 = QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(4, __qtablewidgetitem4)
         __qtablewidgetitem5 = QTableWidgetItem()
@@ -96,64 +98,61 @@ class Ui_MainWindow(object):
         __qtablewidgetitem6 = QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(6, __qtablewidgetitem6)
         self.tableWidget.setObjectName(u"tableWidget")
-        self.tableWidget.setStyleSheet(u"background-color: rgb(255, 255, 255);\n"
-"border-radius: 5px;")
+        self.tableWidget.setStyleSheet(u"QTableWidget {\n"
+"    background-color: rgb(255, 255, 255);\n"
+"    border-radius: 5px;\n"
+"    selection-background-color: rgb(173, 216, 230);\n"
+"    selection-color: black;\n"
+"    gridline-color: rgb(200, 200, 200);\n"
+"}\n"
+"QTableWidget::item:selected {\n"
+"    background-color: rgb(173, 216, 230);\n"
+"    color: black;\n"
+"}\n"
+"QHeaderView::section {\n"
+"    background-color: rgb(70, 130, 180);\n"
+"    color: white;\n"
+"    padding: 5px;\n"
+"    border: none;\n"
+"    border-right: 1px solid rgb(100, 149, 237);\n"
+"    border-bottom: 2px solid rgb(100, 149, 237);\n"
+"    font-weight: bold;\n"
+"}\n"
+"QHeaderView {\n"
+"    background-color: transparent;\n"
+"}\n"
+"QTableView::corner {\n"
+"    background-color: rgb(70, 130, 180);\n"
+"}")
         self.tableWidget.horizontalHeader().setDefaultSectionSize(92)
+        self.tableWidget.horizontalHeader().setStretchLastSection(True)
+        self.tableWidget.verticalHeader().setDefaultSectionSize(40)
 
-        self.verticalLayout.addWidget(self.tableWidget)
+        self.gridLayout_2.addWidget(self.tableWidget, 3, 0, 1, 7)
 
-        self.gridLayout_buttons = QGridLayout()
-        self.gridLayout_buttons.setObjectName(u"gridLayout_buttons")
-        
-        self.pushButton_updateKeranjang = QPushButton(self.centralwidget)
-        self.pushButton_updateKeranjang.setObjectName(u"pushButton_updateKeranjang")
-        self.pushButton_updateKeranjang.setStyleSheet(u"QPushButton { \n"
-"border-radius: 5px;\n"
+        self.pushButton_updateDataKeranjang = QPushButton(self.centralwidget)
+        self.pushButton_updateDataKeranjang.setObjectName(u"pushButton_updateDataKeranjang")
+        self.pushButton_updateDataKeranjang.setStyleSheet(u"QPushButton { \n"
+"background-color: rgb(255, 255, 0);	\n"
+"	border-radius: 5px;\n"
 "padding: 6px 8px; \n"
-"	background-color: rgb(125, 202, 211);\n"
-"    color: white;\n"
 "}\n"
 "\n"
 "/* Saat kursor hover */\n"
 "QPushButton:hover {\n"
 "     /* warna saat hover */\n"
-"	color: rgb(255, 255, 255);\n"
-"	background-color: rgb(36, 79, 124);\n"
+"	background-color: rgb(255, 255, 127);\n"
+"    color: black;\n"
 "}\n"
 "\n"
 "/* Saat tombol ditekan */\n"
 "QPushButton:pressed {\n"
 "     /* warna saat ditekan */\n"
-"	color: rgb(255, 255, 255);\n"
-"	background-color: rgb(36, 79, 124);\n"
+"	background-color: rgb(255, 255, 127);\n"
+"    color: black;\n"
 "}")
-        self.gridLayout_buttons.addWidget(self.pushButton_updateKeranjang, 0, 0, 1, 1)
 
-        self.pushButton_hapusDataKeranjang = QPushButton(self.centralwidget)
-        self.pushButton_hapusDataKeranjang.setObjectName(u"pushButton_hapusDataKeranjang")
-        self.pushButton_hapusDataKeranjang.setStyleSheet(u"QPushButton { \n"
-"border-radius: 5px;\n"
-"padding: 6px 8px; \n"
-"	background-color: rgb(255, 0, 0);\n"
-"    color: white;\n"
-"}\n"
-"\n"
-"/* Saat kursor hover */\n"
-"QPushButton:hover {\n"
-"     /* warna saat hover */\n"
-"background-color:rgb(213, 0, 0);\n"
-"	color: white;\n"
-"}\n"
-"\n"
-"/* Saat tombol ditekan */\n"
-"QPushButton:pressed {\n"
-"     /* warna saat ditekan */\n"
-"background-color: rgb(213, 0, 0);\n"
-"	color: white;\n"
-"}")
-        self.gridLayout_buttons.addWidget(self.pushButton_hapusDataKeranjang, 0, 1, 1, 1)
-
-        self.verticalLayout.addLayout(self.gridLayout_buttons)
+        self.gridLayout_2.addWidget(self.pushButton_updateDataKeranjang, 4, 6, 1, 1)
 
         self.pushButton_kembali = QPushButton(self.centralwidget)
         self.pushButton_kembali.setObjectName(u"pushButton_kembali")
@@ -180,13 +179,63 @@ class Ui_MainWindow(object):
 "	color: white;\n"
 "}")
 
-        self.verticalLayout.addWidget(self.pushButton_kembali, 0, Qt.AlignRight)
+        self.gridLayout_2.addWidget(self.pushButton_kembali, 5, 6, 1, 1)
+
+        self.pushButton_tambahDataKeranjang = QPushButton(self.centralwidget)
+        self.pushButton_tambahDataKeranjang.setObjectName(u"pushButton_tambahDataKeranjang")
+        self.pushButton_tambahDataKeranjang.setStyleSheet(u"QPushButton { \n"
+"background-color: rgb(49, 245, 46);\n"
+"	border-radius: 5px;\n"
+"padding: 6px 8px; \n"
+"}\n"
+"\n"
+"/* Saat kursor hover */\n"
+"QPushButton:hover {\n"
+"     /* warna saat hover */\n"
+"	background-color: rgb(85, 255, 127);\n"
+"    color: black;\n"
+"}\n"
+"\n"
+"/* Saat tombol ditekan */\n"
+"QPushButton:pressed {\n"
+"     /* warna saat ditekan */\n"
+"		background-color: rgb(85, 255, 127);\n"
+"    color: black;\n"
+"}\n"
+"\n"
+"")
+
+        self.gridLayout_2.addWidget(self.pushButton_tambahDataKeranjang, 4, 5, 1, 1)
+
+        self.pushButton_hapusDataKeranjang = QPushButton(self.centralwidget)
+        self.pushButton_hapusDataKeranjang.setObjectName(u"pushButton_hapusDataKeranjang")
+        self.pushButton_hapusDataKeranjang.setStyleSheet(u"QPushButton { \n"
+"border-radius: 5px;\n"
+"padding: 6px 8px; \n"
+"	background-color: rgb(255, 0, 0);\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"/* Saat kursor hover */\n"
+"QPushButton:hover {\n"
+"     /* warna saat hover */\n"
+"background-color:rgb(213, 0, 0);\n"
+"	color: white;\n"
+"}\n"
+"\n"
+"/* Saat tombol ditekan */\n"
+"QPushButton:pressed {\n"
+"     /* warna saat ditekan */\n"
+"background-color: rgb(213, 0, 0);\n"
+"	color: white;\n"
+"}")
+
+        self.gridLayout_2.addWidget(self.pushButton_hapusDataKeranjang, 4, 4, 1, 1, Qt.AlignHCenter)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 573, 22))
-        self.menubar.setGeometry(QRect(0, 0, 666, 22))
+        self.menubar.setGeometry(QRect(0, 0, 769, 22))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -199,21 +248,18 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.label.setText(QCoreApplication.translate("MainWindow", u"Detail Data Keranjang", None))
-        self.label_2.setText(QCoreApplication.translate("MainWindow", u"Nama Pembeli  :", None))
-        self.label_namaPembeli.setText("")
+        self.label_3.setText(QCoreApplication.translate("MainWindow", u"Silakan pilih data obat yang akan dihapus dari keranjang!", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"Detail Data Keranjang Apoteker", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"Nama Pembeli  :", None))
         self.label_namaPembeli.setText("")
-        self.label_3.setText(QCoreApplication.translate("MainWindow", u"Silakan pilih data obat yang akan dihapus dari keranjang!", None))
+        self.label_4.setText(QCoreApplication.translate("MainWindow", u"Total Pembelian  :", None))
+        self.label_totalPembelian.setText("")
+        self.tableWidget.setColumnHidden(6, True)
         ___qtablewidgetitem = self.tableWidget.horizontalHeaderItem(0)
         ___qtablewidgetitem.setText(QCoreApplication.translate("MainWindow", u"Keranjang ID", None));
         ___qtablewidgetitem1 = self.tableWidget.horizontalHeaderItem(1)
         ___qtablewidgetitem1.setText(QCoreApplication.translate("MainWindow", u"Nama Obat", None));
         ___qtablewidgetitem2 = self.tableWidget.horizontalHeaderItem(2)
-        ___qtablewidgetitem2.setText(QCoreApplication.translate("MainWindow", u"Jumlah", None));
-        ___qtablewidgetitem3 = self.tableWidget.horizontalHeaderItem(3)
-        ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"Subtotal", None));
         ___qtablewidgetitem2.setText(QCoreApplication.translate("MainWindow", u"Jenis", None));
         ___qtablewidgetitem3 = self.tableWidget.horizontalHeaderItem(3)
         ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"Kategori", None));
@@ -223,11 +269,11 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem5.setText(QCoreApplication.translate("MainWindow", u"Subtotal", None));
         ___qtablewidgetitem6 = self.tableWidget.horizontalHeaderItem(6)
         ___qtablewidgetitem6.setText(QCoreApplication.translate("MainWindow", u"Total", None));
-        self.pushButton_updateKeranjang.setText(QCoreApplication.translate("MainWindow", u"Update Keranjang", None))
-        self.pushButton_hapusDataKeranjang.setText(QCoreApplication.translate("MainWindow", u"Hapus Dari Keranjang", None))
+        self.pushButton_updateDataKeranjang.setText(QCoreApplication.translate("MainWindow", u"Update Data Keranjang", None))
         self.pushButton_kembali.setText(QCoreApplication.translate("MainWindow", u"Kembali", None))
+        self.pushButton_tambahDataKeranjang.setText(QCoreApplication.translate("MainWindow", u"Tambah Data Keranjang", None))
+        self.pushButton_hapusDataKeranjang.setText(QCoreApplication.translate("MainWindow", u"Hapus Dari Keranjang", None))
     # retranslateUi
-
 
 import sys
 import os
@@ -248,8 +294,9 @@ class DetailKeranjangApotekerWindow(QMainWindow):
         self.load_detail_keranjang()
         
         # Connect buttons
-        self.ui.pushButton_updateKeranjang.clicked.connect(self.update_keranjang)
+        self.ui.pushButton_updateDataKeranjang.clicked.connect(self.update_keranjang)
         self.ui.pushButton_hapusDataKeranjang.clicked.connect(self.hapus_obat_keranjang)
+        self.ui.pushButton_tambahDataKeranjang.clicked.connect(self.tambah_obat_ke_keranjang)
         self.ui.pushButton_kembali.clicked.connect(self.close)
     
     def load_detail_keranjang(self):
@@ -271,6 +318,16 @@ class DetailKeranjangApotekerWindow(QMainWindow):
             
             total_keseluruhan = 0
             
+            # Hitung total keseluruhan terlebih dahulu
+            for item in detail_obat:
+                if isinstance(item, dict):
+                    total_keseluruhan += item.get('subtotal', 0)
+                else:
+                    total_keseluruhan += item[5]  # subtotal
+            
+            # Set total pembelian
+            self.ui.label_totalPembelian.setText(f"Rp {total_keseluruhan:,}")
+            
             for row_idx, item in enumerate(detail_obat):
                 if isinstance(item, dict):
                     detail_id = item.get('detailKeranjangId', '')
@@ -288,9 +345,7 @@ class DetailKeranjangApotekerWindow(QMainWindow):
                     jumlah = item[4]
                     subtotal = item[5]
                 
-                total_keseluruhan += subtotal
-                
-                # Kolom: detailKeranjangId, namaObat, Jenis, Kategori, Jumlah, Subtotal, Total
+                # Kolom: detailKeranjangId, namaObat, Jenis, Kategori, Jumlah, Subtotal, Total (hidden)
                 # Semua kolom tidak bisa diedit kecuali Jumlah
                 item_detail_id = QTableWidgetItem(str(detail_id))
                 item_detail_id.setFlags(item_detail_id.flags() & ~Qt.ItemIsEditable)
@@ -316,12 +371,13 @@ class DetailKeranjangApotekerWindow(QMainWindow):
                 item_subtotal.setFlags(item_subtotal.flags() & ~Qt.ItemIsEditable)
                 self.ui.tableWidget.setItem(row_idx, 5, item_subtotal)
                 
+                # Kolom total tidak ditampilkan (hidden), tapi tetap set nilai untuk kompatibilitas
                 item_total = QTableWidgetItem(f"Rp {total_keseluruhan:,}")
                 item_total.setFlags(item_total.flags() & ~Qt.ItemIsEditable)
                 self.ui.tableWidget.setItem(row_idx, 6, item_total)
             
-            # Update label header
-            self.ui.label.setText(f"Detail Data Keranjang Apoteker - Total: Rp {total_keseluruhan:,}")
+            # Update label header tanpa total
+            self.ui.label.setText(f"Detail Data Keranjang Apoteker")
             
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Gagal load detail: {e}")
@@ -421,4 +477,13 @@ class DetailKeranjangApotekerWindow(QMainWindow):
                     
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Gagal update keranjang: {e}")
+    
+    def tambah_obat_ke_keranjang(self):
+        """Buka popup tambah obat ke keranjang"""
+        try:
+            from tambahKeranjangDetail import TambahKeranjangDetailWindow
+            self.tambah_window = TambahKeranjangDetailWindow(self.keranjang_id, parent=self)
+            self.tambah_window.show()
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Gagal buka form tambah obat: {e}")
 

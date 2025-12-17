@@ -21,7 +21,7 @@ from PySide6.QtWidgets import (QApplication, QGridLayout, QLabel, QLineEdit,
 import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), "frontend"))
-import logo_apotek_rc
+from frontend import logo_apotek_rc
 from backend.login import login, session
 from backend.logout import logout as backend_logout
 
@@ -244,7 +244,7 @@ class Ui_MainWindow(object):
         self.lineEdit.setText("")
         self.label_4.setText(QCoreApplication.translate("MainWindow", u"Password:", None))
         self.lineEdit_2.setText("")
-        self.pushButton_logout.setText(QCoreApplication.translate("MainWindow", u"Logout", None))
+        self.pushButton_logout.setText(QCoreApplication.translate("MainWindow", u"Keluar", None))
         self.pushButton_login.setText(QCoreApplication.translate("MainWindow", u"Login", None))
     # retranslateUi
 
@@ -268,14 +268,14 @@ class Ui_MainWindow(object):
         pesan = login(username, password)
 
         if session.get('is_login'):
-            QMessageBox.information(MainWindow, "Login Berhasil", pesan)
+            QMessageBox.information(MainWindow, "Berhasil", pesan)
             role = session.get('role')
 
             if role == "admin":
                 # Import runtime untuk menghindari circular import
                 import sys
                 sys.path.append(os.path.join(os.path.dirname(__file__), "frontend"))
-                from dashboardAdmin import DashboardAdmin
+                from frontend.dashboardAdmin import DashboardAdmin
                 self.window = DashboardAdmin()
                 self.window.show()
                 # Tutup window login
@@ -283,21 +283,21 @@ class Ui_MainWindow(object):
             elif role == "apoteker":
                 import sys
                 sys.path.append(os.path.join(os.path.dirname(__file__), "frontend"))
-                from dashboardApoteker import DashboardApoteker
+                from frontend.dashboardApoteker import DashboardApoteker
                 self.window = DashboardApoteker()
                 self.window.show()
                 self.login_window.close()
             elif role == "kasir":
                 import sys
-                sys.path.append(os.path.join(os.path.dirname(__file__), "frontend"))
-                from dashboardKasir import DashboardKasir
+                sys.path.append(os.path.dirname(__file__))
+                from frontend.dashboardKasir import DashboardKasir
                 self.window = DashboardKasir()
                 self.window.show()
                 self.login_window.close()
             else:
                 QMessageBox.warning(MainWindow, "Role belum tersedia", f"Role '{role}' belum didukung.")
         else:
-            QMessageBox.critical(MainWindow, "Login Gagal", pesan)
+            QMessageBox.warning(MainWindow, "Login Gagal", "Username atau password yang Anda masukkan salah!\nSilakan coba lagi.")
 
     def open_register(self, MainWindow):
         """Buka window register"""
@@ -306,45 +306,9 @@ class Ui_MainWindow(object):
             self.register_win = QMainWindow()
             self.register_ui = Ui_Register()
             self.register_ui.setupUi(self.register_win)
-            
-            # Koneksi tombol kembali di register
-            if hasattr(self.register_ui, 'pushButton_kembali'):
-                self.register_ui.pushButton_kembali.clicked.connect(self.register_win.close)
-            
-            # Koneksi tombol register
-            if hasattr(self.register_ui, 'pushButton_register'):
-                self.register_ui.pushButton_register.clicked.connect(
-                    lambda: self.proses_register(self.register_ui, self.register_win)
-                )
-            
             self.register_win.show()
         except Exception as e:
             QMessageBox.warning(MainWindow, "Error", f"Gagal membuka form register: {e}")
-
-    def proses_register(self, ui, window):
-        """Proses registrasi user baru"""
-        try:
-            from backend.register import register as backend_register
-            
-            nama = ui.lineEdit_nama.text().strip()
-            username = ui.lineEdit_username.text().strip()
-            password = ui.lineEdit_password.text().strip()
-            konfirmasi = ui.lineEdit_konfirmasipass.text().strip()
-            role = ui.comboBox_pilihRole.currentText().lower()
-
-            if not all([nama, username, password, konfirmasi]):
-                QMessageBox.warning(window, "Peringatan", "Semua field harus diisi!")
-                return
-
-            if password != konfirmasi:
-                QMessageBox.warning(window, "Peringatan", "Password dan konfirmasi tidak cocok!")
-                return
-
-            pesan = backend_register(nama, username, password, role)
-            QMessageBox.information(window, "Info", pesan)
-            window.close()
-        except Exception as e:
-            QMessageBox.warning(window, "Error", f"Gagal register: {e}")
 
     def action_logout(self, MainWindow):
         """Logout user dan tutup aplikasi"""

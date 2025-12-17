@@ -28,6 +28,7 @@ class Ui_MainWindow(object):
         MainWindow.setStyleSheet(u"")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
+        self.centralwidget.setStyleSheet(u"background-color: rgb(230, 230, 230);")
         self.verticalLayout = QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.label = QLabel(self.centralwidget)
@@ -382,8 +383,11 @@ class UpdateObatWindow(QMainWindow):
             if isinstance(data, dict):
                 self.ui.lineEdit.setText(str(data.get('namaObat', '')))
                 self.ui.lineEdit_2.setText(str(data.get('jenis', '')))
-                self.ui.lineEdit_3.setText(str(data.get('harga', '')))
-                self.ui.lineEdit_4.setText(str(data.get('stok', '')))
+                # Konversi harga dan stok ke integer tanpa desimal
+                harga_value = int(float(data.get('harga', 0)))
+                stok_value = int(float(data.get('stok', 0)))
+                self.ui.lineEdit_3.setText(str(harga_value))
+                self.ui.lineEdit_4.setText(str(stok_value))
                 
                 # --- REVISI: Pake setDate bukan setText ---
                 # lineEdit_6 = tgl_produksi (row 4)
@@ -402,8 +406,11 @@ class UpdateObatWindow(QMainWindow):
                 # Data tuple format
                 self.ui.lineEdit.setText(str(data[1]))  # namaObat
                 self.ui.lineEdit_2.setText(str(data[2]))  # jenis
-                self.ui.lineEdit_3.setText(str(data[3]))  # harga
-                self.ui.lineEdit_4.setText(str(data[4]))  # stok
+                # Konversi harga dan stok ke integer tanpa desimal
+                harga_value = int(float(data[3]))
+                stok_value = int(float(data[4]))
+                self.ui.lineEdit_3.setText(str(harga_value))
+                self.ui.lineEdit_4.setText(str(stok_value))
                 
                 # --- REVISI: Pake setDate bukan setText ---
                 set_date_from_string(self.ui.lineEdit_6, data[5]) # tgl_produksi
@@ -413,6 +420,9 @@ class UpdateObatWindow(QMainWindow):
                 kategori_id = data[7] if len(data) > 7 and data[7] is not None else 1
                 kategori_index = max(0, int(kategori_id) - 1)
                 self.ui.comboBox.setCurrentIndex(kategori_index)
+            
+            # Set focus ke field Nama Obat agar tidak auto focus ke field lain
+            self.ui.lineEdit.setFocus()
                 
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Gagal load data: {e}")

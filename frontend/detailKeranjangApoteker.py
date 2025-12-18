@@ -269,7 +269,7 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem5.setText(QCoreApplication.translate("MainWindow", u"Subtotal", None));
         ___qtablewidgetitem6 = self.tableWidget.horizontalHeaderItem(6)
         ___qtablewidgetitem6.setText(QCoreApplication.translate("MainWindow", u"Total", None));
-        self.pushButton_updateDataKeranjang.setText(QCoreApplication.translate("MainWindow", u"Update Data Keranjang", None))
+        self.pushButton_updateDataKeranjang.setText(QCoreApplication.translate("MainWindow", u"Update Stok Obat", None))
         self.pushButton_kembali.setText(QCoreApplication.translate("MainWindow", u"Kembali", None))
         self.pushButton_tambahDataKeranjang.setText(QCoreApplication.translate("MainWindow", u"Tambah Data Keranjang", None))
         self.pushButton_hapusDataKeranjang.setText(QCoreApplication.translate("MainWindow", u"Hapus Dari Keranjang", None))

@@ -10,20 +10,51 @@ def tambahObat(namaObat, jenis, harga, stok, tgl_produksi, kadaluarsa, kategoriI
         return pesan
     
     try:
-        # Format nama obat dan jenis ke title case (awal kata kapital)
         namaObat = namaObat.strip().title()
         jenis = jenis.strip().title()
         
-        query = '''
-            insert into obat(namaObat, jenis, harga, stok, tgl_produksi, kadaluarsa, kategoriId) 
-            values(%s, %s, %s, %s, %s, %s, %s)
+        query_cek = '''
+            SELECT obatId, stok FROM obat 
+            WHERE namaObat = %s 
+            AND jenis = %s 
+            AND kategoriId = %s
+            AND tgl_produksi = %s 
+            AND kadaluarsa = %s
         '''
-        cursor.execute(query,(namaObat, jenis, harga, stok, tgl_produksi, kadaluarsa, kategoriId))
+        cursor.execute(query_cek, (namaObat, jenis, kategoriId, tgl_produksi, kadaluarsa))
+        data_exist = cursor.fetchone()
+        
+        if data_exist:
+            obatId_lama = data_exist[0]
+            stok_lama = data_exist[1]
+            
+            total_stok = stok_lama + int(stok)
+            
+            query_update = '''
+                UPDATE obat 
+                SET stok = %s, harga = %s 
+                WHERE obatId = %s
+            '''
+            cursor.execute(query_update, (total_stok, harga, obatId_lama))
+            pesan = f'Obat sudah ada. Stok berhasil diupdate menjadi {total_stok}'
+            
+        else:
+            query_insert = '''
+                INSERT INTO obat(namaObat, jenis, harga, stok, tgl_produksi, kadaluarsa, kategoriId) 
+                VALUES(%s, %s, %s, %s, %s, %s, %s)
+            '''
+            cursor.execute(query_insert, (namaObat, jenis, harga, stok, tgl_produksi, kadaluarsa, kategoriId))
+            pesan = 'Data obat baru (batch baru) telah ditambahkan'
+
         db.commit()
-        pesan = 'Data obat baru telah ditambahkan'
+        
     except Exception as e:
         pesan = f"Terjadi kesalahan {e}"
         return pesan
+
+    cursor.close()
+    db.close()
+    return pesan
 
     cursor.close()
     db.close()

@@ -3,16 +3,22 @@ from .koneksi import *
 # Kelola Obat 
 def tambahObat(namaObat, jenis, harga, stok, tgl_produksi, kadaluarsa, kategoriId):
     db = koneksiKeDatabase()
-    cursor = db.cursor()
     
     if db is None:
-        pesan = "Gagal koneksi ke database"
-        return pesan
+        return "Gagal koneksi ke database"
+
+    cursor = db.cursor() 
     
     try:
-        namaObat = namaObat.strip().title()
-        jenis = jenis.strip().title()
+        # Format string biar rapi
+        namaObat = str(namaObat).strip().title()
+        jenis = str(jenis).strip().title()
         
+        # Pastikan input angka aman
+        stok_input = int(stok)
+        harga_input = float(harga) 
+
+        # 1. CEK DULU: Cari obat yang atributnya KEMBAR (termasuk tanggal)
         query_cek = '''
             SELECT obatId, stok FROM obat 
             WHERE namaObat = %s 
@@ -25,39 +31,39 @@ def tambahObat(namaObat, jenis, harga, stok, tgl_produksi, kadaluarsa, kategoriI
         data_exist = cursor.fetchone()
         
         if data_exist:
-            obatId_lama = data_exist[0]
-            stok_lama = data_exist[1]
+            # === UPDATE (REPLACE STOK) ===
+            obatId_lama = data_exist['obatId']  
             
-            total_stok = stok_lama + int(stok)
+            # REVISI: Langsung pakai stok_input (jangan ditambah stok_lama)
+            # Jadi stok di database akan berubah sesuai inputan baru
             
             query_update = '''
                 UPDATE obat 
                 SET stok = %s, harga = %s 
                 WHERE obatId = %s
             '''
-            cursor.execute(query_update, (total_stok, harga, obatId_lama))
-            pesan = f'Obat sudah ada. Stok berhasil diupdate menjadi {total_stok}'
+            cursor.execute(query_update, (stok_input, harga_input, obatId_lama))
+            pesan = f'Data Double Ditemukan: Stok obat "{namaObat}" telah diubah (replace) menjadi {stok_input}'
             
         else:
+            # === INSERT (DATA BARU) ===
             query_insert = '''
                 INSERT INTO obat(namaObat, jenis, harga, stok, tgl_produksi, kadaluarsa, kategoriId) 
                 VALUES(%s, %s, %s, %s, %s, %s, %s)
             '''
-            cursor.execute(query_insert, (namaObat, jenis, harga, stok, tgl_produksi, kadaluarsa, kategoriId))
-            pesan = 'Data obat baru (batch baru) telah ditambahkan'
+            cursor.execute(query_insert, (namaObat, jenis, harga_input, stok_input, tgl_produksi, kadaluarsa, kategoriId))
+            pesan = 'Data obat baru berhasil ditambahkan'
 
         db.commit()
         
     except Exception as e:
+        print(f"Error detail: {e}") 
         pesan = f"Terjadi kesalahan {e}"
-        return pesan
-
-    cursor.close()
-    db.close()
-    return pesan
-
-    cursor.close()
-    db.close()
+        
+    finally:
+        cursor.close()
+        db.close()
+    
     return pesan
 
 def lihatSemuaDataObat():
